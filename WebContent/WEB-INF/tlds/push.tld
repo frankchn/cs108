@@ -1,0 +1,17 @@
+<!-- From http://stackoverflow.com/questions/7165715/jsp-tags-scriptlet-how-to-enable-scriptlet -->
+<taglib>
+    <tlib-version>1.2</tlib-version>
+    <jsp-version>2.1</jsp-version>
+    <short-name>ex</short-name>
+    <uri>http://frankchn.stanford.edu/cs108/</uri>
+    <tag>
+        <name>push</name>
+        <tag-class>quiz.website.PushTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>key</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+</taglib>
