@@ -60,7 +60,7 @@ public class User {
 		}
 	}
 	
-	public User(int user_id, String name, String email, boolean is_admin, String cookie_key) {
+	private User(int user_id, String name, String email, boolean is_admin, String cookie_key) {
 		this.user_id = user_id;
 		this.name = name;
 		this.email = email;

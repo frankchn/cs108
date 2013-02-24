@@ -5,7 +5,6 @@
 <ex:push key="body.content">
 	<h1>Announcements</h1>
 	<p>This is a test announcement by someone.</p>
-	<%= "We Love SCRIPTLET!" %>
 </ex:push>
 
 <t:standard>

@@ -18,7 +18,7 @@ User currentUser = (User) session.getAttribute("currentUser");
 				<div id="top_nav">
 					<div id="navbar_items">
 						<span class="nav_item"><a href="">Home</a></span>
-						<span class="nav_item"><a href="quizzes/">Quizzes</a></span>
+						<span class="nav_item"><a href="quiz/">Quizzes</a></span>
 						<%
 						
 						if(currentUser == null) {
