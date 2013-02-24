@@ -16,7 +16,7 @@ if(!currentUser.is_admin && currentQuiz.user_id != currentUser.user_id) return;
 	<h3>Information &bull; 
 	    <a href="quiz/edit/quiz_info.jsp?quiz_id=<%=currentQuiz.quiz_id%>">Edit</a> &bull;
 	    <a href="quiz/edit/DeleteQuizServlet?quiz_id=<%=currentQuiz.quiz_id%>">Delete</a> &bull;
-	    <a href="quiz/edit/TogglePublicServlet.jsp?quiz_id=<%=currentQuiz.quiz_id %>">
+	    <a href="quiz/edit/TogglePublicServlet?quiz_id=<%=currentQuiz.quiz_id %>">
 	    	Make <%=currentQuiz.is_public ? "Private" : "Public" %>
 	    </a></h3>
 	<table cellpadding="3" cellspacing="3" border="0">

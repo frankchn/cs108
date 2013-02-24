@@ -85,14 +85,15 @@ public class Quiz {
 
 	public void save() {
 		try {
-			PreparedStatement p = db.prepareStatement("UPDATE `quiz` SET `name` = ?, `description` = ?, `random_questions` = ?, `multiple_pages` = ?, `immediate_correction` = ?, `practice_mode` = ? WHERE `quiz_id` = ?");
+			PreparedStatement p = db.prepareStatement("UPDATE `quiz` SET `name` = ?, `description` = ?, `is_public` = ?, `random_questions` = ?, `multiple_pages` = ?, `immediate_correction` = ?, `practice_mode` = ? WHERE `quiz_id` = ?");
 			p.setString(1, this.name);
 			p.setString(2, this.description);
-			p.setInt(3, this.random_questions ? 1 : 0);
-			p.setInt(4, this.multiple_pages ? 1 : 0);
-			p.setInt(5, this.immediate_correction ? 1 : 0);
-			p.setInt(6, this.practice_mode ? 1 : 0);
-			p.setInt(7, this.quiz_id);
+			p.setInt(3, this.is_public ? 1 : 0);
+			p.setInt(4, this.random_questions ? 1 : 0);
+			p.setInt(5, this.multiple_pages ? 1 : 0);
+			p.setInt(6, this.immediate_correction ? 1 : 0);
+			p.setInt(7, this.practice_mode ? 1 : 0);
+			p.setInt(8, this.quiz_id);
 			p.executeUpdate();	
 		} catch (SQLException e) {
 			return;
