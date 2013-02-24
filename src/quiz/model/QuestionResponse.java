@@ -1,5 +1,9 @@
 package quiz.model;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
 
 public class QuestionResponse extends QuizQuestion {
@@ -16,6 +20,24 @@ public class QuestionResponse extends QuizQuestion {
 		super(quiz_id, quiz_question_id);
 	}
 	
+	public static QuestionResponse newQuestion(int quiz_id) {
+		try {
+			int new_order = 0;
+			ResultSet rsq = db.prepareStatement("SELECT MAX(`sort_order`) FROM `quiz_question` WHERE `quiz_id` = " + quiz_id).executeQuery();
+			if(rsq.next()) 
+				new_order = rsq.getInt(1) + 100;
+			
+			PreparedStatement p = db.prepareStatement("INSERT INTO `quiz_question` (`quiz_id`, `type`, `sort_order`) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+			p.setInt(1, quiz_id);
+			p.setString(2, "QuestionResponse");
+			p.setInt(3, new_order);
+			
+			return null;
+		} catch (SQLException e) {
+			return null;
+		}
+	}
+	
 	@Override
 	public String getTitle() {
 		// TODO Auto-generated method stub
@@ -30,7 +52,6 @@ public class QuestionResponse extends QuizQuestion {
 
 	@Override
 	public void updateQuestion(Map<String, String[]> response) {
-		
 		super.save();
 	}
 

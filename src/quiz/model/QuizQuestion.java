@@ -11,7 +11,7 @@ import quiz.base.DBConnector;
 public abstract class QuizQuestion implements Serializable {
 
 	private static final long serialVersionUID = 5346847141930800854L;
-	private static Connection db;	
+	protected static Connection db;	
 	static {
 		db = DBConnector.getConnection();
 	}
