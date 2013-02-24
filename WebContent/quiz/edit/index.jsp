@@ -48,16 +48,33 @@ if(!currentUser.is_admin && currentQuiz.user_id != currentUser.user_id) return;
 	<table cellpadding="3" cellspacing="3" border="0" width="100%">
 		<thead>
 			<tr>
-				<th>No.</th>
-				<th>Question Title</th>
+				<th width="50">No.</th>
+				<th width="500">Question Title</th>
 				<th>Type</th>
 				<th>Action</th>
 			</tr>
 		</thead>
 		<tbody>
+			<%
+			int i = 1;
+			QuizQuestion[] qs = currentQuiz.getQuestions();
+			for(QuizQuestion q : qs) {
+			%>
+			<tr>
+				<td align="center"><%=i++ %></td>
+				<td align="center"><%=q.getTitle() %></td>
+				<td align="center"><%=q.getFriendlyType() %></td>
+				<td align="center">
+					<a href="quiz/edit/edit_question.jsp?quiz_question_id=<%=q.quiz_question_id%>">Edit</a> 
+					<a href="quiz/edit/DeleteQuestionServlet?quiz_question_id=<%=q.quiz_question_id%>">Delete</a> 
+					Up 
+					Down
+				</td>
+			</tr>
+			<% } %>
 			<form method="post" action="quiz/edit/AddQuestionServlet">
 				<tr>
-					<td colspan="2" align="center">New Question</td>
+					<td colspan="2" align="center">Add New Question</td>
 					<td align="center"><select name="type">
 						<option value="QuestionResponse">Question/Picture Response</option>
 						<option value="FillInTheBlanks">Fill-in-the-Blanks</option>

@@ -38,16 +38,13 @@ public class AddQuestionServlet extends HttpServlet {
 		String type = request.getParameter("type");
 		if(type == null) return;
 		
-		QuizQuestion qn;
-		if(type.equals("QuestionResponse")) {
-			
-		} else if(type.equals("FillInTheBlanks")) {
-			
-		} else if(type.equals("MultipleChoice")) {
-			
-		} else {
-			return;
+		try {
+			QuizQuestion.newQuestion(currentQuiz.quiz_id, Class.forName("quiz.model." + request.getParameter("type")));
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Trying to creating a class that does not exist.");
 		}
+		
+		response.sendRedirect("index.jsp?quiz_id=" + currentQuiz.quiz_id);
 	}
 
 }

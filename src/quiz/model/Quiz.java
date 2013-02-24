@@ -90,4 +90,27 @@ public class Quiz {
 		}
 	}
 	
+	public QuizQuestion[] getQuestions() {
+		try {
+			ResultSet r = db.prepareStatement("SELECT * FROM `quiz_question` WHERE `quiz_id` = " + quiz_id + " ORDER BY `sort_order` ASC",
+											  ResultSet.TYPE_SCROLL_INSENSITIVE, 
+											  ResultSet.CONCUR_READ_ONLY).executeQuery();
+			
+			r.last();
+			int size = r.getRow();
+			r.beforeFirst();
+			
+			int i = 0;
+			QuizQuestion[] rtn = new QuizQuestion[size];
+			while(r.next()) {
+				Object x = r.getObject("metadata");
+				rtn[i++] = QuizQuestion.loadQuestion(x);
+			}
+			
+			return rtn;
+		} catch (SQLException e) {
+			return null;
+		}
+	}
+	
 }
