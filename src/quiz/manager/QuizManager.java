@@ -1,9 +1,12 @@
 package quiz.manager;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 
 import quiz.base.DBConnector;
 import quiz.model.Quiz;
@@ -14,6 +17,24 @@ public class QuizManager {
 	private static Connection db;	
 	static {
 		db = DBConnector.getConnection();
+	}
+	
+	public static Quiz createNewQuiz(User currentUser) {
+		try {
+			PreparedStatement p = db.prepareStatement("INSERT INTO `quiz` (`name`, `created`, `user_id`) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+			p.setString(1, "New Quiz");
+			p.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+			p.setInt(3, currentUser.user_id);
+						
+			int changed = p.executeUpdate();
+			if(changed == 0) return null;
+			
+			ResultSet s = p.getGeneratedKeys();
+			s.next();
+			return Quiz.getQuiz(s.getInt(1));
+		} catch (SQLException e) {
+			return null;
+		}
 	}
 	
 	public static Quiz[] getAllQuizzes(User currentUser) {	
@@ -48,16 +69,7 @@ public class QuizManager {
 			int i = 0;
 			Quiz[] rtn = new Quiz[size];
 			while(r.next()) {
-				rtn[i++] = new Quiz(r.getInt("quiz_id"),
-									r.getString("name"),
-									r.getString("description"),
-									r.getInt("user_id"),
-									r.getDate("created"),
-									r.getInt("is_public") == 1 ? true : false,
-									r.getInt("random_questions") == 1 ? true : false,
-									r.getInt("multiple_pages") == 1 ? true : false,
-									r.getInt("immediate_correction") == 1 ? true : false,
-									r.getInt("practice_mode") == 1 ? true : false);
+				rtn[i++] = Quiz.getQuizFromResultSet(r);
 			}
 			
 			return rtn;

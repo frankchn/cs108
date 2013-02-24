@@ -11,7 +11,7 @@ import quiz.base.DBConnector;
 
 public class User {
 
-	public int user_id;
+	public final int user_id;
 	public String name;
 	public String email;
 	public boolean is_admin;

@@ -43,6 +43,9 @@ public class RegisterServlet extends HttpServlet {
 			return;
 		}
 		
+		email = email.trim();
+		full_name = full_name.trim();
+		
 		if(email.length() == 0 || password.length() == 0 || full_name.length() == 0) {
 			response.sendRedirect("register.jsp?missing=1");
 			return;

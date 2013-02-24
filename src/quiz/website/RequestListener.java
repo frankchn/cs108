@@ -61,15 +61,17 @@ public class RequestListener implements ServletRequestListener, ServletRequestAt
     	HttpServletRequest req = (HttpServletRequest) arg0.getServletRequest();
     	Cookie[] cookies = req.getCookies();
     	
-    	for (int i = 0; i < cookies.length; i++){
-    		Cookie cookie = cookies[i];
-    		if(cookie.getName().equals("user_key")) {
-    			User u = User.getUserByCookieKey(cookie.getValue());
-    			if(u != null) {
-    				HttpSession sess = req.getSession();
-    				sess.setAttribute("currentUser", u);
-    			}
-    		}
+    	if(cookies != null) {
+	    	for (int i = 0; i < cookies.length; i++){
+	    		Cookie cookie = cookies[i];
+	    		if(cookie.getName().equals("user_key")) {
+	    			User u = User.getUserByCookieKey(cookie.getValue());
+	    			if(u != null) {
+	    				HttpSession sess = req.getSession();
+	    				sess.setAttribute("currentUser", u);
+	    			}
+	    		}
+	    	}
     	}
     }
 	

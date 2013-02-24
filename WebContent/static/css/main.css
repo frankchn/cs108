@@ -78,6 +78,27 @@ h4 {
 	font-size:17px;
 }
 
+.quiz_item_container {
+	margin-bottom:10px;
+}
+
+.quiz_item_title {
+	font-size:16px;
+	font-weight:bold;
+}
+
+.quiz_item_author {
+	font-size:12px;
+	color:#aaa;
+}
+
+.quiz_item_right {
+	float:right;
+	font-size:11px;
+	line-height:13px;
+	text-align:right;
+}
+
 .error_message {
 	color: #b94a48;
 	background-color:#f2dede;
