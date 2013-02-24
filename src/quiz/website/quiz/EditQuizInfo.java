@@ -45,6 +45,8 @@ public class EditQuizInfo extends HttpServlet {
 		currentQuiz.practice_mode = request.getParameter("practice_mode") != null ? true : false;
 		
 		currentQuiz.save();
+		
+		response.sendRedirect("index.jsp?quiz_id=" + currentQuiz.quiz_id);
 	}
 
 }

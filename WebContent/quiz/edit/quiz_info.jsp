@@ -48,6 +48,6 @@ if(!currentUser.is_admin && currentQuiz.user_id != currentUser.user_id) return;
 </ex:push>
 
 <t:standard>
-    <jsp:attribute name="pageTitle">Update Quiz Information</jsp:attribute>
+    <jsp:attribute name="pageTitle">Edit Quiz Information</jsp:attribute>
 	<jsp:body>${requestScope['body.content']}</jsp:body>
 </t:standard>
