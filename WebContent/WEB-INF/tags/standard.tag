@@ -1,6 +1,9 @@
 <%@ tag language="java" pageEncoding="UTF-8"%>
 <%@attribute name="pageTitle" %>
-
+<%@ tag import="quiz.model.*" %>
+<%
+User currentUser = (User) session.getAttribute("currentUser");
+%>
 <!DOCTYPE html>
 <html lang="en-US">
 	<head>
@@ -13,13 +16,42 @@
 		<div id="container">
 			<div id="topbar">
 				<div id="top_nav">
-					<span class="nav_item"><a href="">Home</a></span>
-					<span class="nav_item">Quizzes</span>
-					<span class="nav_item"><a href="auth/login.jsp">Login</a></span>
-					<span class="nav_item"><a href="auth/register.jsp">Register</a></span>
+					<div id="navbar_items">
+						<span class="nav_item"><a href="">Home</a></span>
+						<span class="nav_item"><a href="quizzes/">Quizzes</a></span>
+						<%
+						
+						if(currentUser == null) {
+						%>
+						<span class="nav_item"><a href="auth/login.jsp">Login</a></span>
+						<span class="nav_item"><a href="auth/register.jsp">Register</a></span>
+						<%
+						} else {
+						%>
+						<span class="nav_item"><a href="messages/">Messages</a></span>
+						<span class="nav_item"><a href="auth/LogoutServlet">Logout</a></span>
+						<%
+						}
+						%>
+						<%
+						if(currentUser != null && currentUser.is_admin) {
+						%>
+						<span class="nav_item"><a href="admin/">Admin</a></span>
+						<%
+						}
+						%>
+					</div>
+					<div id="greeting_msg">
+					<% if(currentUser == null) { %>
+						Welcome, Guest!
+					<% } else { %>
+						Welcome, <a href="profile/"><%=currentUser.name %></a>!
+					<% } %>
+					</div>
 				</div>
 				<div id="page_title">
-					${pageTitle}
+					<div id="page_title_header">CS108 Quiz Website</div>
+					<div id="page_title_text">${pageTitle}</div>
 				</div>
 			</div>
 			<div id="content">

@@ -24,8 +24,16 @@ a:hover {
 }
 
 #page_title {
-	padding-top:30px;
-	font-size:34px;
+	padding-top:16px;
+}
+
+#page_title_header {
+	font-weight:bold;
+	font-size:16px;
+}
+
+#page_title_text {
+	font-size:28px;
 	font-weight:bold;
 }
 
@@ -35,8 +43,13 @@ a:hover {
 }
 
 #top_nav {
-	padding-top:30px;
+	padding-top:20px;
 	float:right;	
+}
+
+#greeting_msg {
+	margin-right:10px;
+	text-align:right;
 }
 
 .nav_item {

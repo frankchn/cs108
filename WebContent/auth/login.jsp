@@ -15,12 +15,15 @@
 		<table cellspacing="3" cellpadding="3" border="0">
 			<tr>
 				<th>Email Address</th>
-				<td><input type="email" size="40" /></td>
+				<td><input name="email" type="email" size="40" /></td>
 			</tr>
 			<tr>
 				<th>Password</th>
-				<td><input type="password" size="20" /></td>
+				<td><input name="password" type="password" size="20" /></td>
 			</tr>
+			<tr>
+				<th>&nbsp;</th>
+				<td><input name="remember" type="checkbox" checked="true"> Remember me</td>
 			<tr>
 				<th>&nbsp;</th>
 				<td><input type="submit" value="Login Now"></td>

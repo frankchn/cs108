@@ -3,6 +3,7 @@ package quiz.website.auth;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,11 +47,25 @@ public class LoginServlet extends HttpServlet {
 			return;
 		}
 		
+		// Initialize Session
 		HttpSession currentSession = request.getSession();
 		currentSession.setAttribute("currentUser", user);
 		
-		response.sendRedirect("../");
+		// Persistent Cookies
+		Cookie c;
+		if(request.getParameter("remember") != null) {
+			String key = user.setCookieKey();
+			c = new Cookie("user_key", key);
+			c.setMaxAge(365 * 86400);
+		} else {
+			c = new Cookie("user_key", "");
+			c.setMaxAge(0);
+		}
+		c.setHttpOnly(true);
+		c.setPath("/");
+		response.addCookie(c);
 		
+		response.sendRedirect("../");
 	}
-
+	
 }
