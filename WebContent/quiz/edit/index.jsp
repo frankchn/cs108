@@ -55,16 +55,18 @@ if(!currentUser.is_admin && currentQuiz.user_id != currentUser.user_id) return;
 			</tr>
 		</thead>
 		<tbody>
-			<form method="get" action="quiz/edit/quiz_question_add.jsp?quiz_id=<%=currentQuiz.quiz_id%>">
+			<form method="post" action="quiz/edit/AddQuestionServlet">
 				<tr>
 					<td colspan="2" align="center">New Question</td>
 					<td align="center"><select name="type">
-						<option value="QuestionResponse">Question Response</option>
+						<option value="QuestionResponse">Question/Picture Response</option>
 						<option value="FillInTheBlanks">Fill-in-the-Blanks</option>
 						<option value="MultipleChoice">Multiple Choice</option>
-						<option value="PictureResponse">Picture Response</option>
 					</select></td>
-					<td align="center"><input type="submit" value="Add Question"></td>
+					<td align="center">
+						<input type="hidden" name="quiz_id" value="<%=currentQuiz.quiz_id%>">
+						<input type="submit" value="Add Question">
+					</td>
 				</tr>
 			</form>
 		</tbody>
