@@ -41,7 +41,7 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 						on <%=sdf.format(q.created) %>
 						&bull;
 						<%=q.is_public ? "Public" : "Draft (Invisible)" %>
-						<%=currentUser != null && currentUser.user_id == q.user_id ? "&bull; Edit This Quiz" : "" %>
+						<%=(currentUser != null && (currentUser.is_admin || currentUser.user_id == q.user_id)) ? "&bull; <a href='quiz/edit/index.jsp?quiz_id=" + q.quiz_id + "'>Edit This Quiz</a>" : "" %>
 					</div>
 				</div>
 			</div>
