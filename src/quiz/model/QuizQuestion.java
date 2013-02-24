@@ -127,7 +127,9 @@ public abstract class QuizQuestion implements Serializable {
 	}
 	
 	public void delete() {
-		throw new RuntimeException("not implemented.");
+		try {
+			db.prepareStatement("DELETE FROM `quiz_question` WHERE `quiz_question_id` = " + quiz_question_id).executeUpdate();
+		} catch (SQLException ignored) { }
 	}
 	
 	public void moveUp() {

@@ -15,6 +15,7 @@ if(!currentUser.is_admin && currentQuiz.user_id != currentUser.user_id) return;
 <ex:push key="body.content">
 	<h3>Information &bull; 
 	    <a href="quiz/edit/quiz_info.jsp?quiz_id=<%=currentQuiz.quiz_id%>">Edit</a> &bull;
+	    <a href="quiz/edit/DeleteQuizServlet?quiz_id=<%=currentQuiz.quiz_id%>">Delete</a> &bull;
 	    <a href="quiz/edit/TogglePublicServlet.jsp?quiz_id=<%=currentQuiz.quiz_id %>">
 	    	Make <%=currentQuiz.is_public ? "Private" : "Public" %>
 	    </a></h3>
