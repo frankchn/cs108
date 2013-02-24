@@ -34,7 +34,21 @@ public class QuestionResponse extends QuizQuestion {
 
 	@Override
 	public void updateQuestion(Map<String, String[]> response) {
-		super.save();
+		String[] answer_key = response.get("correct_answer_key");
+		String[] answer_score  = response.get("correct_answer_score");
+		
+		question_text = response.get("question_text")[0];
+		question_image = response.get("question_image")[0];
+		
+		correct_answers.clear();
+		
+		if(answer_key != null) {
+			for(int i = 0; i < answer_key.length; i++) {
+				correct_answers.put(answer_key[i], Double.parseDouble(answer_score[i]));
+			}
+		}
+		
+		save();
 	}
 
 	@Override

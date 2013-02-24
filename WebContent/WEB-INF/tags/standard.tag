@@ -10,6 +10,7 @@ User currentUser = (User) session.getAttribute("currentUser");
 		<base href="${pageContext.request.contextPath}/" />
 		<meta charset="utf-8" />
 		<link rel="stylesheet" href="static/css/main.css" />
+		<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 		<title>CS108 Quiz Website | ${pageTitle}</title>
 	</head>
 	<body>

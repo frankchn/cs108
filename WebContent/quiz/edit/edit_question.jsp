@@ -17,7 +17,10 @@ request.setAttribute("currentQuestion", currentQuestion);
 %>
 
 <ex:push key="body.content">
-	<jsp:include page="templates/${requestScope['currentQuestionType']}.jsp" />
+	<form method="post" action="quiz/edit/EditQuestion">
+		<input type="hidden" name="quiz_question_id" value="<%=currentQuestion.quiz_question_id%>">
+		<jsp:include page="templates/${requestScope['currentQuestionType']}.jsp" />
+	</form>
 </ex:push>
 
 <t:standard>
