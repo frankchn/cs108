@@ -31,7 +31,7 @@ if(request.getParameter("quiz_attempt_question_id") == null) {
 	<% } %>
 	</h4>
 <% } else { %>
-	<h4>Click <a href="quiz/attempt/attempt.jsp?quiz_attempt_id=<%=currentAttempt.quiz_attempt_id %>">here</a> to continue your quiz.</h4>
+	<h4><center>Click <a href="quiz/attempt/attempt.jsp?quiz_attempt_id=<%=currentAttempt.quiz_attempt_id %>">here</a> to continue your quiz.</center></h4>
 <% } %>
 
 <%
@@ -46,6 +46,9 @@ for(QuizQuestion.QuizQuestionAttempt QQA : currentQQAs) {
 <%
 }
 %>
+<% if(request.getParameter("quiz_attempt_question_id") == null) { %>
+	<h4><center>Click <a href="quiz/attempt/attempt.jsp?quiz_attempt_id=<%=currentAttempt.quiz_attempt_id %>">here</a> to continue your quiz.</center></h4>
+<% } %>
 </ex:push>
 
 <t:standard>

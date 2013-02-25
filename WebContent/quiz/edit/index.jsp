@@ -18,7 +18,8 @@ if(!currentUser.is_admin && currentQuiz.user_id != currentUser.user_id) return;
 	    <a href="quiz/edit/DeleteQuizServlet?quiz_id=<%=currentQuiz.quiz_id%>">Delete</a> &bull;
 	    <a href="quiz/edit/TogglePublicServlet?quiz_id=<%=currentQuiz.quiz_id %>">
 	    	Make <%=currentQuiz.is_public ? "Private" : "Public" %>
-	    </a></h3>
+	    </a> &bull;
+	    Clear History</h3>
 	<table cellpadding="3" cellspacing="3" border="0">
 		<tr>
 			<th>Name</th>

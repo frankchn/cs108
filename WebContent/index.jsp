@@ -3,8 +3,13 @@
 <%@ taglib prefix="ex" uri="http://frankchn.stanford.edu/cs108/" %>
 
 <ex:push key="body.content">
-	<h1>Announcements</h1>
+	<h2>Announcements</h2>
 	<p>This is a test announcement by someone.</p>
+	<h2>My Recent Activity</h2>
+	<h2>Friends' Activities</h2>
+	<h2>Popular Quizzes</h2>
+	<h2>Recent Quizzes</h2>
+	<h2>Achievements Earned</h2>
 </ex:push>
 
 <t:standard>

@@ -85,6 +85,8 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 		}
 		%>
 	</table>
+	<h3>Top Scorers</h3>
+	<h3>Recent Activity</h3>
 </ex:push>
 
 <t:standard>
