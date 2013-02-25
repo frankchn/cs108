@@ -25,6 +25,8 @@ public class QuestionResponse extends QuizQuestion {
 												  int quiz_id,
 												  int user_id) {
 			super(quiz_attempt_id, quiz_question_id, quiz_id, user_id);
+			answer = "";
+			save();
 		}
 
 		@Override
@@ -64,7 +66,8 @@ public class QuestionResponse extends QuizQuestion {
 		
 		if(answer_key != null) {
 			for(int i = 0; i < answer_key.length; i++) {
-				correct_answers.put(answer_key[i], Double.parseDouble(answer_score[i]));
+				if(answer_key[i].length() > 0 && answer_score[i].length() > 0)
+					correct_answers.put(answer_key[i], Double.parseDouble(answer_score[i]));
 			}
 		}
 		

@@ -34,6 +34,9 @@ public abstract class QuizQuestion implements Serializable {
 		public final int user_id;
 		public QuizQuestionAttemptGraded graded = QuizQuestionAttemptGraded.undone;
 		
+		public QuizQuestion getQuizQuestion() {
+			return QuizQuestion.this;
+		}
 		
 		protected QuizQuestionAttempt(int quiz_attempt_id,
 									  int quiz_question_id,
@@ -73,9 +76,10 @@ public abstract class QuizQuestion implements Serializable {
 				os.writeObject(this);
 				os.close();
 				
-				PreparedStatement ps = db.prepareStatement("UPDATE `quiz_attempt_question` SET `metadata` = ? WHERE `quiz_question_id` = ?");
+				PreparedStatement ps = db.prepareStatement("UPDATE `quiz_attempt_question` SET `metadata` = ?, `graded` = ? WHERE `quiz_attempt_question_id` = ?");
 				ps.setObject(1, bs.toByteArray());
-				ps.setInt(2, this.quiz_attempt_question_id);
+				ps.setString(2, graded.toString());
+				ps.setInt(3, this.quiz_attempt_question_id);
 							
 				ps.executeUpdate();
 			} catch (Exception e) {
@@ -110,6 +114,26 @@ public abstract class QuizQuestion implements Serializable {
 			ps.executeUpdate();
 		} catch (Exception e) {
 			throw new RuntimeException("Something went badly wrong");
+		}
+	}
+	
+	public static QuizQuestionAttempt loadQuizQuestionAttempt(int quiz_attempt_question_id) {
+		try {
+			ResultSet r = db.prepareStatement("SELECT * FROM `quiz_attempt_question` WHERE `quiz_attempt_question_id` = " + quiz_attempt_question_id).executeQuery();
+			if(!r.next()) return null;
+			return loadQuizQuestionAttempt(r.getObject("metadata"));
+		} catch (SQLException e) {
+			throw new RuntimeException("Cannot load question attempt.");
+		}
+	}
+	
+	public static QuizQuestionAttempt loadQuizQuestionAttempt(Object bas) {
+		try {
+			ByteArrayInputStream bs = new ByteArrayInputStream((byte[]) bas);
+			ObjectInputStream is = new ObjectInputStream(bs);
+			return (QuizQuestionAttempt) is.readObject();
+		} catch (Exception e) {
+			throw new RuntimeException("Something went seriously wrong here. Cannot unserialize.");
 		}
 	}
 	

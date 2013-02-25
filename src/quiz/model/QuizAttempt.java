@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 
 import quiz.base.DBConnector;
@@ -25,16 +26,46 @@ public class QuizAttempt {
 	}
 	
 	private QuizAttempt(int quiz_attempt_id, int quiz_id, int user_id) {
-		this.quiz_id = quiz_id;
+		this.quiz_id = quiz_id;	
 		this.quiz_attempt_id = quiz_attempt_id;
 		this.user_id = user_id;
+	}
+	
+	public QuizQuestion.QuizQuestionAttempt[] getQuizQuestionAttempts(boolean random_order) {
+		try {
+			String orderSQL = " ORDER BY `sort_order` ASC";
+			if(random_order) orderSQL = " ORDER BY RAND()";
+			
+			ResultSet r = db.prepareStatement("SELECT DISTINCT `quiz_attempt_question_id` FROM `quiz_attempt_question` JOIN `quiz_question` ON `quiz_attempt_question`.`quiz_question_id` = `quiz_question`.`quiz_question_id` WHERE `quiz_attempt_id` = " + quiz_attempt_id + orderSQL, 
+							    			  ResultSet.TYPE_SCROLL_INSENSITIVE, 
+							    			  ResultSet.CONCUR_READ_ONLY).executeQuery();
+			
+			r.last();
+			int size = r.getRow();
+			r.beforeFirst();
+			
+			int i = 0;
+			QuizQuestion.QuizQuestionAttempt[] rtn = new QuizQuestion.QuizQuestionAttempt[size];
+			while(r.next()) {
+				rtn[i++] = QuizQuestion.loadQuizQuestionAttempt(r.getInt("quiz_attempt_question_id"));
+			}
+			
+			return rtn;
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 	
 	public static QuizAttempt newQuizAttempt(Quiz quiz, User user, boolean show_score) {
 		QuizAttempt qa = null;
 		
 		try {
-			PreparedStatement ps = db.prepareStatement("INSERT INTO `quiz_attempt` (`quiz_id`, `user_id`, `start_time`, `show_score`) VALUES (?, ?, ?, ?)");
+			PreparedStatement ps = db.prepareStatement("INSERT INTO `quiz_attempt` (`quiz_id`, `user_id`, `start_time`, `show_score`) VALUES (?, ?, ?, ?)",
+													   Statement.RETURN_GENERATED_KEYS);
 			ps.setInt(1, quiz.quiz_id);
 			ps.setInt(2, user.user_id);
 			ps.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
