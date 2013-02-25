@@ -54,11 +54,37 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 			<input type="hidden" name="quiz_id" value="<%=currentQuiz.quiz_id %>">
 			<input type="submit" style="font-size:16px;padding:5px;" name="real_mode" value="Take Quiz for Real">
 			<% if(currentQuiz.practice_mode) { %>
-			<input type="submit" style="font-size:16px;padding:5px;" name="practice_mode" value="Take Quiz for Practice">
+			<input type="submit" style="font-size:16px;padding:5px;" name="practice_mode" value="Take Quiz without Recording Scores">
 			<% } %>
 		</form>
 	</div>
 	<h3>Previous Attempts</h3>
+	<table cellpadding="3" cellspacing="3" border="0">
+		<tr>
+			<th>Attempt No.</th>
+			<th>Started</th>
+			<th>Completed</th>
+			<th>Score</th>
+			<th>Action</th>
+		</tr>
+		<% 
+		QuizAttempt[] qas = QuizAttempt.loadAttempts(currentQuiz, currentUser);
+		int counter = qas.length;
+		for(QuizAttempt qa : qas) {
+		%>
+		<tr>
+			<td align="center"><%=counter-- %></td>
+			<td align="center"><%=sdf.format(qa.start_time) %></td>
+			<td align="center"><%=qa.submission_time != null ? sdf.format(qa.submission_time) : "Not complete" %></td>
+			<td align="center"><%=qa.finished ? (!qa.show_score ? "Practice" : qa.score) : "Not complete" %></td>
+			<td align="center"><%=qa.finished ? 
+					"<a href='quiz/attempt/results.jsp?quiz_attempt_id=" + qa.quiz_attempt_id + "'>View Results</a>" : 
+					"<a href='quiz/attempt/attempt.jsp?quiz_attempt_id=" + qa.quiz_attempt_id + "'>Continue</a>" %></td>
+		</tr>
+		<%
+		}
+		%>
+	</table>
 </ex:push>
 
 <t:standard>

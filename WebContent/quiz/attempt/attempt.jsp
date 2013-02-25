@@ -11,7 +11,7 @@ QuizAttempt currentAttempt = QuizAttempt.load(Integer.parseInt(request.getParame
 if(currentAttempt.user_id != currentUser.user_id && !currentUser.is_admin) return;
 Quiz currentQuiz = Quiz.getQuiz(currentAttempt.quiz_id);
 
-QuizQuestion.QuizQuestionAttempt[] currentQQAs = currentAttempt.getQuizQuestionAttempts(true);
+QuizQuestion.QuizQuestionAttempt[] currentQQAs = currentAttempt.getQuizQuestionAttempts(currentQuiz.random_questions);
 
 %>
 

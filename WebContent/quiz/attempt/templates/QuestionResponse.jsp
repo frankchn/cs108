@@ -22,9 +22,16 @@ QuizAttempt currentAttempt = (QuizAttempt) request.getAttribute("QuizAttempt");
 <h4>Answer</h4>
 <input type="text" style="width:95%" name="qqa_<%=currentQQA.quiz_attempt_question_id %>" value="<%=currentQQA.answer %>">
 <% } else { %>
-<h4>Answer</h4>
+<h4>Your Answer</h4>
 <p><%=currentQQA.answer %></p>
 <% if(currentAttempt.show_score) { %>
 <p><em>For the above answer, you achieved a score of <strong><%=currentQQA.score %></strong>.</em>
 <% } %>
+<h4>Possible Answers</h4>
+<p>We accepted the following answers:</p>
+<ul>
+<% for(String ans : currentQuestion.correct_answers.keySet()) { %>
+<li><%=ans %> &mdash; <em><%=currentQuestion.correct_answers.get(ans) %> points</em></li>
+<% } %>
+</ul>
 <% } %>

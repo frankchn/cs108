@@ -38,12 +38,12 @@ public class AttemptStoreAnswers extends HttpServlet {
 		QuizAttempt currentAttempt = QuizAttempt.load(Integer.parseInt(request.getParameter("quiz_attempt_id")));
 		if(currentAttempt.user_id != currentUser.user_id && !currentUser.is_admin) return;
 		Quiz currentQuiz = Quiz.getQuiz(currentAttempt.quiz_id);
-		QuizQuestion.QuizQuestionAttempt[] currentQQAs = currentAttempt.getQuizQuestionAttempts(true);
-		
-		int first_qqa_id = currentQQAs[0].quiz_attempt_question_id;
+		QuizQuestion.QuizQuestionAttempt[] currentQQAs = currentAttempt.getQuizQuestionAttempts(false);
+		QuizQuestion.QuizQuestionAttempt onlyGradedQQA = null;
 		
 		for(QuizQuestion.QuizQuestionAttempt QQA : currentQQAs) {
 			if(QQA.graded == QuizQuestionAttemptGraded.incomplete) {
+				onlyGradedQQA = QQA;
 				QQA.saveAnswer(request.getParameterMap());
 			}
 		}
@@ -54,14 +54,22 @@ public class AttemptStoreAnswers extends HttpServlet {
 			return;
 		}
 		
+		int undone_questions = 0;
+		QuizQuestion.QuizQuestionAttempt chosenQQA = null;
+		
 		// assume from now on this is a submit answer request
 		for(QuizQuestion.QuizQuestionAttempt QQA : currentQQAs) {
 			if(QQA.graded == QuizQuestionAttemptGraded.incomplete) {
 				QQA.gradeAnswer();
 			}
+			if(QQA.graded == QuizQuestionAttemptGraded.undone) {
+				undone_questions++;
+				if(chosenQQA == null)
+					chosenQQA = QQA;
+			}
 		}
 		
-		if(!currentQuiz.multiple_pages) {
+		if(!currentQuiz.multiple_pages || undone_questions == 0) {
 			double score = 0.0;
 			for(QuizQuestion.QuizQuestionAttempt QQA : currentQQAs) {
 				score += QQA.score;
@@ -74,11 +82,14 @@ public class AttemptStoreAnswers extends HttpServlet {
 			
 			response.sendRedirect("results.jsp?quiz_attempt_id=" + currentAttempt.quiz_attempt_id);
 		} else {
-			// if no more undone questions, redirect to results page
-			// if there are undone questions
-				// select one to become incomplete
-				// check whether need to grade immediately. if needed, then go to results page
-				// if not, redirect back to attempt page page
+			chosenQQA.graded = QuizQuestionAttemptGraded.incomplete;
+			chosenQQA.save();
+			
+			if(currentQuiz.immediate_correction) {
+				response.sendRedirect("results.jsp?quiz_attempt_id=" + currentAttempt.quiz_attempt_id + "&quiz_attempt_question_id=" + onlyGradedQQA.quiz_attempt_question_id);	
+			} else {
+				response.sendRedirect("attempt.jsp?quiz_attempt_id=" + currentAttempt.quiz_attempt_id);
+			}
 		}
 	}
 

@@ -96,6 +96,30 @@ public class QuizAttempt {
 		return qa;
 	}
 
+	public static QuizAttempt[] loadAttempts(Quiz quiz, User user) {
+		try {
+			ResultSet r = db.prepareStatement("SELECT `quiz_attempt_id` FROM `quiz_attempt` WHERE `quiz_id` = " + quiz.quiz_id + " AND `user_id` = " + user.user_id + " ORDER BY `start_time` DESC",
+											  ResultSet.TYPE_SCROLL_INSENSITIVE, 
+											  ResultSet.CONCUR_READ_ONLY).executeQuery();
+			
+			
+			r.last();
+			int size = r.getRow();
+			r.beforeFirst();
+			
+			int i = 0;
+			QuizAttempt[] rtn = new QuizAttempt[size];
+			while(r.next()) {
+				rtn[i++] = load(r.getInt("quiz_attempt_id"));
+			}
+			
+			return rtn;
+			
+		} catch (SQLException e) {
+			return null;
+		}
+	}
+	
 	public static QuizAttempt load(int quiz_attempt_id) {
 		try {
 			ResultSet r = db.prepareStatement("SELECT * FROM `quiz_attempt` WHERE `quiz_attempt_id` = " + quiz_attempt_id).executeQuery();

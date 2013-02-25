@@ -43,12 +43,11 @@ public class QuizStartAttempt extends HttpServlet {
 			practice_mode = true;
 		
 		QuizAttempt qa = QuizAttempt.newQuizAttempt(currentQuiz, currentUser, !practice_mode);
-		QuizQuestionAttempt[] qqas = qa.getQuizQuestionAttempts(true);
+		QuizQuestionAttempt[] qqas = qa.getQuizQuestionAttempts(currentQuiz.random_questions);
 		
 		if(currentQuiz.multiple_pages) {
-			int randIdx = rgen.nextInt() % qqas.length;
-			qqas[randIdx].graded = QuizQuestionAttemptGraded.incomplete;
-			qqas[randIdx].save();
+			qqas[0].graded = QuizQuestionAttemptGraded.incomplete;
+			qqas[0].save();
 		} else {
 			for(int i = 0; i < qqas.length; i++) {
 				qqas[i].graded = QuizQuestionAttemptGraded.incomplete;

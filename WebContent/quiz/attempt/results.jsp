@@ -13,16 +13,26 @@ QuizAttempt currentAttempt = QuizAttempt.load(Integer.parseInt(request.getParame
 if(currentAttempt.user_id != currentUser.user_id && !currentUser.is_admin) return;
 Quiz currentQuiz = Quiz.getQuiz(currentAttempt.quiz_id);
 
-QuizQuestion.QuizQuestionAttempt[] currentQQAs = currentAttempt.getQuizQuestionAttempts(true);
+QuizQuestion.QuizQuestionAttempt[] currentQQAs = null;
+if(request.getParameter("quiz_attempt_question_id") == null) {
+	currentQQAs = currentAttempt.getQuizQuestionAttempts(currentQuiz.random_questions);
+} else {
+	currentQQAs = new QuizQuestion.QuizQuestionAttempt[1];
+	currentQQAs[0] = QuizQuestion.loadQuizQuestionAttempt(Integer.parseInt(request.getParameter("quiz_attempt_question_id")));
+}
 
 %>
 
 <ex:push key="body.content">
-<h4>You started this quiz on <%=sdf.format(currentAttempt.start_time) %> and completed it on <%=sdf.format(currentAttempt.submission_time) %>.
-<% if(currentAttempt.show_score) { %>
-<br>You have scored a total of <em><u><%=currentAttempt.score %></u></em> points on this quiz.
+<% if(request.getParameter("quiz_attempt_question_id") == null) { %>
+	<h4>You started this quiz on <%=sdf.format(currentAttempt.start_time) %> and completed it on <%=sdf.format(currentAttempt.submission_time) %>.
+	<% if(currentAttempt.show_score) { %>
+	<br>You have scored a total of <em><u><%=currentAttempt.score %></u></em> points on this quiz.
+	<% } %>
+	</h4>
+<% } else { %>
+	<h4>Click <a href="quiz/attempt/attempt.jsp?quiz_attempt_id=<%=currentAttempt.quiz_attempt_id %>">here</a> to continue your quiz.</h4>
 <% } %>
-</h4>
 
 <%
 for(QuizQuestion.QuizQuestionAttempt QQA : currentQQAs) {

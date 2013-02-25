@@ -85,6 +85,8 @@ public class Quiz {
 
 	public void save() {
 		try {
+			this.immediate_correction = this.multiple_pages ? this.immediate_correction : false;
+			
 			PreparedStatement p = db.prepareStatement("UPDATE `quiz` SET `name` = ?, `description` = ?, `is_public` = ?, `random_questions` = ?, `multiple_pages` = ?, `immediate_correction` = ?, `practice_mode` = ? WHERE `quiz_id` = ?");
 			p.setString(1, this.name);
 			p.setString(2, this.description);
