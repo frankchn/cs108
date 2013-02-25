@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.Map;
 
 import quiz.base.DBConnector;
@@ -23,23 +24,63 @@ public abstract class QuizQuestion implements Serializable {
 		db = DBConnector.getConnection();
 	}
 	
-	public abstract class QuizQuestionAttempt {
+	public abstract class QuizQuestionAttempt implements Serializable {
+		private static final long serialVersionUID = 8116729402810794552L;
+		
 		public final int quiz_attempt_question_id;
 		public final int quiz_attempt_id;
 		public final int quiz_question_id;
 		public final int quiz_id;
 		public final int user_id;
+		public QuizQuestionAttemptGraded graded = QuizQuestionAttemptGraded.undone;
 		
-		private QuizQuestionAttempt(int quiz_attempt_question_id,
-									int quiz_attempt_id,
-									int quiz_question_id,
-									int quiz_id,
-									int user_id) {
-			this.quiz_attempt_question_id = quiz_attempt_question_id;
+		
+		protected QuizQuestionAttempt(int quiz_attempt_id,
+									  int quiz_question_id,
+									  int quiz_id,
+									  int user_id) {
+			
+			int qaq_id = -1;
 			this.quiz_attempt_id = quiz_attempt_id;
 			this.quiz_question_id = quiz_question_id;
 			this.user_id = user_id;
 			this.quiz_id = quiz_id;
+			
+			PreparedStatement ps;
+			try {
+				ps = db.prepareStatement("INSERT INTO `quiz_attempt_question` (`quiz_attempt_id`, `quiz_question_id`, `quiz_id`, `user_id`) VALUES (?, ?, ?, ?)",
+										 Statement.RETURN_GENERATED_KEYS);
+				ps.setInt(1, quiz_attempt_id);
+				ps.setInt(2, quiz_question_id);
+				ps.setInt(3, quiz_id);
+				ps.setInt(4, user_id);
+				ps.executeUpdate();
+				
+				ResultSet s = ps.getGeneratedKeys();
+				s.next();
+				qaq_id = s.getInt(1);
+			} catch (SQLException ignored) {  }
+			
+			this.quiz_attempt_question_id = qaq_id;
+			
+			save();
+		}
+		
+		public void save() {
+			try {
+				ByteArrayOutputStream bs = new ByteArrayOutputStream();
+				ObjectOutputStream os = new ObjectOutputStream(bs);
+				os.writeObject(this);
+				os.close();
+				
+				PreparedStatement ps = db.prepareStatement("UPDATE `quiz_attempt_question` SET `metadata` = ? WHERE `quiz_question_id` = ?");
+				ps.setObject(1, bs.toByteArray());
+				ps.setInt(2, this.quiz_attempt_question_id);
+							
+				ps.executeUpdate();
+			} catch (Exception e) {
+				throw new RuntimeException("Something went badly wrong");
+			}
 		}
 		
 		abstract public double getScore();
@@ -53,6 +94,7 @@ public abstract class QuizQuestion implements Serializable {
 	abstract public void updateQuestion(Map<String, String[]> response);
 	
 	abstract public String getFriendlyType();
+	abstract public QuizQuestionAttempt newQuizQuestionAttempt(QuizAttempt attempt, User user);
 	
 	public void save() {
 		try {
@@ -66,9 +108,7 @@ public abstract class QuizQuestion implements Serializable {
 			ps.setInt(2, this.quiz_question_id);
 						
 			ps.executeUpdate();
-		} catch (SQLException e) {
-			return;
-		} catch (IOException e) {
+		} catch (Exception e) {
 			throw new RuntimeException("Something went badly wrong");
 		}
 	}
@@ -100,7 +140,8 @@ public abstract class QuizQuestion implements Serializable {
 			if(rsq.next()) 
 				new_order = rsq.getInt(1) + 100;
 			
-			PreparedStatement p = db.prepareStatement("INSERT INTO `quiz_question` (`quiz_id`, `type`, `sort_order`) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement p = db.prepareStatement("INSERT INTO `quiz_question` (`quiz_id`, `type`, `sort_order`) VALUES (?, ?, ?)", 
+													  Statement.RETURN_GENERATED_KEYS);
 			p.setInt(1, quiz_id);
 			p.setString(2, cl.getSimpleName());
 			p.setInt(3, new_order);

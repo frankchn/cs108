@@ -15,6 +15,26 @@ public class QuestionResponse extends QuizQuestion {
 	public String question_image = "";
 	public Map<String, Double> correct_answers = new HashMap<String, Double>();
 	
+	public class QuestionResponseQuestionAttempt extends QuizQuestionAttempt {
+		
+		private static final long serialVersionUID = 5064105115168916881L;
+		public String answer = "";
+		
+		protected QuestionResponseQuestionAttempt(int quiz_attempt_id, 
+												  int quiz_question_id, 
+												  int quiz_id,
+												  int user_id) {
+			super(quiz_attempt_id, quiz_question_id, quiz_id, user_id);
+		}
+
+		@Override
+		public double getScore() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+		
+	}
+	
 	public QuestionResponse(int quiz_question_id, int quiz_id) {
 		super(quiz_question_id, quiz_id);
 	}
@@ -54,6 +74,16 @@ public class QuestionResponse extends QuizQuestion {
 	@Override
 	public String getFriendlyType() {
 		return "Question/Picture Response";
+	}
+
+	@Override
+	public QuizQuestionAttempt newQuizQuestionAttempt(QuizAttempt attempt, User user) {
+		QuestionResponseQuestionAttempt qqa = 
+			new QuestionResponseQuestionAttempt(attempt.quiz_attempt_id,
+												quiz_question_id,
+												quiz_id,
+												user.user_id);
+		return qqa;
 	}
 
 }

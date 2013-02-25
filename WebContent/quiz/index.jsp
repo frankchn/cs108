@@ -35,7 +35,7 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 					<div><strong>0.0</strong> / 5.0 rating</div>
 				</div>
 				<div class="quiz_item_left">
-					<div class="quiz_item_title"><a href="quiz/info.php?quiz_id=<%=q.quiz_id%>"><%=q.name %></a></div>
+					<div class="quiz_item_title"><a href="quiz/info.jsp?quiz_id=<%=q.quiz_id%>"><%=q.name %></a></div>
 					<div class="quiz_item_author">
 						created by <a href="profile/?user_id=<%=q.user_id%>"><%=User.getUser(q.user_id).name %></a>
 						on <%=sdf.format(q.created) %>
