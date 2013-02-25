@@ -6,6 +6,7 @@
 QuestionResponse.QuestionResponseQuestionAttempt currentQQA = 
 	(QuestionResponse.QuestionResponseQuestionAttempt) request.getAttribute("QuizQuestionAttempt");
 QuestionResponse currentQuestion = (QuestionResponse) currentQQA.getQuizQuestion();
+QuizAttempt currentAttempt = (QuizAttempt) request.getAttribute("QuizAttempt");
 
 %>
 <h4>Question</h4>
@@ -17,5 +18,13 @@ QuestionResponse currentQuestion = (QuestionResponse) currentQQA.getQuizQuestion
 </div>
 <% } %>
 <p><%=currentQuestion.question_text %></p>
+<% if(currentQQA.graded != QuizQuestionAttemptGraded.done) { %>
 <h4>Answer</h4>
 <input type="text" style="width:95%" name="qqa_<%=currentQQA.quiz_attempt_question_id %>" value="<%=currentQQA.answer %>">
+<% } else { %>
+<h4>Answer</h4>
+<p><%=currentQQA.answer %></p>
+<% if(currentAttempt.show_score) { %>
+<p><em>For the above answer, you achieved a score of <strong><%=currentQQA.score %></strong>.</em>
+<% } %>
+<% } %>

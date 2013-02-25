@@ -31,6 +31,17 @@ public class QuizAttempt {
 		this.user_id = user_id;
 	}
 	
+	public void save() {
+		try {
+			PreparedStatement p = db.prepareStatement("UPDATE `quiz_attempt` SET `submission_time` = ?, score = ?, finished = ? WHERE `quiz_attempt_id` = ?");
+			p.setTimestamp(1, submission_time);
+			p.setDouble(2, score);
+			p.setInt(3, finished ? 1 : 0);
+			p.setInt(4, quiz_attempt_id);
+			p.execute();
+		} catch (SQLException e) { }
+	}
+	
 	public QuizQuestion.QuizQuestionAttempt[] getQuizQuestionAttempts(boolean random_order) {
 		try {
 			String orderSQL = " ORDER BY `sort_order` ASC";

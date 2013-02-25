@@ -18,7 +18,6 @@ public class User {
 	public String cookie_key;
 
 	private static Connection db;
-	
 	static {
 		db = DBConnector.getConnection();
 	}

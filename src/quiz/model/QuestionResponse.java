@@ -34,6 +34,27 @@ public class QuestionResponse extends QuizQuestion {
 			// TODO Auto-generated method stub
 			return 0;
 		}
+
+		@Override
+		public void saveAnswer(Map<String, String[]> ans) {
+			for(String key : ans.keySet()) {
+				if(key.equals("qqa_" + quiz_attempt_question_id)) {
+					answer = ans.get(key)[0];
+				}
+			}
+			save();
+		}
+
+		@Override
+		public void gradeAnswer() {
+			if(QuestionResponse.this.correct_answers.containsKey(answer)) {
+				score = QuestionResponse.this.correct_answers.get(answer);
+			} else {
+				score = 0;
+			}
+			graded = QuizQuestionAttemptGraded.done;
+			save();
+		}
 		
 	}
 	

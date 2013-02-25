@@ -25,7 +25,6 @@ public class QuizStartAttempt extends HttpServlet {
      */
     public QuizStartAttempt() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
@@ -43,7 +42,7 @@ public class QuizStartAttempt extends HttpServlet {
 		if(request.getParameter("practice_mode") != null)
 			practice_mode = true;
 		
-		QuizAttempt qa = QuizAttempt.newQuizAttempt(currentQuiz, currentUser, practice_mode);
+		QuizAttempt qa = QuizAttempt.newQuizAttempt(currentQuiz, currentUser, !practice_mode);
 		QuizQuestionAttempt[] qqas = qa.getQuizQuestionAttempts(true);
 		
 		if(currentQuiz.multiple_pages) {

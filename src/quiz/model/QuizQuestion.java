@@ -32,11 +32,15 @@ public abstract class QuizQuestion implements Serializable {
 		public final int quiz_question_id;
 		public final int quiz_id;
 		public final int user_id;
+		public double score = 0.0;
 		public QuizQuestionAttemptGraded graded = QuizQuestionAttemptGraded.undone;
 		
 		public QuizQuestion getQuizQuestion() {
 			return QuizQuestion.this;
 		}
+		
+		public abstract void saveAnswer(Map<String, String[]> ans);
+		public abstract void gradeAnswer();
 		
 		protected QuizQuestionAttempt(int quiz_attempt_id,
 									  int quiz_question_id,
@@ -87,7 +91,9 @@ public abstract class QuizQuestion implements Serializable {
 			}
 		}
 		
-		abstract public double getScore();
+		public double getScore() {
+			return score;
+		}
 	}
 	
 	public final int quiz_question_id;
