@@ -8,6 +8,7 @@ QuestionResponse.QuestionResponseQuestionAttempt currentQQA =
 QuestionResponse currentQuestion = (QuestionResponse) currentQQA.getQuizQuestion();
 QuizAttempt currentAttempt = (QuizAttempt) request.getAttribute("QuizAttempt");
 
+
 %>
 <h4>Question</h4>
 <% if(currentQuestion.question_image.length() > 0) { %>

@@ -1,8 +1,6 @@
 package quiz.website.quiz;
 
 import java.io.IOException;
-import java.util.Random;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -32,8 +30,6 @@ public class QuizStartAttempt extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
-		
-		Random rgen = new Random();
 		
 		User currentUser = (User) request.getSession().getAttribute("currentUser");
 		Quiz currentQuiz = Quiz.getQuiz(Integer.parseInt(request.getParameter("quiz_id")));		

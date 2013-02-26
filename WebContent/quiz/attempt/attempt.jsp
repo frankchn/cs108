@@ -10,6 +10,7 @@ User currentUser = (User) session.getAttribute("currentUser");
 QuizAttempt currentAttempt = QuizAttempt.load(Integer.parseInt(request.getParameter("quiz_attempt_id")));
 if(currentAttempt.user_id != currentUser.user_id && !currentUser.is_admin) return;
 Quiz currentQuiz = Quiz.getQuiz(currentAttempt.quiz_id);
+if(currentAttempt.finished) return;
 
 QuizQuestion.QuizQuestionAttempt[] currentQQAs = currentAttempt.getQuizQuestionAttempts(currentQuiz.random_questions);
 

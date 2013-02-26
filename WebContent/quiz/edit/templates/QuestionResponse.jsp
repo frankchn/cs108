@@ -24,9 +24,9 @@ QuestionResponse currentQ = (QuestionResponse)request.getAttribute("currentQuest
 	</tr>
 </table>
 <h3>Solutions</h3>
-<td>We support multiple solutions with different scores. For instance, answering "JFK" can be awarded
+<p>We support multiple solutions with different scores. For instance, answering "JFK" can be awarded
     0.5 points while answering "John Fitzgerald Kennedy" can be awarded 2.0 points. Awarding an option
-    0.0 points will cause it to be deleted upon saves.</td>
+    0.0 points will cause it to be deleted upon saves.</p>
 <table id="tblOptions" width="700" cellspacing="6" cellpadding="6" border="0">
 	<tr>
 		<th width="500">Solution Text</th>

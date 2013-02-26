@@ -39,7 +39,7 @@ public class DeleteQuestionServlet extends HttpServlet {
 		
 		currentQuestion.delete();
 		
-		response.sendRedirect("/quiz");
+		response.sendRedirect("index.jsp?quiz_id=" + currentQuiz.quiz_id);
 	}
 
 }
