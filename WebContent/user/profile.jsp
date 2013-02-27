@@ -11,15 +11,13 @@ User currentUser = (User) session.getAttribute("currentUser");
 %>
 
 <ex:push key="body.content">
-	<form method="post" action="quiz/edit/EditQuizInfo">
-		<table cellspacing="3" cellpadding="3" border="0">
-			<tr>
-				<th>Friends</th>
-				<td><input name="name" type="text" size="60" value="<%=currentUser.name %>" /></td>
-			</tr>
-			
-		</table>
-	</form>
+	<h2>Friends</h2>
+	<h2>Achievements</h2>
+		<div class="achievement_grid">
+		<% for (int i = 0; i < 9; i++) { %>
+			<p>hello</p>
+		<%} %>
+		</div>
 </ex:push>
 
 <t:standard>

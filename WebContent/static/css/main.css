@@ -108,6 +108,12 @@ h4 {
 	margin: 8px 8px 8px 8px;
 }
 
+.achievement_grid p {
+	float:left;
+	width:20%;
+	padding-right:80px;
+}
+
 #footer {
 	padding-top:15px;
 	border-top:1px solid #555;
