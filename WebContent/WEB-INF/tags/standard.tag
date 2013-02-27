@@ -46,7 +46,7 @@ User currentUser = (User) session.getAttribute("currentUser");
 					<% if(currentUser == null) { %>
 						Welcome, Guest!
 					<% } else { %>
-						Welcome, <a href="profile/"><%=currentUser.name %></a>!
+						Welcome, <a href="user/profile.jsp?user=<%=currentUser.user_id %>"><%=currentUser.name %></a>!
 					<% } %>
 					</div>
 				</div>
