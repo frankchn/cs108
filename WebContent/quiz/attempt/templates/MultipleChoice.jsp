@@ -64,6 +64,6 @@ Collections.shuffle(options);
 	<% } %>
 </ul>
 <% if(currentAttempt.show_score) { %>
-<em>For the above answers, you scored <strong><%=currentQQA.score %></strong> points.</em>
+<div><em>For the above answers, you scored <strong><%=currentQQA.score %></strong> points.</em></div>
 <% } %>
 <% } %>

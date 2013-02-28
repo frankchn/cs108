@@ -9,23 +9,41 @@ public class FillInTheBlanks extends QuizQuestion {
 	public class FillInTheBlanksQuestionAttempt extends QuizQuestionAttempt {
 
 		private static final long serialVersionUID = -3105203143340286069L;
+		public Map<Integer, String> answer = new HashMap<Integer, String>();
 
 		protected FillInTheBlanksQuestionAttempt(int quiz_attempt_id,
 				int quiz_question_id, int quiz_id, int user_id) {
 			super(quiz_attempt_id, quiz_question_id, quiz_id, user_id);
-			// TODO Auto-generated constructor stub
+			save();
 		}
 
 		@Override
 		public void saveAnswer(Map<String, String[]> ans) {
-			// TODO Auto-generated method stub
-			
+			answer.clear();
+			String target_string = "qqa_" + quiz_attempt_question_id + "_";
+			for(String key : ans.keySet()) {
+				if(key.contains(target_string)) {
+					int field_id = Integer.parseInt(key.substring(target_string.length()));
+					answer.put(field_id, ans.get(key)[0]);
+				}
+			}
+			save();
 		}
 
 		@Override
 		public void gradeAnswer() {
-			// TODO Auto-generated method stub
+			score = 0.0;		
+			graded = QuizQuestionAttemptGraded.done;
 			
+			for(Integer blank_id : answer.keySet()) {
+				String current_answer = answer.get(blank_id);
+								
+				if(FillInTheBlanks.this.correct_answers.get(blank_id).containsKey(current_answer)) {
+					score += FillInTheBlanks.this.correct_answers.get(blank_id).get(current_answer);
+				}
+			}
+			
+			save();
 		}
 		
 	}
@@ -80,8 +98,10 @@ public class FillInTheBlanks extends QuizQuestion {
 	@Override
 	public QuizQuestionAttempt newQuizQuestionAttempt(QuizAttempt attempt,
 			User user) {
-		// TODO Auto-generated method stub
-		return null;
+		return new FillInTheBlanksQuestionAttempt(attempt.quiz_attempt_id,
+												  quiz_question_id,
+												  quiz_id,
+												  user.user_id);
 	}
 
 }
