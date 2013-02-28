@@ -46,7 +46,7 @@ QuestionResponse currentQ = (QuestionResponse)request.getAttribute("currentQuest
 	</tbody>
 	<tfoot>
 		<tr>
-			<td align="center" colspan="3"><a href="#" class="add_new_option">Add New Option</a></td>
+			<td align="center" colspan="2"><a href="#" class="add_new_option">Add New Option</a></td>
 		</tr>
 	</tfoot>
 </table>
@@ -63,4 +63,4 @@ $(".add_new_option").click(function (e) {
 	);
 });
 
-	</script>
+</script>

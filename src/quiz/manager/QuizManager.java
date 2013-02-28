@@ -15,10 +15,7 @@ import quiz.model.User;
 
 public class QuizManager {
 	
-	private static Connection db;	
-	static {
-		db = DBConnector.getConnection();
-	}
+	private static Connection db = DBConnector.getConnection();;	
 	
 	public static Quiz createNewQuiz(User currentUser) {
 		try {

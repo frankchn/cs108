@@ -12,11 +12,7 @@ import quiz.model.*;
 
 public class UserManager {
 
-	private static Connection db;
-	
-	static {
-		db = DBConnector.getConnection();
-	}
+	private static Connection db = DBConnector.getConnection();
 
 	private static String hexToString(byte[] bytes) {
 		StringBuffer buff = new StringBuffer();
@@ -43,7 +39,7 @@ public class UserManager {
 	public static User authenticate(String email, String password) {
 		password = hash_password(email + password);
 		
-		try {
+		try {			
 			PreparedStatement p = db.prepareStatement("SELECT * FROM `user` WHERE `email` = ?");
 			p.setString(1, email);
 			

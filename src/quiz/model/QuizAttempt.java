@@ -20,11 +20,8 @@ public class QuizAttempt {
 	public boolean show_score;
 	public boolean finished;
 	
-	private static Connection db;	
-	static {
-		db = DBConnector.getConnection();
-	}
-	
+	private static Connection db = DBConnector.getConnection();
+
 	private QuizAttempt(int quiz_attempt_id, int quiz_id, int user_id) {
 		this.quiz_id = quiz_id;	
 		this.quiz_attempt_id = quiz_attempt_id;
