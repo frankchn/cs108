@@ -21,7 +21,7 @@ public class Achievement {
 	public static final int PRODIGIOUS_AUTHOR = 3;
 	public static final int QUIZ_MACHINE = 4;
 	public static final int GREATEST = 5;
-	
+	public static final int PRACTICE_MODE = 6;
 
 	public final int user_id;
 	public final int achievement_id;
@@ -70,6 +70,10 @@ public class Achievement {
 		checkHighestScore(user_id, quiz_attempt_id, quiz_id);
 	}
 	
+	public static void alertPractice(int user_id) {
+		saveAchievement(user_id, PRACTICE_MODE);
+	}
+	
 	private static void checkHighestScore(int user_id, int quiz_attempt_id, int quiz_id) {
 		ResultSet r;
 		try {
@@ -106,24 +110,28 @@ public class Achievement {
 		this.achievement_id = achievement_id;
 		switch (achievement_id) {
 			case 1:
-				img = "images/badge.gif";
-				description = "Amateur Author";
+				img = "images/amateur_author.gif";
+				description = " created one quiz.";
 				break;
 			case 2:
-				img = "images/badge.gif";
-				description = "Prolific Author";
+				img = "images/prolific_author.gif";
+				description = " created five quizzes.";
 				break;
 			case 3:
-				img = "images/badge.gif";
-				description = "Prodigious Author";
+				img = "images/prodigious_author.gif";
+				description = " created ten quizzes.";
 				break;
 			case 4:
-				img = "images/badge.gif";
-				description = "Quiz Machine";
+				img = "images/quiz_machine.gif";
+				description = " took ten quizzes.";
 				break;
 			case 5:
-				img = "images/badge.gif";
-				description = "You're the Greatest!";
+				img = "images/youre_the_greatest.gif";
+				description = " got the highest score on a quiz.";
+				break;
+			case 6:
+				img = "images/practice_makes_perfect.gif";
+				description = " took a practice quiz.";
 				break;
 			default:
 				img = "";
