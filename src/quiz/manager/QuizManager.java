@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 
 import quiz.base.DBConnector;
+import quiz.model.Achievement;
 import quiz.model.Quiz;
 import quiz.model.User;
 
@@ -31,6 +32,7 @@ public class QuizManager {
 			
 			ResultSet s = p.getGeneratedKeys();
 			s.next();
+			Achievement.alertCreateQuiz(currentUser.user_id);
 			return Quiz.getQuiz(s.getInt(1));
 		} catch (SQLException e) {
 			return null;

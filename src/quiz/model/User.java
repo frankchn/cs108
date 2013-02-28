@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import quiz.base.DBConnector;
 
@@ -58,6 +60,22 @@ public class User {
 			return null;
 		}
 	}
+	
+	public List<Achievement> getAchievements() {
+		ResultSet r;
+		List<Achievement> a_list = new ArrayList<Achievement>();
+		try {
+			r = db.prepareStatement("SELECT * FROM `achievement` WHERE `user_id` = " + user_id).executeQuery();
+			while (r.next()) {
+				Achievement a = new Achievement(r.getInt("user_id"), r.getInt("achievement_id"));
+				a_list.add(a);
+			}
+			return a_list;
+		} catch (SQLException e) {
+			return null;
+		}
+	}
+	
 	
 	private User(int user_id, String name, String email, boolean is_admin, String cookie_key) {
 		this.user_id = user_id;
