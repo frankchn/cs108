@@ -8,8 +8,8 @@ if(!Authentication.require_login(request, response)) return;
 int profile_id = Integer.parseInt(request.getParameter("user"));
 User viewedUser = (User)User.getUser(profile_id);
 User currentUser = (User) session.getAttribute("currentUser");
-List<Achievement> achievements = currentUser.getAchievements();
-List<Record> records = currentUser.getRecords();
+List<Achievement> achievements = viewedUser.getAchievements();
+List<Record> records = viewedUser.getRecords();
 
 %>
 
