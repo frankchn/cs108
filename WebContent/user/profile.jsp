@@ -9,6 +9,7 @@ int profile_id = Integer.parseInt(request.getParameter("user"));
 User viewedUser = (User)User.getUser(profile_id);
 User currentUser = (User) session.getAttribute("currentUser");
 List<Achievement> achievements = currentUser.getAchievements();
+List<Record> records = currentUser.getRecords();
 
 %>
 
@@ -58,6 +59,13 @@ List<Achievement> achievements = currentUser.getAchievements();
 		for (int i = 0; i < achievements.size(); i++) { %>
 			<img style="margin-right:25px" src="<%=achievements.get(i).img %>" title="<%=currentUser.name %><%=achievements.get(i).description %>">
 		<%} %>
+		</div>
+	<tab><h3>History</h3></tab>
+		<div class="record_grid">
+		<%
+		for (int j = 0; j < records.size(); j++) { %>
+		
+		<% }%>
 		</div>
 </ex:push>
 

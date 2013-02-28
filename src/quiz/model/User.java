@@ -73,6 +73,21 @@ public class User {
 		}
 	}
 	
+	public List<Record> getRecords() {
+		ResultSet r;
+		List<Record> r_list = new ArrayList<Record>();
+		try {
+			r = db.prepareStatement("SELECT * from `quiz_attempt` WHERE `user_id` = " + user_id).executeQuery();
+			while (r.next()) {
+				Record record = new Record(r.getInt("user_id"), r.getInt("quiz_id"), r.getTimestamp("submission_time"), r.getDouble("score"), r.getInt("show_score"), r.getInt("finished"));
+				r_list.add(record);
+			}
+			return r_list;
+		} catch (SQLException e) {
+			return null;
+		}
+	}
+	
 	
 	private User(int user_id, String name, String email, boolean is_admin, String cookie_key) {
 		this.user_id = user_id;
