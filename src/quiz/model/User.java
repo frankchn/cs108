@@ -17,10 +17,7 @@ public class User {
 	public boolean is_admin;
 	public String cookie_key;
 
-	private static Connection db;
-	static {
-		db = DBConnector.getConnection();
-	}
+	private static Connection db = DBConnector.getConnection();;
 	
 	public static User getUser(int user_id) {
 		ResultSet r;

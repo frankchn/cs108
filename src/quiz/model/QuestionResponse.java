@@ -60,6 +60,7 @@ public class QuestionResponse extends QuizQuestion {
 	
 	public QuestionResponse(int quiz_question_id, int quiz_id) {
 		super(quiz_question_id, quiz_id);
+		save();
 	}
 	
 	@Override

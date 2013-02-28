@@ -11,10 +11,7 @@ import quiz.base.DBConnector;
 
 public class Quiz {
 
-	private static Connection db;	
-	static {
-		db = DBConnector.getConnection();
-	}
+	private static Connection db = DBConnector.getConnection();;	
 	
 	public final int quiz_id;
 	public String name;
