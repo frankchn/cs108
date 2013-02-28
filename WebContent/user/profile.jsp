@@ -17,7 +17,7 @@ List<Achievement> achievements = currentUser.getAchievements();
 		<div class="achievement_grid">
 		<% 
 		for (int i = 0; i < achievements.size(); i++) { %>
-			<p><img src="<%=achievements.get(i).img %>"><%=achievements.get(i).description %></p>
+			<img style="margin-right:25px" src="<%=achievements.get(i).img %>" title="<%=currentUser.name %><%=achievements.get(i).description %>">
 		<%} %>
 		</div>
 </ex:push>

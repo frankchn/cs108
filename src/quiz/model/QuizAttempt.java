@@ -80,6 +80,10 @@ public class QuizAttempt {
 			ps.setInt(4, show_score ? 1 : 0);
 			ps.executeUpdate();
 			
+			if (!show_score) {
+				Achievement.alertPractice(user.user_id);
+			}
+			
 			ResultSet s = ps.getGeneratedKeys();
 			s.next();
 			qa = QuizAttempt.load(s.getInt(1));
