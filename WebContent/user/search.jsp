@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="ex" uri="http://frankchn.stanford.edu/cs108/" %>
-<%@page import="quiz.model.*, quiz.website.auth.Authentication, quiz.manager.*, java.util.*" %>
+<%@page import="quiz.model.*, quiz.website.auth.Authentication, quiz.friends.*, java.util.*" %>
 
 <%
 if(!Authentication.require_login(request, response)) return;
@@ -20,10 +20,25 @@ ArrayList<User> results = RelationManager.search(request.getParameter("search_qu
 				<div class="search_user_container">
 				<div class="search_user_right">
 					<div>
-						<form style="display:inline" action="user/search.jsp" method="POST">
-							<input type="submit" name="submit" value="Add Friend">
-							<input type="hidden" name="requestor_id" value=<%=u.user_id%>>
-							<input type="hidden" name="requestee_id" value=<%=currentUser.user_id%>>
+						<form style="display:inline" action="FriendServlet" method="POST">
+							<%if (RelationManager.friends(currentUser.user_id, u.user_id)) { 
+							%>
+							<input type="submit" name="friends" value="Friends" disabled>	
+							<%} else if(RelationManager.requested(currentUser.user_id, u.user_id)) { 
+							%>
+							<input type="submit" name="requested" value="Request Sent" disabled>
+							<%} else if(RelationManager.requested(u.user_id, currentUser.user_id)) { 
+							%>
+							<input type="submit" name="confirm" value="Confirm">
+							<%} else {
+							%>
+							<input type="submit" name="addFriend" value="Add Friend">
+							<% 
+							}
+							%>
+							<input type="hidden" name="requestee_id" value=<%=u.user_id%>>
+							<input type="hidden" name="requestor_id" value=<%=currentUser.user_id%>>
+							<input type="hidden" name="search_query" value=<%=request.getParameter("search_query")%>>
 						</form>
 					</div>
 				</div>
