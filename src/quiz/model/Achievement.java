@@ -20,6 +20,7 @@ public class Achievement {
 	public static final int PROLIFIC_AUTHOR = 2;
 	public static final int PRODIGIOUS_AUTHOR = 3;
 	public static final int QUIZ_MACHINE = 4;
+	public static final int GREATEST = 5;
 	
 
 	public final int user_id;
@@ -34,15 +35,14 @@ public class Achievement {
 	
 	public static void alertCreateQuiz(int user_id) {
 		ResultSet r;
-		System.out.println("prepare");
 		try {
-			PreparedStatement p = db.prepareStatement("SELECT COUNT (*) as count FROM 'quiz' where user_id = ?");
+			PreparedStatement p = db.prepareStatement("SELECT COUNT(*) FROM `quiz` where `user_id` = ?");
 			p.setInt(1, user_id);
 			r = p.executeQuery();
-			int numQuizzes = r.getInt("count");
+			r.next();
+			int numQuizzes = r.getInt(1);
 			switch (numQuizzes) {
 				case 1: saveAchievement(user_id, AMATEUR_AUTHOR);
-					System.out.println("saved");
 					break;
 				case 5: saveAchievement(user_id, PROLIFIC_AUTHOR);
 					break;
@@ -54,13 +54,49 @@ public class Achievement {
 		} catch (SQLException ignored) { }
 	}
 	
-	public static void saveAchievement(int user_id, int achievement_id) {
+	public static void alertTakeQuiz(int user_id, int quiz_attempt_id, int quiz_id) {
 		ResultSet r;
+		try {
+			PreparedStatement p = db.prepareStatement("SELECT COUNT(*) from `quiz_attempt` where `user_id` = ?");
+			p.setInt(1, user_id);
+			r = p.executeQuery();
+			r.next();
+			int numTaken = r. getInt(1);
+			if (numTaken == 10) {
+				saveAchievement(user_id, QUIZ_MACHINE);
+			}
+		} catch (SQLException ignored) { }
+		
+		checkHighestScore(user_id, quiz_attempt_id, quiz_id);
+	}
+	
+	private static void checkHighestScore(int user_id, int quiz_attempt_id, int quiz_id) {
+		ResultSet r;
+		try {
+			PreparedStatement p2 = db.prepareStatement("SELECT * from `quiz_attempt` where `quiz_attempt_id` = ?");
+			p2.setInt(1, quiz_attempt_id);
+			r = p2.executeQuery();
+			r.next();
+			double user_score = r.getDouble("score");
+			PreparedStatement p3 = db.prepareStatement("SELECT MAX(score) from `quiz_attempt` where `quiz_id` = ?");
+			p3.setInt(1, quiz_id);
+			r = p3.executeQuery();
+			r.next();
+			double max_score = r.getDouble(1);
+			System.out.println(user_score);
+			System.out.println(max_score);
+			if (user_score >= max_score && user_score > 0) {
+				saveAchievement(user_id, GREATEST);
+			}
+		} catch (SQLException ignored) { }	
+	}
+		
+	public static void saveAchievement(int user_id, int achievement_id) {
 		try {
 			PreparedStatement p = db.prepareStatement("INSERT INTO `achievement` (`user_id`, `achievement_id`) VALUES (?, ?)");
 			p.setInt(1, user_id);
 			p.setInt(2, achievement_id);
-			r = p.executeQuery();
+			p.executeUpdate();
 			
 		} catch (SQLException ignored) {  }
 	}
@@ -80,6 +116,14 @@ public class Achievement {
 			case 3:
 				img = "images/badge.gif";
 				description = "Prodigious Author";
+				break;
+			case 4:
+				img = "images/badge.gif";
+				description = "Quiz Machine";
+				break;
+			case 5:
+				img = "images/badge.gif";
+				description = "You're the Greatest!";
 				break;
 			default:
 				img = "";

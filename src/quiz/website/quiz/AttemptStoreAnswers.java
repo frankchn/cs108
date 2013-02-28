@@ -79,6 +79,7 @@ public class AttemptStoreAnswers extends HttpServlet {
 			currentAttempt.finished = true;
 			currentAttempt.score = score;
 			currentAttempt.save();
+			Achievement.alertTakeQuiz(currentAttempt.user_id, currentAttempt.quiz_attempt_id, currentAttempt.quiz_id);
 			
 			response.sendRedirect("results.jsp?quiz_attempt_id=" + currentAttempt.quiz_attempt_id);
 		} else {

@@ -89,7 +89,6 @@ public class QuizAttempt {
 		for(QuizQuestion q : qs) {
 			q.newQuizQuestionAttempt(qa, user);
 		}
-		
 		return qa;
 	}
 
