@@ -43,7 +43,7 @@ ArrayList<User> results = RelationManager.search(request.getParameter("search_qu
 					</div>
 				</div>
 				<div class="search_user_left">
-					<div class="search_user_name"><a href="user/profile.jsp?user_id=<%=u.user_id%>"><%=u.name %></a></div>
+					<div class="search_user_name"><a href="user/profile.jsp?user=<%=u.user_id%>"><%=u.name %></a></div>
 					<div class="search_user_email">
 						<%=u.email%> 
 					</div>

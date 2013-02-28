@@ -49,15 +49,15 @@ public class FriendServlet extends HttpServlet {
 			// You accepted a friend!
 			RelationManager.removeFriendRequest(requestee, requestor);
 			RelationManager.addFriendship(requestor, requestee, time);
-			response.sendRedirect("user/profile.jsp?user_id=" + requestee);
+			response.sendRedirect("user/profile.jsp?=" + requestee);
 			
 		} else if (request.getParameter("ignore") != null) {
 			// You aren't really friends!
 			RelationManager.removeFriendRequest(requestor, requestee);
-			response.sendRedirect("user/profile.jsp?user_id=" + requestor);
+			response.sendRedirect("user/profile.jsp?user=" + requestor);
 		} else {
 			RelationManager.removeFriendship(requestor, requestee);
-			response.sendRedirect("user/profile.jsp?user_id=" + requestor);
+			response.sendRedirect("user/profile.jsp?user=" + requestor);
 		}
 	}
 
