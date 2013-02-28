@@ -49,7 +49,7 @@ public class FriendServlet extends HttpServlet {
 			// You accepted a friend!
 			RelationManager.removeFriendRequest(requestee, requestor);
 			RelationManager.addFriendship(requestor, requestee, time);
-			response.sendRedirect("user/profile.jsp?=" + requestee);
+			response.sendRedirect("user/profile.jsp?user=" + requestee);
 			
 		} else if (request.getParameter("ignore") != null) {
 			// You aren't really friends!

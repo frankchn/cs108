@@ -13,6 +13,7 @@ List<Achievement> achievements = currentUser.getAchievements();
 %>
 
 <ex:push key="body.content">
+	
 	<div>
 		<h2 style="display:inline"><span style="font-weight:normal">
 		<% if (viewedUser.user_id != currentUser.user_id) {%>
