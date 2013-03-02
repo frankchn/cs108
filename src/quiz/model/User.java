@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import quiz.messaging.*;
 
 import quiz.base.DBConnector;
 
@@ -96,6 +97,58 @@ public class User {
 		}
 	}
 	
+	public List<Message> getMessages() {
+		ArrayList<Message> inbox = new ArrayList<Message>();
+		ResultSet r;
+		try {
+			r = db.prepareStatement("SELECT * FROM `message` WHERE `recipient_user_id` = " + user_id).executeQuery();
+			while(r.next()) {
+				Message m = new Message(r.getInt("message_id"),
+										r.getString("type"),
+										r.getInt("sender_user_id"),
+										r.getInt("recipient_user_id"),
+										r.getInt("unread"),
+										r.getTimestamp("time_sent"),
+										r.getInt("quiz_id"),
+										r.getString("subject"),
+										r.getString("body"));
+				inbox.add(m);
+			}
+			return inbox;
+		} catch (SQLException e) {
+			return null;
+		}
+	}
+	
+	public List<FriendRequest> getRequests() {
+		List<FriendRequest> requests = new ArrayList<FriendRequest>();
+		ResultSet r;
+		try {
+			r = db.prepareStatement("SELECT * FROM `friend_request` WHERE `requestee_user_id`=" + user_id).executeQuery();
+			while(r.next()) { 
+				FriendRequest req = new FriendRequest(r.getInt("friend_request_id"), r.getInt("requestor_user_id"), r.getInt("requestee_user_id"), r.getTimestamp("request_time"));
+				requests.add(req);
+			}	
+		} catch (SQLException e) {
+			return null;
+		}
+		return requests;
+	}
+	
+	public List<User> getFriends() {
+		List<User> friends = new ArrayList<User>();
+		try {
+			PreparedStatement p = db.prepareStatement("SELECT * FROM `friend` WHERE `user_id_1` =" + user_id + " OR `user_id_2` =" + user_id);
+			ResultSet r = p.executeQuery();
+			while(r.next()) {
+				User u = User.getUser(r.getInt("user_id"));
+				friends.add(u);
+			}
+		} catch (SQLException e) {
+			return null;
+		}	
+		return friends;
+	}
 	
 	private User(int user_id, String name, String email, boolean is_admin, String cookie_key) {
 		this.user_id = user_id;

@@ -15,7 +15,6 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 %>
 
 <ex:push key="body.content">
-	
 	<div>
 		<h2 style="display:inline"><span style="font-weight:normal">
 		<% if (viewedUser.user_id != currentUser.user_id) {%>
@@ -23,13 +22,15 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 			<div class="search_user_right">
 			<form style="display:inline" action="FriendServlet" method="POST">
 			<%if (RelationManager.friends(currentUser.user_id, viewedUser.user_id)) { %>
-				<input type="submit" name="friends" value="Friends" disabled>	
+				<input type="submit" style="color:grey" name="unfriend" value="Friends" onmouseover="this.value='Remove'; this.style.color='black'" onmouseout="this.value='Friends'; this.style.color='grey'" >
+				<!--<input type="image" name="unfriend" src="user/friendbtn.png" width="55" height="16" onMouseOver="this.src='user/removebtn.png'" onMouseOut="this.src='user/friendbtn.png'"/>-->	
 			<%} else if(RelationManager.requested(currentUser.user_id, viewedUser.user_id)) { %>
 				<input type="submit" name="requested" value="Request Sent" disabled>
 			<%} else if(RelationManager.requested(viewedUser.user_id, currentUser.user_id)) { %>
-				<input type="submit" name="confirm" value="Confirm">
+				<input type="submit" name="confirm" value="Confirm"> &nbsp;
+				<input type="submit" name="ignoreProf" value="Ignore">
 			<%} else { %>
-				<input type="submit" name="addFriend" value="+1  Add Friend">
+				<input type="submit" name="addFriendProf" value="+1 Add Friend">
 			<%} %>
 				<input type="hidden" name="requestee_id" value=<%=viewedUser.user_id%>>
 				<input type="hidden" name="requestor_id" value=<%=currentUser.user_id%>>
@@ -37,9 +38,9 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 			</form>
 			<%if (RelationManager.friends(currentUser.user_id, viewedUser.user_id)) { %>	
 				<form style="display:inline" action="MessageServlet" method="POST">
-					<input type="submit" name="challenge" value="CHALLENGE!">	
-					<input type="hidden" name="challengee_id" value=<%=viewedUser.user_id%>>
-					<input type="hidden" name="challenger_id" value=<%=currentUser.user_id%>>
+					<input type="submit" name="message" value="Message">	
+					<input type="hidden" name="messengee_id" value=<%=viewedUser.user_id%>>
+					<input type="hidden" name="messenger_id" value=<%=currentUser.user_id%>>
 				</form>
 			<%} %>
 			</div>	

@@ -102,11 +102,10 @@ public class RelationManager {
 		}
 	}
 	
-	public static boolean removeFriendship(int user_id_1, int user_id_2) {
+	public static void removeFriendship(int user_id_1, int user_id_2) {
 		try {
-			return db.prepareStatement("DELETE FROM 'friend' WHERE `user_id_1` = " +user_id_1 + " AND `user_id_2` =" + user_id_2).execute();
+			db.prepareStatement("DELETE FROM `friend` WHERE (`user_id_1` =" + user_id_1 + " AND `user_id_2`=" + user_id_2 +") OR (`user_id_1` =" + user_id_2 + " AND `user_id_2`=" + user_id_1 +")").executeUpdate();
 		} catch (SQLException e) {
-			return false;
 		}
 	}
 	
