@@ -77,9 +77,17 @@ public class User {
 		ResultSet r;
 		List<Record> r_list = new ArrayList<Record>();
 		try {
-			r = db.prepareStatement("SELECT * from `quiz_attempt` WHERE `user_id` = " + user_id).executeQuery();
+			PreparedStatement p = db.prepareStatement("SELECT ui, qi, max_start FROM (\n" +
+							"SELECT user_id AS ui, quiz_id AS qi, MAX( start_time ) AS max_start\n" +
+							"FROM  `quiz_attempt`\n" +
+							"GROUP BY ui, qi)qa\n" +	
+							"WHERE ui =?\n" +
+							"ORDER BY max_start DESC");
+			p.setInt(1, user_id);
+			r = p.executeQuery();
 			while (r.next()) {
-				Record record = new Record(r.getInt("user_id"), r.getInt("quiz_id"), r.getTimestamp("submission_time"), r.getDouble("score"), r.getInt("show_score"), r.getInt("finished"));
+				Record record = new Record(r.getInt("ui"), r.getInt("qi"));
+				System.out.println(record.quiz_name);
 				r_list.add(record);
 			}
 			return r_list;

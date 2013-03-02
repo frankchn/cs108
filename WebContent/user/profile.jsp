@@ -10,6 +10,7 @@ User viewedUser = (User)User.getUser(profile_id);
 User currentUser = (User) session.getAttribute("currentUser");
 List<Achievement> achievements = viewedUser.getAchievements();
 List<Record> records = viewedUser.getRecords();
+java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 
 %>
 
@@ -65,8 +66,12 @@ List<Record> records = viewedUser.getRecords();
 		<div class="record_grid">
 		<%
 		for (int j = 0; j < records.size(); j++) { %>
-		
-		<% }%>
+			<% Record rec = records.get(j); %>
+			<p><%= rec.quiz_name %></p>
+			<% for (int k = 0; k < rec.attempts.length; k++) { %>
+				<p><%= sdf.format(rec.attempts[k].start_time) %>
+			<% }	
+		}%>
 		</div>
 </ex:push>
 
