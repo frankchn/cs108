@@ -29,10 +29,11 @@ ArrayList<User> results = RelationManager.search(request.getParameter("search_qu
 							<input type="submit" name="requested" value="Request Sent" disabled>
 							<%} else if(RelationManager.requested(u.user_id, currentUser.user_id)) { 
 							%>
-							<input type="submit" name="confirm" value="Confirm">
+							<input type="submit" name="confirm" value="Confirm"> &nbsp;
+							<input type="submit" name="ignoreSearch" value = "Ignore">
 							<%} else {
 							%>
-							<input type="submit" name="addFriend" value="Add Friend">
+							<input type="submit" name="addFriendSearch" value="+1 Add Friend">
 							<% 
 							}
 							%>
