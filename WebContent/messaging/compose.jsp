@@ -13,41 +13,82 @@ if(!currentUser.is_admin && currentQuiz.user_id != currentUser.user_id) return;
 %>
 
 <ex:push key="body.content">
-	<form method="post" action="quiz/edit/EditQuizInfo">
-		<table cellspacing="3" cellpadding="3" border="0">
+<h3><a href="messaging/messages.jsp">Messages</a> &bull; 
+	    <a href="messaging/friendRequests.jsp"">Friend Requests</a>
+</h3>
+	<table cellpadding="3" cellspacing="3" border="0">
+		<tr>
+			<th>Name</th>
+			<td><%=currentQuiz.name %></td>
+		</tr>
+		<tr>
+			<th>Description</th>
+			<td><%=currentQuiz.description %></td>
+		</tr>
+		<tr>
+			<th>Multiple Pages</th>
+			<td><%=currentQuiz.multiple_pages ? "The quiz will be rendered on multiple pages." : "The quiz will be rendered on a single page." %></td>
+		</tr>
+		<tr>
+			<th>Random Questions</th>
+			<td><%=currentQuiz.random_questions ? "The questions will be ordered randomly." : "The questions will be ordered in the order you specify." %></td>
+		</tr>
+		<tr>
+			<th>Immediate Correction</th>
+			<td><%=currentQuiz.immediate_correction ? "Individual questions will be graded immediately." : "The quiz will graded completely at the end." %></td>
+		</tr>
+		<tr>
+			<th>Practice Mode</th>
+			<td><%=currentQuiz.practice_mode ? "The quiz can be taken for practice." : "The quiz must be taken for a grade." %></td>
+		</tr>
+	</table>
+	<h3>Questions</h3>
+	<table cellpadding="3" cellspacing="3" border="0" width="100%">
+		<thead>
 			<tr>
-				<th>Quiz Title</th>
-				<td><input name="name" type="text" size="60" value="<%=currentQuiz.name %>" /></td>
+				<th width="50">No.</th>
+				<th width="500">Question Title</th>
+				<th>Type</th>
+				<th>Action</th>
 			</tr>
+		</thead>
+		<tbody>
+			<%
+			int i = 1;
+			QuizQuestion[] qs = currentQuiz.getQuestions();
+			for(QuizQuestion q : qs) {
+			%>
 			<tr>
-				<th>Description</th>
-				<td><textarea name="description" style="width:500px;height:150px"><%=currentQuiz.description %></textarea></td>
+				<td align="center"><%=i++ %></td>
+				<td align="center"><%=q.getTitle() %></td>
+				<td align="center"><%=q.getFriendlyType() %></td>
+				<td align="center">
+					<a href="quiz/edit/edit_question.jsp?quiz_question_id=<%=q.quiz_question_id%>">Edit</a> 
+					<a href="quiz/edit/DeleteQuestionServlet?quiz_question_id=<%=q.quiz_question_id%>">Delete</a> 
+					Up 
+					Down
+				</td>
 			</tr>
-			<tr>
-				<th>Multiple Pages</th>
-				<td><input type="checkbox" name="multiple_pages" <%=currentQuiz.multiple_pages ? "checked" : "" %> value="1"> I want the quiz to have span multiple pages (one for each question).</td>
-			</tr>
-			<tr>
-				<th>Random Questions</th>
-				<td><input type="checkbox" name="random_questions" <%=currentQuiz.random_questions ? "checked" : "" %> value="1"> I want question order to be randomized.</td>
-			</tr>
-			<tr>
-				<th>Immediate Correction</th>
-				<td><input type="checkbox" name="immediate_correction" <%=currentQuiz.immediate_correction ? "checked" : "" %> value="1"> I want individual questions graded immediately.</td>
-			</tr>
-			<tr>
-				<th>Practice Mode</th>
-				<td><input type="checkbox" name="practice_mode" <%=currentQuiz.practice_mode ? "checked" : "" %> value="1"> I want to allow this quiz to be taken without a score.</td>
-			</tr>
-			<tr>
-				<th><input type="hidden" name="quiz_id" value="<%=currentQuiz.quiz_id %>"></th>
-				<td><input type="submit" value="Send Challenge"></td>
-			</tr>
-		</table>
-	</form>
+			<% } %>
+			<form method="post" action="quiz/edit/AddQuestionServlet">
+				<tr>
+					<td colspan="2" align="center">Add New Question</td>
+					<td align="center"><select name="type">
+						<option value="QuestionResponse">Question/Picture Response</option>
+						<option value="FillInTheBlanks">Fill-in-the-Blanks</option>
+						<option value="MultipleChoice">Multiple Choice</option>
+					</select></td>
+					<td align="center">
+						<input type="hidden" name="quiz_id" value="<%=currentQuiz.quiz_id%>">
+						<input type="submit" value="Add Question">
+					</td>
+				</tr>
+			</form>
+		</tbody>
+	</table>
 </ex:push>
 
 <t:standard>
-    <jsp:attribute name="pageTitle">Edit Quiz Information</jsp:attribute>
+    <jsp:attribute name="pageTitle">MailBox</jsp:attribute>
 	<jsp:body>${requestScope['body.content']}</jsp:body>
 </t:standard>

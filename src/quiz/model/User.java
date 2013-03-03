@@ -97,29 +97,7 @@ public class User {
 		}
 	}
 	
-	public List<Message> getMessages() {
-		ArrayList<Message> inbox = new ArrayList<Message>();
-		ResultSet r;
-		try {
-			r = db.prepareStatement("SELECT * FROM `message` WHERE `recipient_user_id` = " + user_id).executeQuery();
-			while(r.next()) {
-				Message m = new Message(r.getInt("message_id"),
-										r.getString("type"),
-										r.getInt("sender_user_id"),
-										r.getInt("recipient_user_id"),
-										r.getInt("unread"),
-										r.getTimestamp("time_sent"),
-										r.getInt("quiz_id"),
-										r.getString("subject"),
-										r.getString("body"));
-				inbox.add(m);
-			}
-			return inbox;
-		} catch (SQLException e) {
-			return null;
-		}
-	}
-	
+
 	public List<FriendRequest> getRequests() {
 		List<FriendRequest> requests = new ArrayList<FriendRequest>();
 		ResultSet r;

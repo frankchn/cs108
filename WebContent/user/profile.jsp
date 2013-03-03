@@ -23,7 +23,6 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 			<form style="display:inline" action="FriendServlet" method="POST">
 			<%if (RelationManager.friends(currentUser.user_id, viewedUser.user_id)) { %>
 				<input type="submit" style="color:grey" name="unfriend" value="Friends" onmouseover="this.value='Remove'; this.style.color='black'" onmouseout="this.value='Friends'; this.style.color='grey'" >
-				<!--<input type="image" name="unfriend" src="user/friendbtn.png" width="55" height="16" onMouseOver="this.src='user/removebtn.png'" onMouseOut="this.src='user/friendbtn.png'"/>-->	
 			<%} else if(RelationManager.requested(currentUser.user_id, viewedUser.user_id)) { %>
 				<input type="submit" name="requested" value="Request Sent" disabled>
 			<%} else if(RelationManager.requested(viewedUser.user_id, currentUser.user_id)) { %>
@@ -60,7 +59,7 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 		<div class="achievement_grid">
 		<% 
 		for (int i = 0; i < achievements.size(); i++) { %>
-			<img style="margin-right:25px" src="<%=achievements.get(i).img %>" title="<%=currentUser.name %><%=achievements.get(i).description %>">
+			<img style="margin-right:25px" src="<%=achievements.get(i).img %>" title="<%=viewedUser.name %><%=achievements.get(i).description %>">
 		<%} %>
 		</div>
 	<tab><h3>History</h3></tab>

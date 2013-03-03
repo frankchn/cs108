@@ -1,6 +1,6 @@
 <%@tag language="java" pageEncoding="UTF-8"%>
 <%@attribute name="pageTitle" %>
-<%@tag import="quiz.model.*" %>
+<%@tag import="quiz.model.*, quiz.messaging.*" %>
 <%
 User currentUser = (User) session.getAttribute("currentUser");
 %>
@@ -35,7 +35,7 @@ User currentUser = (User) session.getAttribute("currentUser");
 						<%
 						} else {
 						%>
-						<span class="nav_item"><a href="messages/">Messages <strong>(X)</strong></a></span>
+						<span class="nav_item"><a href="messaging/messages.jsp">Messages <strong>(<%=MessageManager.numNewNotifications(currentUser.user_id)%>)</strong></a></span>
 						<span class="nav_item"><a href="auth/LogoutServlet">Logout</a></span>
 						<%
 						}

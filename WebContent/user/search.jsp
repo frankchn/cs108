@@ -16,6 +16,7 @@ ArrayList<User> results = RelationManager.search(request.getParameter("search_qu
 		<%if (results.size() != 0) { 
 			for (int i = 0; i < results.size(); i++) { 
 				User u = results.get(i);
+				if (u.user_id != currentUser.user_id) {
 			%>
 				<div class="search_user_container">
 				<div class="search_user_right">
@@ -50,7 +51,7 @@ ArrayList<User> results = RelationManager.search(request.getParameter("search_qu
 					</div>
 				</div>
 			</div>
-		<%
+		<%		}
 			}
 		} else {
 		%>
