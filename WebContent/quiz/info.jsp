@@ -25,6 +25,13 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 			<td><%=currentQuiz.description %></td>
 		</tr>
 		<tr>
+			<th>Average Rating</th>
+			<td><%double rating = currentQuiz.getAvgRating();
+				if (rating > 0) {%><%=rating %>
+				<%} else { %>Not Yet Rated
+				<% } %></td>
+		</tr>
+		<tr>
 			<th>Created by</th>
 			<td><a href="profile/?user_id=<%=currentQuiz.user_id%>"><%=User.getUser(currentQuiz.user_id).name %></a></td>
 		</tr>
@@ -58,7 +65,7 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 			<% } %>
 		</form>
 	</div>
-	<h3>Previous Attempts</h3>
+	<h3 id= "prevAttempts">Previous Attempts</h3>
 	<table cellpadding="3" cellspacing="3" border="0">
 		<tr>
 			<th>Attempt No.</th>

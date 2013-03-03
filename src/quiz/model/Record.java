@@ -16,22 +16,26 @@ import java.util.List;
 import quiz.base.DBConnector;
 
 public class Record {
+	public int quiz_id;
 	public int user_id;
 	public QuizAttempt[] attempts;
 	public String quiz_name;
 	public int rating;
+	public Timestamp last_start_time;
 	
 	private static Connection db;
 	static {
 		db = DBConnector.getConnection();
 	}
 	
-	public Record(int user_id, int quiz_id) {
+	public Record(int user_id, int quiz_id, Timestamp last_start_time) {
+		this.quiz_id = quiz_id;
 		this.user_id = user_id;
 		this.quiz_name = getQuizName(quiz_id);
 		this.rating = getRating(quiz_id, user_id);
+		this.last_start_time = last_start_time;
 		
-		attempts = QuizAttempt.loadAttemptsForRecord(quiz_id, user_id);
+		//attempts = QuizAttempt.loadAttemptsForRecord(quiz_id, user_id);
 	}
 	
 	private String getQuizName(int quiz_id) {
