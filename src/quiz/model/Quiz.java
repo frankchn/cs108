@@ -71,6 +71,16 @@ public class Quiz {
 		}
 	}
 	
+	public double getAvgRating() {
+		try {
+			ResultSet r = db.prepareStatement("SELECT AVG(stars) FROM `rating` WHERE `quiz_id` = " + quiz_id).executeQuery();
+			if (!r.next()) return 0;
+			return r.getDouble(1);
+		} catch (SQLException ignored) { 
+			return 0;
+		}
+	}
+	
 	public void delete() {
 		try {
 			db.prepareStatement("DELETE FROM `quiz_attempt` WHERE `quiz_id` = " + quiz_id).executeUpdate();

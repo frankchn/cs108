@@ -149,3 +149,20 @@ h4 {
 	line-height:15px;
 	text-align:right;
 }
+
+.rating {
+  unicode-bidi: bidi-override;
+  direction: rtl;
+}
+.rating > span {
+  font-size: 30px;
+  display: inline-block;
+  position: relative;
+  width: 1.1em;
+}
+.rating > span:hover:before,
+.rating > span:hover ~ span:before {
+   color: #C9C299;
+   content: "\2605";
+   position: absolute;
+}

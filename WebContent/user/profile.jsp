@@ -1,7 +1,9 @@
+<!-- Ratings css taken from http://css-tricks.com/star-ratings/ -->
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="ex" uri="http://frankchn.stanford.edu/cs108/" %>
-<%@page import="quiz.model.*, quiz.website.auth.Authentication, java.util.*, quiz.friends.*" %>
+<%@page import="quiz.model.*, quiz.website.auth.Authentication, java.util.*, quiz.friends.*, quiz.website.quiz.*" %>
 
 <%
 if(!Authentication.require_login(request, response)) return;
@@ -66,12 +68,39 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 		<div class="record_grid">
 		<%
 		for (int j = 0; j < records.size(); j++) { %>
-			<% Record rec = records.get(j); %>
-			<p><%= rec.quiz_name %></p>
-			<% for (int k = 0; k < rec.attempts.length; k++) { %>
-				<p><%= sdf.format(rec.attempts[k].start_time) %>
-			<% }	
-		}%>
+			<% Record rec = records.get(j); 
+			   int curRating = currentUser.getRating(rec.quiz_id);
+			%>
+			<div>
+			<h3><%= rec.quiz_name %></h3>
+		<% if (currentUser.user_id == viewedUser.user_id) { %>
+			<div class="rating" id="<%=rec.quiz_id%>">
+			<% for (int curStar = 0; curStar < 5; curStar++) {%>
+				<span class="star" 
+				id=<%= 5 - curStar %> <% if (curStar >= (5 - curRating)) { %> 
+				style="color:#FDD017">
+				&#9733;
+				<% } else { %>style="color:#C9C299">☆<% } %></span>
+			<% } %>
+			</div>
+
+			<% } %>
+			<p>Last Taken: <%= sdf.format(rec.last_start_time) %></p>
+			<a href="quiz/info.jsp?quiz_id=<%=Integer.toString(rec.quiz_id) %>#prevAttempts">View Quiz History</a>
+			</div>
+		<%}%>
+					<script>
+					$('.star').click(function() {
+						$.post("RateQuizServlet", {
+							'rating' : $(this).attr('id'),
+							'user_id' :
+			<%=currentUser.user_id%>
+				,
+							'quiz_id' : 
+			$(this).parent().attr('id')
+				}, function() {window.location = "user/profile.jsp?user=<%=currentUser.user_id%>"});
+				});
+			</script>
 		</div>
 </ex:push>
 

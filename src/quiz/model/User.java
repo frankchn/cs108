@@ -59,6 +59,38 @@ public class User {
 		}
 	}
 	
+	public static void rateQuiz(int user_id, int quiz_id, int rating) {
+		try {
+			PreparedStatement p = db.prepareStatement("DELETE from `rating` WHERE `user_id` = ? AND `quiz_id` = ?");
+			p.setInt(1, user_id);
+			p.setInt(2,  quiz_id);
+			p.executeUpdate();
+			PreparedStatement p2 = db.prepareStatement("INSERT into `rating` VALUES (?, ?, ?)");
+			p2.setInt(1,  user_id);
+			p2.setInt(2,  quiz_id);
+			p2.setInt(3, rating);
+			p2.executeUpdate();
+		} catch (SQLException e) {
+		}
+	}
+	
+	public int getRating(int quiz_id) {
+		try {
+			PreparedStatement p = db.prepareStatement("SELECT * from `rating` WHERE `user_id` = ? and `quiz_id` = ?");
+			p.setInt(1, user_id);
+			p.setInt(2, quiz_id);
+			ResultSet r = p.executeQuery();
+			if (!r.next()) {
+				return 0;
+			} else {		   
+				int curRating = r.getInt("stars");
+				return curRating;
+			}
+		} catch (SQLException e) {
+			return 0;
+		}
+	}
+	
 	public List<Achievement> getAchievements() {
 		ResultSet r;
 		List<Achievement> a_list = new ArrayList<Achievement>();
@@ -87,8 +119,7 @@ public class User {
 			p.setInt(1, user_id);
 			r = p.executeQuery();
 			while (r.next()) {
-				Record record = new Record(r.getInt("ui"), r.getInt("qi"));
-				System.out.println(record.quiz_name);
+				Record record = new Record(r.getInt("ui"), r.getInt("qi"), r.getTimestamp("max_start"));
 				r_list.add(record);
 			}
 			return r_list;
