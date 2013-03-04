@@ -33,7 +33,7 @@ User sender = User.getUser(m.sender_user_id);
 	<hr style="clear:both;"/>
 	<tab><h3><%=m.subject %></h3>
 	<div>
-		<table cellspacing="3" cellpadding="3" border="0">
+		<table cellspacing="2" cellpadding="2" border="0">
 			<tr>
 				<th align="left" width="10%">From </th>
 				<td align="left"><%=sender.name %></td>
@@ -53,7 +53,7 @@ User sender = User.getUser(m.sender_user_id);
 		
 	<style>
 		textarea {
-			font-size:10pt;
+			font-size:11pt;
 			font-family:Helvetica;
 		}
 	</style>

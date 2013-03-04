@@ -9,19 +9,32 @@ if(!Authentication.require_login(request, response)) return;
 User currentUser = (User) session.getAttribute("currentUser");
 ArrayList<User> friends = (ArrayList<User>)currentUser.getFriends();
 String send_id_string = request.getParameter("recipient");
-int send_id = -1;
+int send_id = -1, challenge_id = -1;
+double top_score = -1.0;
 String recipient_string = "";
+String challenge = "", chal_subject="";
 if (send_id_string != null) {
 	send_id = Integer.parseInt(send_id_string);
 	User u = User.getUser(send_id);
 	recipient_string = u.name + "<" + u.email + ">";
 }
+if (request.getParameter("challenge") != null) {
+	top_score = Double.parseDouble(request.getParameter("high_score"));
+	challenge_id = Integer.parseInt(request.getParameter("quiz_id"));
+	Quiz q = Quiz.getQuiz(challenge_id);
+	chal_subject = currentUser.name + " has challenged you to take " + q.name + "!";
+	challenge = currentUser.name + "'s highest score was: " + top_score + "! Will you assume the role of the yellow-bellied sap sucker? Or will you show " + currentUser.name + " his/her place?";
+}
 %>
 
 <ex:push key="body.content">
-<h3>Compose New Message</h3>
+<%if (challenge_id != -1) { %>
+	<h3>Send a Challenge</h3>
+<%} else { %>
+	<h3>Compose New Message</h3>
+<%} %>
 	<div><form method="post" action="MessageServlet">
-		<table cellspacing="3" cellpadding="3" border="0">
+		<table cellspacing="4" cellpadding="4" border="0">
 			<tr>
 				<th align="left" width="10%">To </th>
 				<td align="left">
@@ -55,18 +68,40 @@ if (send_id_string != null) {
 			</tr>
 			<tr>
 				<th align="left" width="10%">Subject </th>
-				<td align="left"><input name="subject" type="text" style="width:500px" value=""/></td>
+				<%if (challenge_id != -1) { %>
+					<td align="left"><%=chal_subject%></td>
+				<%} else { %>
+					<td align="left"><input name="subject" type="text" style="width:500px" value=""/></td>
+				<%} %>
 			</tr>
 			<tr>
 				<th align="left" width="10%">Message </th>
-				<td><textarea name="body" style="width:500px;height:150px"></textarea></td>
+				<%if (challenge_id != -1) { %>
+					<td><textarea name="body" style="width:500px;height:150px"><%=challenge%></textarea></td>
+				<%} else { %>
+					<td><textarea name="body" style="width:500px;height:150px"></textarea></td>
+				<%} %>
 			</tr>
 			<tr>
-				<th><input type="hidden" name="quiz_id" value=""></th>
-				<td><input type="submit" name ="send_compose" value="Send">&nbsp;&nbsp;<input type="submit" value="Cancel"></td>
+				<th></th>
+				<%if (challenge_id != -1) { %>
+					<td>
+						<input type="hidden" name="quiz_id" value="<%=challenge_id%>">
+						<input type="hidden" name="high_score" value="<%=top_score %>">
+						<input type="submit" name ="send_challenge" value="Send">&nbsp;&nbsp;<input type="submit" value="Cancel"/>
+					</td>
+				<%} else { %>
+					<td><input type="submit" name ="send_compose" value="Send">&nbsp;&nbsp;<input type="submit" value="Cancel"/></td>
+				<%} %>
 			</tr>
 		</table>
 	</form></div><br>
+	<style>
+		textarea {
+			font-size:11pt;
+			font-family:Helvetica;
+		}
+	</style>
 </ex:push>
 
 <t:standard>

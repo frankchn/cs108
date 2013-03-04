@@ -1,4 +1,4 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+	<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@taglib prefix="ex" uri="http://frankchn.stanford.edu/cs108/" %>
 <%@page import="quiz.model.*, quiz.manager.*, quiz.website.auth.*" %>
@@ -25,11 +25,26 @@ if(request.getParameter("quiz_attempt_question_id") == null) {
 
 <ex:push key="body.content">
 <% if(request.getParameter("quiz_attempt_question_id") == null) { %>
+<div>
+	<table width = "100%">
+	<tr>
+	<td align="left" width="80%">
 	<h4>You started this quiz on <%=sdf.format(currentAttempt.start_time) %> and completed it on <%=sdf.format(currentAttempt.submission_time) %>.
 	<% if(currentAttempt.show_score) { %>
 	<br>You have scored a total of <em><u><%=currentAttempt.score %></u></em> points on this quiz.
 	<% } %>
 	</h4>
+	</td>
+	<td align="right" width="20%">
+		<form method="post" action="messaging/compose.jsp">
+			<input type="hidden" name="quiz_id" value="<%=currentQuiz.quiz_id%>"/>
+			<input type="hidden" name="high_score" value="<%=currentQuiz.getHighestScore(currentUser.user_id) %>"/>
+			<input type="submit" name="challenge" value="Challenge a Friend!" style="font-size:16px;padding:5px;"/>
+		</form>
+	</td>
+	</tr>
+	</table>
+</div>
 <% } else { %>
 	<h4><center>Click <a href="quiz/attempt/attempt.jsp?quiz_attempt_id=<%=currentAttempt.quiz_attempt_id %>">here</a> to continue your quiz.</center></h4>
 <% } %>
@@ -40,7 +55,7 @@ for(QuizQuestion.QuizQuestionAttempt QQA : currentQQAs) {
 	request.setAttribute("currentQuestionType", QQA.getClass().getEnclosingClass().getSimpleName());
 	request.setAttribute("QuizQuestionAttempt", QQA);
 %>
-<div style="padding:10px;margin-bottom:20px;background-color:#f6f6f6">
+<div style="padding:10px;margin-bottom:20px;background-color:#f6f6f6;clear:both">
 	<jsp:include page="templates/${requestScope['currentQuestionType']}.jsp" />
 </div>
 <%

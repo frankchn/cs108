@@ -87,8 +87,6 @@ public class Achievement {
 			r = p3.executeQuery();
 			r.next();
 			double max_score = r.getDouble(1);
-			System.out.println(user_score);
-			System.out.println(max_score);
 			if (user_score >= max_score && user_score > 0) {
 				saveAchievement(user_id, GREATEST);
 			}
