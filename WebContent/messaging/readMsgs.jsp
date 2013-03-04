@@ -17,6 +17,9 @@ if (m.type.equals("CHALLENGE")) {
 	quiz_id = m.quiz_id;
 	challenge_quiz = Quiz.getQuiz(quiz_id);
 }
+
+int numReqs = MessageManager.numFriendReqs(currentUser.user_id);
+int numMsgs = MessageManager.numNewMessages(currentUser.user_id);
 %>
 
 <ex:push key="body.content">
@@ -28,8 +31,8 @@ if (m.type.equals("CHALLENGE")) {
 			line-height: 1em;
 		}
 	</style>
-	<h3 style="text-align:left;float:left;"><span style="font-weight:normal;"><a href="messaging/messages.jsp">Messages</a></span> &bull; 
-	    <span style="font-weight:normal;"><a href="messaging/friendRequests.jsp"">Friend Requests</a> </span>
+	<h3 style="text-align:left;float:left;"><span style="font-weight:normal;"><a href="messaging/messages.jsp">Messages<%if (numMsgs >0) { %>(<%=numMsgs%>)<%}%></a></span> &bull; 
+	    <span style="font-weight:normal;"><a href="messaging/friendRequests.jsp"">Friend Requests <%if (numReqs >0) { %>(<%=numReqs%>)<%}%></a> </span>
 	</h3>
 	<div style="float:right;padding-left:15px;padding-top:5px">
 		<form method="post" action="messaging/compose.jsp">
@@ -59,9 +62,11 @@ if (m.type.equals("CHALLENGE")) {
 		<tab><font size="4"><textarea readonly style="width:500px;height:150px"><%=m.body%></textarea></font></tab>
 	</div>
 	<br>
-	<form method="post" action="quiz/info.jsp?quiz_id=<%=quiz_id%>">
-	<input type="submit" name ="send_compose" value="Accept the Challenge!"/>
-	</form>
+	<%if (quiz_id != -1) { %>
+		<form method="post" action="quiz/info.jsp?quiz_id=<%=quiz_id%>">
+		<input type="submit" name ="send_compose" value="Accept the Challenge!"/>
+		</form>
+	<%} %>
 	</tab>	
 	<br>
 		
