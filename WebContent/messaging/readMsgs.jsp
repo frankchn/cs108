@@ -40,7 +40,7 @@ User sender = User.getUser(m.sender_user_id);
 			</tr>
 			<tr>
 				<th align="left" width="10%">Sent </th>
-				<td align="left"><%=m.time_sent%></td>
+				<td align="left"><%=sdf.format(m.time_sent)%></td>
 			</tr>
 		</table>
 	</div>

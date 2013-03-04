@@ -63,13 +63,13 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 			<hr>
 					<div> Select:&nbsp;&nbsp;<a href="javascript:;" onclick="checkAll(this)" >All</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:;" id="checknone">None</a>
 					<span style="float:right"><b>Selected Messages :&nbsp;&nbsp;&nbsp;</b>
-					<select name="type">
+					<select name="update_type">
 						<option value="delete">Delete Messages</option>
 						<option value="read">Mark as Read</option>
 						<option value="unread">Mark as Unread</option>
 					</select>
 						<input type="hidden" name="quiz_id" value="s">
-						<input type="submit" value="Update"></span>
+						<input type="submit" name="inbox_update" value="Update"></span>
 					</div>
 		<%		
 			}

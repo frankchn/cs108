@@ -53,6 +53,14 @@ public class Message {
 		} catch (SQLException e) { }
 	}
 	
+	public void markUnread() {
+		try {
+			PreparedStatement ps = db.prepareStatement("UPDATE `message` SET `unread`= ? WHERE `message_id` = ?");
+			ps.setInt(1, 1);
+			ps.setInt(2, this.message_id);
+			ps.executeUpdate();
+		} catch (SQLException e) { }
+	}
 
 	
 }

@@ -8,6 +8,14 @@ if(!Authentication.require_login(request, response)) return;
 
 User currentUser = (User) session.getAttribute("currentUser");
 ArrayList<User> friends = (ArrayList<User>)currentUser.getFriends();
+String send_id_string = request.getParameter("recipient");
+int send_id = -1;
+String recipient_string = "";
+if (send_id_string != null) {
+	send_id = Integer.parseInt(send_id_string);
+	User u = User.getUser(send_id);
+	recipient_string = u.name + "<" + u.email + ">";
+}
 %>
 
 <ex:push key="body.content">
@@ -17,6 +25,8 @@ ArrayList<User> friends = (ArrayList<User>)currentUser.getFriends();
 			<tr>
 				<th align="left" width="10%">To </th>
 				<td align="left">
+				<% if (send_id == -1) { %>	
+			
 					<input id="email_field" name= "email_field" type="text" style="width:300px" value="" readonly/>
 					<input id="id_field" name = "id_field" type="hidden" value=""/>
 					<select name="type" id="friend_dropdown">
@@ -37,6 +47,10 @@ ArrayList<User> friends = (ArrayList<User>)currentUser.getFriends();
 							idField.value = info[1];
 						};
 					</script>
+				<%} else { %>
+					<input id="email_field" name= "email_field" type="text" style="width:300px" value="<%=recipient_string%>" readonly/>
+					<input id="id_field" name = "id_field" type="hidden" value="<%=send_id%>"/>
+				<%} %>
 				</td>
 			</tr>
 			<tr>
@@ -49,7 +63,7 @@ ArrayList<User> friends = (ArrayList<User>)currentUser.getFriends();
 			</tr>
 			<tr>
 				<th><input type="hidden" name="quiz_id" value=""></th>
-				<td><input type="submit" name ="sendComp" value="Send">&nbsp;&nbsp;<input type="submit" value="Cancel"></td>
+				<td><input type="submit" name ="send_compose" value="Send">&nbsp;&nbsp;<input type="submit" value="Cancel"></td>
 			</tr>
 		</table>
 	</form></div><br>

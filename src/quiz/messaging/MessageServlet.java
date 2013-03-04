@@ -44,7 +44,7 @@ public class MessageServlet extends HttpServlet {
 
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (request.getParameter("sendComp") != null) {
+		if (request.getParameter("send_compose") != null) {
 			User currentUser = (User) request.getSession().getAttribute("currentUser");
 			int recID = Integer.parseInt(request.getParameter("id_field"));
 			java.util.Date date = new java.util.Date();
@@ -53,11 +53,37 @@ public class MessageServlet extends HttpServlet {
 			String body = request.getParameter("body");
 			Message msg = new Message(-1, "GENERAL", currentUser.user_id, recID, 1, currTime, -1, subject, body);
 			MessageManager.sendMessage(msg);
-		} if (request.getParameter("msg_id") != null) {
-			int msg_id = Integer.parseInt(request.getParameter("msg_id"));
-			System.out.println("HOLY SMOKES!: " + msg_id);
+			response.sendRedirect("messaging/messages.jsp");
+		} else if (request.getParameter("friend_compose") != null) {
+			String send_id = request.getParameter("messengee_id");
+			response.sendRedirect("messaging/compose.jsp?recipient=" + send_id);	
+		} else if (request.getParameter("inbox_update") != null) {
+			String update = request.getParameter("update_type");
+			String[] checkedIds = request.getParameterValues("check");
+			if (checkedIds != null) {
+				if (update.equals("delete")) {
+					for (String id: checkedIds) {
+						int msg_id = Integer.parseInt(id);
+						MessageManager.deleteMessage(msg_id);
+					}
+				} else if (update.equals("unread")) {
+					for (String id: checkedIds) {
+						int msg_id = Integer.parseInt(id);
+						Message m = MessageManager.getMessage(msg_id);
+						m.markUnread();
+					}
+				} else {
+					for (String id: checkedIds) {
+						int msg_id = Integer.parseInt(id);
+						Message m = MessageManager.getMessage(msg_id);
+						m.markRead();
+					}
+				}
+			}
+			response.sendRedirect("messaging/messages.jsp");
+		} else {
+			response.sendRedirect("messaging/messages.jsp");
 		}
-		response.sendRedirect("messaging/messages.jsp");	
 	}
 
 }
