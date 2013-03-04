@@ -11,6 +11,12 @@ int msg_id = Integer.parseInt(request.getParameter("msg_id"));
 Message m = MessageManager.getMessage(msg_id);
 m.markRead();
 User sender = User.getUser(m.sender_user_id);
+int quiz_id = -1;
+Quiz challenge_quiz = null;
+if (m.type.equals("CHALLENGE")) {
+	quiz_id = m.quiz_id;
+	challenge_quiz = Quiz.getQuiz(quiz_id);
+}
 %>
 
 <ex:push key="body.content">
@@ -31,7 +37,11 @@ User sender = User.getUser(m.sender_user_id);
 		</form>
 	</div>	
 	<hr style="clear:both;"/>
-	<tab><h3><%=m.subject %></h3>
+	<%if (quiz_id != -1) { %>
+		<tab><h3><%=sender.name%> has challenged you to take <a href="quiz/info.jsp?quiz_id=<%=quiz_id%>"><%=challenge_quiz.name%></a>!</h3>
+	<%} else { %>
+		<tab><h3><%=m.subject %></h3>
+	<%} %>
 	<div>
 		<table cellspacing="2" cellpadding="2" border="0">
 			<tr>

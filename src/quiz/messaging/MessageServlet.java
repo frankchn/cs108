@@ -81,6 +81,17 @@ public class MessageServlet extends HttpServlet {
 				}
 			}
 			response.sendRedirect("messaging/messages.jsp");
+		} else if (request.getParameter("send_challenge") != null) {
+			User currentUser = (User) request.getSession().getAttribute("currentUser");
+			int recID = Integer.parseInt(request.getParameter("id_field"));
+			java.util.Date date = new java.util.Date();
+			Timestamp currTime = new Timestamp(date.getTime());
+			String subject = request.getParameter("subject");
+			String body = request.getParameter("body");
+			int quiz_id = Integer.parseInt(request.getParameter("quiz_id"));
+			Message msg = new Message(-1, "CHALLENGE", currentUser.user_id, recID, 1, currTime, quiz_id, subject, body);
+			MessageManager.sendMessage(msg);
+			response.sendRedirect("quiz/info.jsp?quiz_id=" + quiz_id);
 		} else {
 			response.sendRedirect("messaging/messages.jsp");
 		}

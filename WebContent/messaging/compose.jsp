@@ -69,7 +69,7 @@ if (request.getParameter("challenge") != null) {
 			<tr>
 				<th align="left" width="10%">Subject </th>
 				<%if (challenge_id != -1) { %>
-					<td align="left"><%=chal_subject%></td>
+					<td align="left"><%=chal_subject%><input name="subject" type="hidden" value="<%=chal_subject %>"></td>
 				<%} else { %>
 					<td align="left"><input name="subject" type="text" style="width:500px" value=""/></td>
 				<%} %>
