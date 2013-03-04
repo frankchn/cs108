@@ -1,91 +1,58 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="ex" uri="http://frankchn.stanford.edu/cs108/" %>
-<%@page import="quiz.model.*, quiz.manager.*, quiz.website.auth.Authentication" %>
+<%@page import="quiz.model.*, quiz.manager.*, quiz.website.auth.Authentication, java.util.*" %>
 
 <%
 if(!Authentication.require_login(request, response)) return;
 
 User currentUser = (User) session.getAttribute("currentUser");
-Quiz currentQuiz = Quiz.getQuiz(Integer.parseInt(request.getParameter("quiz_id")));
-
-if(!currentUser.is_admin && currentQuiz.user_id != currentUser.user_id) return;
+ArrayList<User> friends = (ArrayList<User>)currentUser.getFriends();
 %>
 
 <ex:push key="body.content">
-<h3><a href="messaging/messages.jsp">Messages</a> &bull; 
-	    <a href="messaging/friendRequests.jsp"">Friend Requests</a>
-</h3>
-	<table cellpadding="3" cellspacing="3" border="0">
-		<tr>
-			<th>Name</th>
-			<td><%=currentQuiz.name %></td>
-		</tr>
-		<tr>
-			<th>Description</th>
-			<td><%=currentQuiz.description %></td>
-		</tr>
-		<tr>
-			<th>Multiple Pages</th>
-			<td><%=currentQuiz.multiple_pages ? "The quiz will be rendered on multiple pages." : "The quiz will be rendered on a single page." %></td>
-		</tr>
-		<tr>
-			<th>Random Questions</th>
-			<td><%=currentQuiz.random_questions ? "The questions will be ordered randomly." : "The questions will be ordered in the order you specify." %></td>
-		</tr>
-		<tr>
-			<th>Immediate Correction</th>
-			<td><%=currentQuiz.immediate_correction ? "Individual questions will be graded immediately." : "The quiz will graded completely at the end." %></td>
-		</tr>
-		<tr>
-			<th>Practice Mode</th>
-			<td><%=currentQuiz.practice_mode ? "The quiz can be taken for practice." : "The quiz must be taken for a grade." %></td>
-		</tr>
-	</table>
-	<h3>Questions</h3>
-	<table cellpadding="3" cellspacing="3" border="0" width="100%">
-		<thead>
+<h3>Compose New Message</h3>
+	<div><form method="post" action="MessageServlet">
+		<table cellspacing="3" cellpadding="3" border="0">
 			<tr>
-				<th width="50">No.</th>
-				<th width="500">Question Title</th>
-				<th>Type</th>
-				<th>Action</th>
-			</tr>
-		</thead>
-		<tbody>
-			<%
-			int i = 1;
-			QuizQuestion[] qs = currentQuiz.getQuestions();
-			for(QuizQuestion q : qs) {
-			%>
-			<tr>
-				<td align="center"><%=i++ %></td>
-				<td align="center"><%=q.getTitle() %></td>
-				<td align="center"><%=q.getFriendlyType() %></td>
-				<td align="center">
-					<a href="quiz/edit/edit_question.jsp?quiz_question_id=<%=q.quiz_question_id%>">Edit</a> 
-					<a href="quiz/edit/DeleteQuestionServlet?quiz_question_id=<%=q.quiz_question_id%>">Delete</a> 
-					Up 
-					Down
+				<th align="left" width="10%">To </th>
+				<td align="left">
+					<input id="email_field" name= "email_field" type="text" style="width:300px" value="" readonly/>
+					<input id="id_field" name = "id_field" type="hidden" value=""/>
+					<select name="type" id="friend_dropdown">
+						<option>Select a friend</option>
+					<% for (int i = 0; i < friends.size(); i++) { 
+						User f = friends.get(i);
+					%>
+						<option value="<%=f.name%> <<%=f.email%>>,<%=f.user_id%>"><%=f.email%></option>
+					<%} %>
+					</select>
+					<script>
+						var textBox = document.getElementById('email_field');
+						var dropDown = document.getElementById('friend_dropdown');
+						var idField = document.getElementById('id_field');
+						dropDown.onchange = function() {
+							var info = dropDown.value.split(",");
+							textBox.value = info[0];
+							idField.value = info[1];
+						};
+					</script>
 				</td>
 			</tr>
-			<% } %>
-			<form method="post" action="quiz/edit/AddQuestionServlet">
-				<tr>
-					<td colspan="2" align="center">Add New Question</td>
-					<td align="center"><select name="type">
-						<option value="QuestionResponse">Question/Picture Response</option>
-						<option value="FillInTheBlanks">Fill-in-the-Blanks</option>
-						<option value="MultipleChoice">Multiple Choice</option>
-					</select></td>
-					<td align="center">
-						<input type="hidden" name="quiz_id" value="<%=currentQuiz.quiz_id%>">
-						<input type="submit" value="Add Question">
-					</td>
-				</tr>
-			</form>
-		</tbody>
-	</table>
+			<tr>
+				<th align="left" width="10%">Subject </th>
+				<td align="left"><input name="subject" type="text" style="width:500px" value=""/></td>
+			</tr>
+			<tr>
+				<th align="left" width="10%">Message </th>
+				<td><textarea name="description" style="width:500px;height:150px"></textarea></td>
+			</tr>
+			<tr>
+				<th><input type="hidden" name="quiz_id" value=""></th>
+				<td><input type="submit" name ="sendComp" value="Send">&nbsp;&nbsp;<input type="submit" value="Cancel"></td>
+			</tr>
+		</table>
+	</form></div><br>
 </ex:push>
 
 <t:standard>

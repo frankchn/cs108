@@ -48,18 +48,16 @@ public class MessageManager {
 	
 	public static void sendMessage(Message msg) {
 		//Write sql query to update to read
-		
 		try {
-			PreparedStatement ps = db.prepareStatement("INSERT INTO `message` VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-			ps.setInt(1, msg.message_id);
-			ps.setString(2, msg.type);
-			ps.setInt(3, msg.sender_user_id);
-			ps.setInt(4, msg.recipient_user_id);
-			ps.setInt(5,  msg.unread ? 1 : 0);
-			ps.setTimestamp(6,  msg.time_sent);
-			ps.setInt(7, msg.quiz_id);
-			ps.setString(8,  msg.subject);
-			ps.setString(9, msg.body);
+			PreparedStatement ps = db.prepareStatement("INSERT IGNORE INTO `message` (`type`, `sender_user_id`, `recipient_user_id`, `unread`, `time_sent`, `quiz_id`, `subject`, `body`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+			ps.setString(1, msg.type);
+			ps.setInt(2, msg.sender_user_id);
+			ps.setInt(3, msg.recipient_user_id);
+			ps.setInt(4,  msg.unread ? 1 : 0);
+			ps.setTimestamp(5,  msg.time_sent);
+			ps.setInt(6, msg.quiz_id);
+			ps.setString(7,  msg.subject);
+			ps.setString(8, msg.body);
 			ps.executeUpdate();
 		} catch (SQLException e) { }
 	}
@@ -91,10 +89,11 @@ public class MessageManager {
 										r.getString("body"));
 				inbox.add(m);
 			}
-			return inbox;
 		} catch (SQLException e) {
-			return null;
+			e.printStackTrace();
 		}
+		return inbox;
+
 	}
 	
 	public static Message getMessage(int message_id) {
