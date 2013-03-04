@@ -35,7 +35,7 @@ User currentUser = (User) session.getAttribute("currentUser");
 						<%
 						} else {
 						%>
-						<span class="nav_item"><a href="messaging/messages.jsp">Messages <strong>(<%=MessageManager.numNewNotifications(currentUser.user_id)%>)</strong></a></span>
+						<span class="nav_item"><a href="messaging/messages.jsp">Inbox <strong>(<%=MessageManager.numNewNotifications(currentUser.user_id)%>)</strong></a></span>
 						<span class="nav_item"><a href="auth/LogoutServlet">Logout</a></span>
 						<%
 						}

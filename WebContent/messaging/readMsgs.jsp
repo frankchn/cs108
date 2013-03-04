@@ -58,6 +58,10 @@ if (m.type.equals("CHALLENGE")) {
 	<div>
 		<tab><font size="4"><textarea readonly style="width:500px;height:150px"><%=m.body%></textarea></font></tab>
 	</div>
+	<br>
+	<form method="post" action="quiz/info.jsp?quiz_id=<%=quiz_id%>">
+	<input type="submit" name ="send_compose" value="Accept the Challenge!"/>
+	</form>
 	</tab>	
 	<br>
 		

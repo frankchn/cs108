@@ -7,6 +7,8 @@
 if(!Authentication.require_login(request, response)) return;
 User currentUser = (User) session.getAttribute("currentUser");
 java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
+int numReqs = MessageManager.numFriendReqs(currentUser.user_id);
+int numMsgs = MessageManager.numNewMessages(currentUser.user_id);
 %>
 
 <ex:push key="body.content">
@@ -18,8 +20,8 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 			text-indent: 0.4em;
 		}
 	</style>
-	<h3 style="text-align:left;float:left;"><a href="messaging/messages.jsp">Messages</a> &bull; 
-	    <span style="font-weight:normal;"><a href="messaging/friendRequests.jsp"">Friend Requests</a></span>	    
+	<h3 style="text-align:left;float:left;"><a href="messaging/messages.jsp">Messages <%if (numMsgs >0) { %>(<%=numMsgs%>)<%}%></a> &bull; 
+	    <span style="font-weight:normal;"><a href="messaging/friendRequests.jsp">Friend Requests <%if (numReqs >0) { %>(<%=numReqs%>)<%}%></a></span>	    
 	</h3>
 	<div style="float:right;padding-left:15px;padding-top:5px">
 		<form method="post" action="messaging/compose.jsp">
@@ -28,16 +30,17 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 	</div>
 	
 	<hr style="clear:both;"/>
+	<%
+	ArrayList<Message> messages = (ArrayList<Message>)MessageManager.getMessages(currentUser.user_id);
+	if (messages.isEmpty()) {
+		%><center><h4> No new mail! </h4></center><% 
+	} else {
+	%>
 	<form method="post" action="MessageServlet">
 	<fieldset style="border:0 none;">
 	<table cellpadding="5" cellspacing="5" border="0" width="100%">
 		<tbody>
-			<%
-			ArrayList<Message> messages = (ArrayList<Message>)MessageManager.getMessages(currentUser.user_id);
-			if (messages.isEmpty()) {
-				%><center><h4> No new mail! </h4></center><% 
-			} else {
-				
+			<%	
 				for(int i = 0; i < messages.size(); i++) {
 					Message m = messages.get(i);
 					User sender = User.getUser(m.sender_user_id);

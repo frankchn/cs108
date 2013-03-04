@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,6 +118,23 @@ public class MessageManager {
 			return null;
 		}
 	}
-	
+
+	public static ArrayList<FriendRequest> getFriendRequests(int user_id) {
+		ArrayList<FriendRequest> requests = new ArrayList<FriendRequest>();
+		ResultSet r;
+		try {
+			r = db.prepareStatement("SELECT * FROM `friend_request` WHERE `requestee_user_id` = " + user_id).executeQuery();
+			while(r.next()) {
+				FriendRequest f = new FriendRequest(r.getInt("friend_request_id"),
+										r.getInt("requestor_user_id"),
+										r.getInt("requestee_user_id"),
+										r.getTimestamp("request_time"));
+				requests.add(f);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return requests;
+	}
 	
 }
