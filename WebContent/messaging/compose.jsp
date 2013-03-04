@@ -59,7 +59,7 @@ if (send_id_string != null) {
 			</tr>
 			<tr>
 				<th align="left" width="10%">Message </th>
-				<td><textarea name="description" style="width:500px;height:150px"></textarea></td>
+				<td><textarea name="body" style="width:500px;height:150px"></textarea></td>
 			</tr>
 			<tr>
 				<th><input type="hidden" name="quiz_id" value=""></th>
