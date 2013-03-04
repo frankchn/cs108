@@ -35,12 +35,19 @@ public class RateQuizServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int rating = Integer.parseInt(request.getParameter("rating"));
-		int user_id = Integer.parseInt(request.getParameter("user_id"));
-		int quiz_id = Integer.parseInt(request.getParameter("quiz_id"));
-		// update the database with the new rating
-		User.rateQuiz(user_id, quiz_id, rating);
-		// TODO Auto-generated method stub
+		if (request.getParameter("rating") != null) {
+			int rating = Integer.parseInt(request.getParameter("rating"));
+			int user_id = Integer.parseInt(request.getParameter("user_id"));
+			int quiz_id = Integer.parseInt(request.getParameter("quiz_id"));
+			// update the database with the new rating
+			User.rateQuiz(user_id, quiz_id, rating);
+		} else {
+			String review = request.getParameter("review");
+			int user_id = Integer.parseInt(request.getParameter("user_id"));
+			String quiz_name = request.getParameter("quiz_id");
+			int quiz_id = Integer.parseInt(quiz_name.substring(quiz_name.indexOf('_') + 1));
+			User.reviewQuiz(user_id, quiz_id, review);
+		}
 	}
 
 }

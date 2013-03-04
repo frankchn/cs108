@@ -74,6 +74,38 @@ public class User {
 		}
 	}
 	
+	public static void reviewQuiz(int user_id, int quiz_id, String review) {
+		try {
+			PreparedStatement p = db.prepareStatement("DELETE from `review` WHERE `user_id` = ? AND `quiz_id` = ?");
+			p.setInt(1, user_id);
+			p.setInt(2, quiz_id);
+			p.executeUpdate();
+			PreparedStatement p2 = db.prepareStatement("INSERT into `review` VALUES (?, ?, ?)");
+			p2.setInt(1,  user_id);
+			p2.setInt(2,  quiz_id);
+			p2.setString(3, review);
+			p2.executeUpdate();
+		} catch (SQLException e) {
+		}
+	}
+	
+	public String getReview(int quiz_id) {
+		try {
+			PreparedStatement p = db.prepareStatement("SELECT * from `review` WHERE `user_id` = ? and `quiz_id` = ?");
+			p.setInt(1, user_id);
+			p.setInt(2,  quiz_id);
+			ResultSet r = p.executeQuery();
+			if (!r.next()) {
+				return null;
+			} else {
+				String curReview = r.getString("content");
+				return curReview;
+			}
+		} catch (SQLException e) {
+			return null;
+		}
+	}
+	
 	public int getRating(int quiz_id) {
 		try {
 			PreparedStatement p = db.prepareStatement("SELECT * from `rating` WHERE `user_id` = ? and `quiz_id` = ?");
