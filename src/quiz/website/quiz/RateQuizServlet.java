@@ -1,6 +1,8 @@
 package quiz.website.quiz;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -42,11 +44,13 @@ public class RateQuizServlet extends HttpServlet {
 			// update the database with the new rating
 			User.rateQuiz(user_id, quiz_id, rating);
 		} else {
+			java.util.Date date = new java.util.Date();
+			Timestamp time = new Timestamp(date.getTime());
 			String review = request.getParameter("review");
 			int user_id = Integer.parseInt(request.getParameter("user_id"));
 			String quiz_name = request.getParameter("quiz_id");
 			int quiz_id = Integer.parseInt(quiz_name.substring(quiz_name.indexOf('_') + 1));
-			User.reviewQuiz(user_id, quiz_id, review);
+			User.reviewQuiz(user_id, quiz_id, review, time);
 		}
 	}
 

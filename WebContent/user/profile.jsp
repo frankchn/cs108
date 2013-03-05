@@ -113,7 +113,7 @@ tab {
 		%>
 		<div>
 			<tab>
-			<h4><%=rec.quiz_name%></h4>
+			<h4><a href="quiz/info.jsp?quiz_id=<%=Integer.toString(rec.quiz_id)%>"><%=rec.quiz_name%></a></h4>
 			</tab>
 			<%
 				if (currentUser.user_id == viewedUser.user_id) {
@@ -130,29 +130,29 @@ tab {
  					}
  					%>
 				</span>
-				<%}%>
+				<%}%> <!--  end for (star) -->
 			</div>
 			<tab>
 			<div class="quiz_rating_info">
 				<%
-					String curReview = currentUser.getReview(rec.quiz_id);
+					Review curReview = currentUser.getReview(rec.quiz_id);
 										if (curReview == null) {
 				%>
 				<textarea class="review_box" id="review_<%=rec.quiz_id%>"
-					style="resize: none" placeholder="Review this quiz" rows="5"
+					style="resize: none" placeholder="Review this quiz. Press enter to submit." rows="5"
 					cols="112"></textarea>
 				<%
 					} else {
 				%>
-				<p><%=curReview%></p>
+				<p><b>Your Review at <%=sdf.format(curReview.time) %>:</b> <%=curReview.content%></p>
+				<%}%>
 			</div>
 			</tab>
 			<!--  end current user review/rating -->
 			<%}%>
-			<%}%>
 			<tab>
 			<p>
-				Last Taken:
+				<b>Last Taken:</b>
 				<%=sdf.format(rec.last_start_time)%>
 				(<a
 					href="quiz/info.jsp?quiz_id=<%=Integer.toString(rec.quiz_id)%>#prevAttempts">View

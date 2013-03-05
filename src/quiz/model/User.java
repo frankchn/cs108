@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import quiz.messaging.*;
@@ -74,22 +75,23 @@ public class User {
 		}
 	}
 	
-	public static void reviewQuiz(int user_id, int quiz_id, String review) {
+	public static void reviewQuiz(int user_id, int quiz_id, String review, Timestamp time) {
 		try {
 			PreparedStatement p = db.prepareStatement("DELETE from `review` WHERE `user_id` = ? AND `quiz_id` = ?");
 			p.setInt(1, user_id);
 			p.setInt(2, quiz_id);
 			p.executeUpdate();
-			PreparedStatement p2 = db.prepareStatement("INSERT into `review` VALUES (?, ?, ?)");
+			PreparedStatement p2 = db.prepareStatement("INSERT into `review` VALUES (?, ?, ?, ?)");
 			p2.setInt(1,  user_id);
 			p2.setInt(2,  quiz_id);
 			p2.setString(3, review);
+			p2.setTimestamp(4, time);
 			p2.executeUpdate();
 		} catch (SQLException e) {
 		}
 	}
 	
-	public String getReview(int quiz_id) {
+	public Review getReview(int quiz_id) {
 		try {
 			PreparedStatement p = db.prepareStatement("SELECT * from `review` WHERE `user_id` = ? and `quiz_id` = ?");
 			p.setInt(1, user_id);
@@ -98,7 +100,7 @@ public class User {
 			if (!r.next()) {
 				return null;
 			} else {
-				String curReview = r.getString("content");
+				Review curReview = new Review(r.getInt("user_id"), r.getInt("quiz_id"), r.getString("content"), r.getTimestamp("time"));
 				return curReview;
 			}
 		} catch (SQLException e) {

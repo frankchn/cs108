@@ -81,6 +81,25 @@ public class Quiz {
 		}
 	}
 	
+	public Review[] getReviews() {
+		try {
+			ResultSet r = db.prepareStatement("SELECT * from `review` WHERE `quiz_id` = " + quiz_id + " ORDER BY `time` DESC").executeQuery();
+			r.last();
+			int size = r.getRow();
+			r.beforeFirst();
+			
+			int i = 0;
+			Review[] rtn = new Review[size];
+			while(r.next()) {
+				Review nextReview = new Review(r.getInt("user_id"), r.getInt("quiz_id"), r.getString("content"), r.getTimestamp("time"));
+				rtn[i++] = nextReview;
+			}			
+			return rtn;
+		} catch (SQLException ignored) {
+			return null;
+		}
+	}
+	
 	public void delete() {
 		try {
 			db.prepareStatement("DELETE FROM `quiz_attempt` WHERE `quiz_id` = " + quiz_id).executeUpdate();

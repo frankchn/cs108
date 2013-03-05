@@ -94,6 +94,15 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 	</table>
 	<h3>Top Scorers</h3>
 	<h3>Recent Activity</h3>
+	<h3>Reviews</h3>
+	<tab><div>
+		<% Review[] reviews = currentQuiz.getReviews();
+		for (int cur = 0; cur < reviews.length; cur++) {
+			Review cur_review = reviews[cur];
+		%>
+			<p><b>At <%=sdf.format(cur_review.time)%>:</b> <%=cur_review.content %></p>
+		<% }%>
+	</div></tab>
 </ex:push>
 
 <t:standard>
