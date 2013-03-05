@@ -56,13 +56,18 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 			<td><%=currentQuiz.practice_mode ? "The quiz can be taken for practice." : "The quiz must be taken for a grade." %></td>
 		</tr>
 	</table>
-	<div style="margin-top:20px;">
-		<form method="post" action="quiz/attempt/QuizStartAttempt">
+	<div style="margin-top:20px;display:inline">
+		<form method="post" action="quiz/attempt/QuizStartAttempt" style="display:inline">
 			<input type="hidden" name="quiz_id" value="<%=currentQuiz.quiz_id %>">
 			<input type="submit" style="font-size:16px;padding:5px;" name="real_mode" value="Take Quiz for Real">
 			<% if(currentQuiz.practice_mode) { %>
 			<input type="submit" style="font-size:16px;padding:5px;" name="practice_mode" value="Take Quiz without Recording Scores">
 			<% } %>
+		</form>
+		<form method="post" action="messaging/compose.jsp" style="display:inline">
+			<input type="hidden" name="quiz_id" value="<%=currentQuiz.quiz_id %>">
+			<input type="hidden" name="high_score" value="<%=currentQuiz.getHighestScore(currentUser.user_id) %>"/>
+			<input type="submit" style="font-size:16px;padding:5px" name="challenge" value="Challenge a Friend!">
 		</form>
 	</div>
 	<h3 id= "prevAttempts">Previous Attempts</h3>

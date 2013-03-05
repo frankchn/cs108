@@ -151,4 +151,20 @@ public class Quiz {
 		}
 	}
 	
+	public double getHighestScore(int user_id) {
+		ResultSet r;
+		try {
+			PreparedStatement p = db.prepareStatement("SELECT MAX(score) from `quiz_attempt` where `quiz_id` = ? and `user_id` = ?");
+			p.setInt(1, quiz_id);
+			p.setInt(2, user_id);
+			r = p.executeQuery();
+			if (!r.next()) return 0;
+			double max_score = r.getDouble(1);
+			System.out.println(max_score);
+			return max_score;
+		} catch (SQLException ignored) { 
+			return 0;
+		}	
+	}
+	
 }

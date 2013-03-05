@@ -1,7 +1,0 @@
-http://www.stanford.edu/
-http://www.stanford.edu/class/cs108/
-http://news.yahoo.com/
-http://www.google.com/
-http://www.ibm.com/
-http://www.dell.com/
-http://www.microsoft.com/

@@ -66,15 +66,19 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 					value=<%=currentUser.user_id%>>
 			</form>
 			<%}%>
-		</div>
-		<hr>
-		<%
-			} else {
-		%>
-		Your Profile </span>
-		</h2>
-		<hr>
-		<%}%>
+
+			<%if (RelationManager.friends(currentUser.user_id, viewedUser.user_id)) { %>	
+				<form style="display:inline" action="MessageServlet" method="POST">
+					<input type="submit" name="friend_compose" value="Message">	
+					<input type="hidden" name="messengee_id" value=<%=viewedUser.user_id%>>
+					<input type="hidden" name="messenger_id" value=<%=currentUser.user_id%>>
+				</form>
+			<%} %>
+			</div>	
+			<hr>	
+		<%} else { %>
+			Your Profile </span></h2><hr>
+		<%} %>
 	</div>
 
 	<style>

@@ -53,12 +53,18 @@ public class FriendServlet extends HttpServlet {
 			RelationManager.removeFriendRequest(requestee, requestor);
 			RelationManager.addFriendship(requestor, requestee, time);
 			response.sendRedirect("user/profile.jsp?user=" + requestee);
-			
+		} else if (request.getParameter("confirmMsg") != null) {
+			RelationManager.removeFriendRequest(requestee, requestor);
+			RelationManager.addFriendship(requestor, requestee, time);
+			response.sendRedirect("messaging/friendRequests.jsp");		
 		} else if (request.getParameter("ignoreSearch") != null) {
 			// You aren't really friends!
 			RelationManager.removeFriendRequest(requestee, requestor);
 			String query = request.getParameter("search_query");
 			response.sendRedirect("user/search.jsp?search_query=" + query);
+		} else if (request.getParameter("ignoreMsg") != null) {
+			RelationManager.removeFriendRequest(requestee, requestor);
+			response.sendRedirect("messaging/friendRequests.jsp");
 		} else if (request.getParameter("ignoreProf") != null) {
 			// You aren't really friends!
 			RelationManager.removeFriendRequest(requestee, requestor);

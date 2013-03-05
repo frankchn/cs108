@@ -1,91 +1,107 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="ex" uri="http://frankchn.stanford.edu/cs108/" %>
-<%@page import="quiz.model.*, quiz.manager.*, quiz.website.auth.Authentication" %>
+<%@page import="quiz.model.*, quiz.manager.*, quiz.website.auth.Authentication, java.util.*" %>
 
 <%
 if(!Authentication.require_login(request, response)) return;
 
 User currentUser = (User) session.getAttribute("currentUser");
-Quiz currentQuiz = Quiz.getQuiz(Integer.parseInt(request.getParameter("quiz_id")));
-
-if(!currentUser.is_admin && currentQuiz.user_id != currentUser.user_id) return;
+ArrayList<User> friends = (ArrayList<User>)currentUser.getFriends();
+String send_id_string = request.getParameter("recipient");
+int send_id = -1, challenge_id = -1;
+double top_score = -1.0;
+String recipient_string = "";
+String challenge = "", chal_subject="";
+if (send_id_string != null) {
+	send_id = Integer.parseInt(send_id_string);
+	User u = User.getUser(send_id);
+	recipient_string = u.name + "<" + u.email + ">";
+}
+if (request.getParameter("challenge") != null) {
+	top_score = Double.parseDouble(request.getParameter("high_score"));
+	challenge_id = Integer.parseInt(request.getParameter("quiz_id"));
+	Quiz q = Quiz.getQuiz(challenge_id);
+	chal_subject = currentUser.name + " has challenged you to take " + q.name + "!";
+	challenge = currentUser.name + "'s highest score was: " + top_score + "! Will you assume the role of the yellow-bellied sap sucker? Or will you show " + currentUser.name + " his/her place?";
+}
 %>
 
 <ex:push key="body.content">
-<h3><a href="messaging/messages.jsp">Messages</a> &bull; 
-	    <a href="messaging/friendRequests.jsp"">Friend Requests</a>
-</h3>
-	<table cellpadding="3" cellspacing="3" border="0">
-		<tr>
-			<th>Name</th>
-			<td><%=currentQuiz.name %></td>
-		</tr>
-		<tr>
-			<th>Description</th>
-			<td><%=currentQuiz.description %></td>
-		</tr>
-		<tr>
-			<th>Multiple Pages</th>
-			<td><%=currentQuiz.multiple_pages ? "The quiz will be rendered on multiple pages." : "The quiz will be rendered on a single page." %></td>
-		</tr>
-		<tr>
-			<th>Random Questions</th>
-			<td><%=currentQuiz.random_questions ? "The questions will be ordered randomly." : "The questions will be ordered in the order you specify." %></td>
-		</tr>
-		<tr>
-			<th>Immediate Correction</th>
-			<td><%=currentQuiz.immediate_correction ? "Individual questions will be graded immediately." : "The quiz will graded completely at the end." %></td>
-		</tr>
-		<tr>
-			<th>Practice Mode</th>
-			<td><%=currentQuiz.practice_mode ? "The quiz can be taken for practice." : "The quiz must be taken for a grade." %></td>
-		</tr>
-	</table>
-	<h3>Questions</h3>
-	<table cellpadding="3" cellspacing="3" border="0" width="100%">
-		<thead>
+<%if (challenge_id != -1) { %>
+	<h3>Send a Challenge</h3>
+<%} else { %>
+	<h3>Compose New Message</h3>
+<%} %>
+	<div><form method="post" action="MessageServlet">
+		<table cellspacing="4" cellpadding="4" border="0">
 			<tr>
-				<th width="50">No.</th>
-				<th width="500">Question Title</th>
-				<th>Type</th>
-				<th>Action</th>
-			</tr>
-		</thead>
-		<tbody>
-			<%
-			int i = 1;
-			QuizQuestion[] qs = currentQuiz.getQuestions();
-			for(QuizQuestion q : qs) {
-			%>
-			<tr>
-				<td align="center"><%=i++ %></td>
-				<td align="center"><%=q.getTitle() %></td>
-				<td align="center"><%=q.getFriendlyType() %></td>
-				<td align="center">
-					<a href="quiz/edit/edit_question.jsp?quiz_question_id=<%=q.quiz_question_id%>">Edit</a> 
-					<a href="quiz/edit/DeleteQuestionServlet?quiz_question_id=<%=q.quiz_question_id%>">Delete</a> 
-					Up 
-					Down
+				<th align="left" width="10%">To </th>
+				<td align="left">
+				<% if (send_id == -1) { %>	
+			
+					<input id="email_field" name= "email_field" type="text" style="width:300px" value="" readonly/>
+					<input id="id_field" name = "id_field" type="hidden" value=""/>
+					<select name="type" id="friend_dropdown">
+						<option>Select a friend</option>
+					<% for (int i = 0; i < friends.size(); i++) { 
+						User f = friends.get(i);
+					%>
+						<option value="<%=f.name%> <<%=f.email%>>,<%=f.user_id%>"><%=f.email%></option>
+					<%} %>
+					</select>
+					<script>
+						var textBox = document.getElementById('email_field');
+						var dropDown = document.getElementById('friend_dropdown');
+						var idField = document.getElementById('id_field');
+						dropDown.onchange = function() {
+							var info = dropDown.value.split(",");
+							textBox.value = info[0];
+							idField.value = info[1];
+						};
+					</script>
+				<%} else { %>
+					<input id="email_field" name= "email_field" type="text" style="width:300px" value="<%=recipient_string%>" readonly/>
+					<input id="id_field" name = "id_field" type="hidden" value="<%=send_id%>"/>
+				<%} %>
 				</td>
 			</tr>
-			<% } %>
-			<form method="post" action="quiz/edit/AddQuestionServlet">
-				<tr>
-					<td colspan="2" align="center">Add New Question</td>
-					<td align="center"><select name="type">
-						<option value="QuestionResponse">Question/Picture Response</option>
-						<option value="FillInTheBlanks">Fill-in-the-Blanks</option>
-						<option value="MultipleChoice">Multiple Choice</option>
-					</select></td>
-					<td align="center">
-						<input type="hidden" name="quiz_id" value="<%=currentQuiz.quiz_id%>">
-						<input type="submit" value="Add Question">
+			<tr>
+				<th align="left" width="10%">Subject </th>
+				<%if (challenge_id != -1) { %>
+					<td align="left"><%=chal_subject%><input name="subject" type="hidden" value="<%=chal_subject %>"></td>
+				<%} else { %>
+					<td align="left"><input name="subject" type="text" style="width:500px" value=""/></td>
+				<%} %>
+			</tr>
+			<tr>
+				<th align="left" width="10%">Message </th>
+				<%if (challenge_id != -1) { %>
+					<td><textarea name="body" style="width:500px;height:150px"><%=challenge%></textarea></td>
+				<%} else { %>
+					<td><textarea name="body" style="width:500px;height:150px"></textarea></td>
+				<%} %>
+			</tr>
+			<tr>
+				<th></th>
+				<%if (challenge_id != -1) { %>
+					<td>
+						<input type="hidden" name="quiz_id" value="<%=challenge_id%>">
+						<input type="hidden" name="high_score" value="<%=top_score %>">
+						<input type="submit" name ="send_challenge" value="Send">&nbsp;&nbsp;<input type="submit" value="Cancel"/>
 					</td>
-				</tr>
-			</form>
-		</tbody>
-	</table>
+				<%} else { %>
+					<td><input type="submit" name ="send_compose" value="Send">&nbsp;&nbsp;<input type="submit" value="Cancel"/></td>
+				<%} %>
+			</tr>
+		</table>
+	</form></div><br>
+	<style>
+		textarea {
+			font-size:11pt;
+			font-family:Helvetica;
+		}
+	</style>
 </ex:push>
 
 <t:standard>

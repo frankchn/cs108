@@ -173,7 +173,7 @@ public class User {
 				requests.add(req);
 			}	
 		} catch (SQLException e) {
-			return null;
+			e.printStackTrace();
 		}
 		return requests;
 	}
@@ -184,11 +184,14 @@ public class User {
 			PreparedStatement p = db.prepareStatement("SELECT * FROM `friend` WHERE `user_id_1` =" + user_id + " OR `user_id_2` =" + user_id);
 			ResultSet r = p.executeQuery();
 			while(r.next()) {
-				User u = User.getUser(r.getInt("user_id"));
-				friends.add(u);
+				int u1 = r.getInt("user_id_1");
+				int u2 = r.getInt("user_id_2");
+				int friend_id = u1 == user_id? u2 : u1;
+				User u = User.getUser(friend_id);
+				friends.add(u);				
 			}
 		} catch (SQLException e) {
-			return null;
+			e.printStackTrace();
 		}	
 		return friends;
 	}
