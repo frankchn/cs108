@@ -21,10 +21,17 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 		</form>
 	</div>
 	<% for(Announcement a : Announcement.getAnnouncements()) { %>
-	<div style="padding-left:20px;padding-right:20px">
+	<div style="padding-left:20px;padding-right:20px;padding-bottom:5px;border-bottom:1px solid #ccc">
 		<h4><%=a.subject %></h4>
 		<div><%=a.body %></div>
-		<div style="text-align:right"><em>Posted by <a href="user/profile.jsp?user=<%=a.user_id%>"><%=User.getUser(a.user_id).name %></a> on <%=sdf.format(a.posted) %></em></div>
+		<div style="text-align:right">
+			<em>
+				Posted by <a href="user/profile.jsp?user=<%=a.user_id%>"><%=User.getUser(a.user_id).name %></a> on <%=sdf.format(a.posted) %>
+				<% if(currentUser != null && currentUser.is_admin) { %>
+				&bull; <a href="admin/DeleteAnnouncementServlet?announcement_id=<%=a.announcement_id %>">Delete</a>
+				<% } %>
+			</em>
+		</div>
 	</div>
 	<% } %>
 	<h2>My Recent Activity</h2>

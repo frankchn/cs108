@@ -53,6 +53,12 @@ public class Announcement {
 		} catch (SQLException e) { return null; }
 	}
 	
+	public static void deleteAnnouncement(int announcement_id) {
+		try {
+			db.prepareStatement("DELETE FROM `announcement` WHERE `announcement_id` = " + announcement_id).executeUpdate();
+		} catch (SQLException e) { }
+	}
+	
 	public static void newAnnouncement(User u, String subject, String body) {
 		try {
 			PreparedStatement p = db.prepareStatement("INSERT INTO `announcement` (`user_id`, `posted`, `subject`, `body`) VALUES (?, ?, ?, ?)");
