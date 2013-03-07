@@ -142,7 +142,7 @@ public class Quiz {
 			QuizQuestion[] rtn = new QuizQuestion[size];
 			while(r.next()) {
 				Object x = r.getObject("metadata");
-				rtn[i++] = QuizQuestion.loadQuestion(x);
+				rtn[i++] = QuizQuestion.loadQuestion(r.getInt("quiz_question_id"));
 			}
 			
 			return rtn;

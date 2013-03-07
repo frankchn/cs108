@@ -33,7 +33,7 @@ if(!currentUser.is_admin && currentQuiz.user_id != currentUser.user_id) return;
 			</tr>
 			<tr>
 				<th>Immediate Correction</th>
-				<td><input type="checkbox" name="immediate_correction" <%=currentQuiz.immediate_correction ? "checked" : "" %> value="1"> I want individual questions graded immediately.</td>
+				<td><input type="checkbox" name="immediate_correction" <%=currentQuiz.immediate_correction ? "checked" : "" %> value="1"> I want individual questions graded immediately (applicable to quizzes that span multiple pages only).</td>
 			</tr>
 			<tr>
 				<th>Practice Mode</th>

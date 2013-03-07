@@ -36,7 +36,7 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 				<div class="quiz_item_left">
 					<div class="quiz_item_title"><a href="quiz/info.jsp?quiz_id=<%=q.quiz_id%>"><%=q.name %></a></div>
 					<div class="quiz_item_author">
-						created by <a href="profile/?user_id=<%=q.user_id%>"><%=User.getUser(q.user_id).name %></a>
+						created by <a href="user/profile.jsp?user=<%=q.user_id%>"><%=User.getUser(q.user_id).name %></a>
 						on <%=sdf.format(q.created) %>
 						&bull;
 						<%=q.is_public ? "Public" : "Draft (Invisible)" %>
