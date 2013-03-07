@@ -11,6 +11,7 @@ User currentUser = (User) session.getAttribute("currentUser");
 		<meta charset="utf-8" />
 		<link rel="stylesheet" href="static/css/main.css" />
 		<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+		<script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
 		<title>CS108 Quiz Website | ${pageTitle}</title>
 	</head>
 	<body>

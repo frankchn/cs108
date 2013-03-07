@@ -81,6 +81,38 @@ public class Quiz {
 		}
 	}
 	
+	public String getCurTagsAsString() {
+		Tag[] tag_list = this.getCurTags();
+		if (tag_list == null) {
+			return "";
+		}
+		String result = "";
+		for (int i = 0; i < tag_list.length; i++) {
+			result += tag_list[i].hashtag;
+			result += " ";
+		}
+		return result;
+	}
+	
+	public Tag[] getCurTags() {
+		try {
+			ResultSet r = db.prepareStatement("SELECT * from `tag` WHERE `quiz_id` = " + quiz_id).executeQuery();
+			r.last();
+			int size = r.getRow();
+			r.beforeFirst();
+			
+			int i = 0;
+			Tag[] tags = new Tag[size];
+			while(r.next()) {
+				Tag nextTag = new Tag(r.getString("hashtag"));
+				tags[i++] = nextTag;
+			}
+			return tags;
+		} catch (SQLException ignored) {
+			return null;
+		}
+	}
+	
 	public Review[] getReviews() {
 		try {
 			ResultSet r = db.prepareStatement("SELECT * from `review` WHERE `quiz_id` = " + quiz_id + " ORDER BY `time` DESC").executeQuery();

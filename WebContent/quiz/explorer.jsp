@@ -9,22 +9,12 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 %>
 
 <ex:push key="body.content">
-	<h3 style="text-align:left;float:left;"><span style="font-weight:normal;"><a href="quiz/explorer.jsp">Explorer</a></span> &bull; 
-	    <a href="quiz/index.jsp">Index</a>    
+	<h3 style="text-align:left;float:left;"><a href="quiz/index.jsp">Explorer</a> &bull; 
+	    <span style="font-weight:normal;"><a href="quiz/index.jsp">Index</a></span>	    
 	</h3>
 	<hr style="clear:both;"/>
-	<% if(currentUser != null) { %>
-	<div style="float:right;padding-left:15px">
-		<form method="post" action="quiz/edit/CreateQuizServlet">
-			<input type="submit" style="margin:15px;font-size:17px;font-weight:bold" value="Create New Quiz" />
-		</form>
-	</div>
-	<% } %>
 
-	<p>Here are a list of all the quizzes that are created and current available
-	   to take. Clicking on any one of them will take you to a page with more
-	   details and where you can take the quiz. You can also click the button on
-	   the right to create a new quiz.</p>
+	<p>Explore quizzes by clicking on tags.</p>
 	   
 	<div id="quiz_list_container">
 		<%
@@ -40,7 +30,7 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 				<div class="quiz_item_left">
 					<div class="quiz_item_title"><a href="quiz/info.jsp?quiz_id=<%=q.quiz_id%>"><%=q.name %></a></div>
 					<div class="quiz_item_author">
-						created by <a href="user/profile.jsp?user=<%=q.user_id%>"><%=User.getUser(q.user_id).name %></a>
+						created by <a href="profile/?user_id=<%=q.user_id%>"><%=User.getUser(q.user_id).name %></a>
 						on <%=sdf.format(q.created) %>
 						&bull;
 						<%=q.is_public ? "Public" : "Draft (Invisible)" %>
