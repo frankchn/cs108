@@ -1,6 +1,7 @@
 package quiz.model;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -50,6 +51,18 @@ public class Announcement {
 			
 			return rtn;
 		} catch (SQLException e) { return null; }
+	}
+	
+	public static void newAnnouncement(User u, String subject, String body) {
+		try {
+			PreparedStatement p = db.prepareStatement("INSERT INTO `announcement` (`user_id`, `posted`, `subject`, `body`) VALUES (?, ?, ?, ?)");
+			p.setInt(1, u.user_id);
+			p.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+			p.setString(3, subject);
+			p.setString(4, body);
+			
+			p.executeUpdate();
+		} catch (SQLException e) { }
 	}
 	
 }
