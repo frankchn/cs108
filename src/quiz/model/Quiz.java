@@ -160,6 +160,15 @@ public class Quiz {
 		}
 	}
 	
+	public int getNumAttempts() {
+		try {
+			ResultSet r = db.prepareStatement("SELECT COUNT(*) FROM `quiz_attempt` WHERE `quiz_id` = " + quiz_id).executeQuery();
+			r.next();
+			return r.getInt("COUNT(*)");
+		} catch (SQLException e) { }
+		return 0;
+	}
+	
 	public QuizQuestion[] getQuestions() {
 		try {
 			ResultSet r = db.prepareStatement("SELECT * FROM `quiz_question` WHERE `quiz_id` = " + quiz_id + " ORDER BY `sort_order` ASC",

@@ -35,7 +35,7 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 			<div class="quiz_item_container">
 				<div class="quiz_item_right">
 					<div><strong><%=q.getQuestions().length %></strong> questions</div>
-					<div><strong>XXX</strong> attempts</div>
+					<div><strong><%=q.getNumAttempts() %></strong> attempts</div>
 				</div>
 				<div class="quiz_item_left">
 					<div class="quiz_item_title"><a href="quiz/info.jsp?quiz_id=<%=q.quiz_id%>"><%=q.name %></a></div>
