@@ -25,6 +25,10 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 			<td><%=currentQuiz.description %></td>
 		</tr>
 		<tr>
+			<th>Tags</th>
+			<td><%=currentQuiz.getCurTagsAsString() %></td>
+		</tr>
+		<tr>
 			<th>Average Rating</th>
 			<td><%double rating = currentQuiz.getAvgRating();
 				if (rating > 0) {%><%=rating %>

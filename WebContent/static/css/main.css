@@ -170,3 +170,18 @@ tab {
    content: "\2605";
    position: absolute;
 }
+
+.draggable {
+    height: 20px;
+    background-color: #e6eaff;
+    border: 2px solid #3399cc;
+    margin-bottom: 1em;
+    padding: 3px;
+    cursor: default;
+    border-radius: 4px;
+    display: inline-block;
+    font-size:11px;
+}
+.active {
+    border: 2px solid #6699ff;
+}

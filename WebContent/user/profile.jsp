@@ -1,4 +1,4 @@
-<!-- Ratings css taken from http://css-tricks.com/star-ratings/ -->
+<!-- Ratings css edited from http://css-tricks.com/star-ratings/ -->
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
@@ -95,12 +95,12 @@ tab {
 	<tab>
 	<div class="achievement_grid">
 		<%
-			for (int i = 0; i < achievements.size(); i++) {
+		for (int i = 0; i < achievements.size(); i++) {
 		%>
 		<img style="margin-right: 20px" src="<%=achievements.get(i).img%>"
-			title="<%=viewedUser.name%><%=achievements.get(i).description%>">
+		title="<%=viewedUser.name%><%=achievements.get(i).description%>">
 		<%
-			}
+		}
 		%>
 	</div>
 	</tab>
@@ -109,49 +109,48 @@ tab {
 	</tab>
 	<div class="record_grid">
 		<%
-			for (int j = 0; j < records.size(); j++) {
+		for (int j = 0; j < records.size(); j++) {
 		%>
 		<%
 			Record rec = records.get(j); 
-			   int curRating = currentUser.getRating(rec.quiz_id);
+			int curRating = currentUser.getRating(rec.quiz_id);
 		%>
-		<div>
+			<div>
 			<tab>
 			<h4><a href="quiz/info.jsp?quiz_id=<%=Integer.toString(rec.quiz_id)%>"><%=rec.quiz_name%></a></h4>
 			</tab>
 			<%
-				if (currentUser.user_id == viewedUser.user_id) {
+			if (currentUser.user_id == viewedUser.user_id) {
 			%>
-			<div class="rating" id="<%=rec.quiz_id%>">
+				<div class="rating" id="<%=rec.quiz_id%>">
 				<%
-					for (int curStar = 0; curStar < 5; curStar++) {
+				for (int curStar = 0; curStar < 5; curStar++) {
 				%>
-				<span class="star" id=<%=5 - curStar%>
+					<span class="star" id=<%=5 - curStar%>
 					<%if (curStar >= (5 - curRating)) {%> style="color: #FDD017">
-					&#9733; <%
- 					} else {
- 						%>style="color:#C9C299">☆<%
- 					}
- 					%>
-				</span>
-				<%}%> <!--  end for (star) -->
-			</div>
-			<tab>
-			<div class="quiz_rating_info">
+						&#9733; <%
+ 					 } else {%>
+ 						style="color:#C9C299">&#9734;
+ 				   <%}%>
+				   </span>
+			   <%}%> <!--  end for (star) -->
+			   </div>
+			   <tab>
+			   <div class="quiz_rating_info">
 				<%
-					Review curReview = currentUser.getReview(rec.quiz_id);
-										if (curReview == null) {
+				Review curReview = currentUser.getReview(rec.quiz_id);
+			    if (curReview == null) {
 				%>
-				<textarea class="review_box" id="review_<%=rec.quiz_id%>"
+				    <textarea class="review_box" id="review_<%=rec.quiz_id%>"
 					style="resize: none" placeholder="Review this quiz. Press enter to submit." rows="5"
 					cols="112"></textarea>
 				<%
-					} else {
+				} else {
 				%>
-				<p><b>Your Review at <%=sdf.format(curReview.time) %>:</b> <%=curReview.content%></p>
-				<%}%>
-			</div>
-			</tab>
+					<p><b>Your Review at <%=sdf.format(curReview.time) %>:</b> <%=curReview.content%></p>
+			  <%}%>
+			   </div>
+			   </tab>
 			<!--  end current user review/rating -->
 			<%}%>
 			<tab>

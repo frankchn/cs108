@@ -1,3 +1,4 @@
+<!--  Draggable functionality edited from source: http://jsfiddle.net/5DCZw/2/ -->
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="ex" uri="http://frankchn.stanford.edu/cs108/" %>
@@ -13,13 +14,16 @@ if(!currentUser.is_admin && currentQuiz.user_id != currentUser.user_id) return;
 %>
 
 <ex:push key="body.content">
-	<h3>Information &bull; 
-	    <a href="quiz/edit/quiz_info.jsp?quiz_id=<%=currentQuiz.quiz_id%>">Edit</a> &bull;
-	    <a href="quiz/edit/DeleteQuizServlet?quiz_id=<%=currentQuiz.quiz_id%>">Delete</a> &bull;
-	    <a href="quiz/edit/TogglePublicServlet?quiz_id=<%=currentQuiz.quiz_id %>">
-	    	Make <%=currentQuiz.is_public ? "Private" : "Public" %>
-	    </a> &bull;
-	    Clear History</h3>
+	<h3>
+		Information &bull; <a
+			href="quiz/edit/quiz_info.jsp?quiz_id=<%=currentQuiz.quiz_id%>">Edit</a>
+		&bull; <a
+			href="quiz/edit/DeleteQuizServlet?quiz_id=<%=currentQuiz.quiz_id%>">Delete</a>
+		&bull; <a
+			href="quiz/edit/TogglePublicServlet?quiz_id=<%=currentQuiz.quiz_id %>">
+			Make <%=currentQuiz.is_public ? "Private" : "Public" %>
+		</a> &bull; Clear History
+	</h3>
 	<table cellpadding="3" cellspacing="3" border="0">
 		<tr>
 			<th>Name</th>
@@ -66,30 +70,79 @@ if(!currentUser.is_admin && currentQuiz.user_id != currentUser.user_id) return;
 				<td align="center"><%=i++ %></td>
 				<td align="center"><%=q.getTitle() %></td>
 				<td align="center"><%=q.getFriendlyType() %></td>
-				<td align="center">
-					<a href="quiz/edit/edit_question.jsp?quiz_question_id=<%=q.quiz_question_id%>">Edit</a> 
-					<a href="quiz/edit/DeleteQuestionServlet?quiz_question_id=<%=q.quiz_question_id%>">Delete</a> 
-					Up 
-					Down
-				</td>
+				<td align="center"><a
+					href="quiz/edit/edit_question.jsp?quiz_question_id=<%=q.quiz_question_id%>">Edit</a>
+					<a
+					href="quiz/edit/DeleteQuestionServlet?quiz_question_id=<%=q.quiz_question_id%>">Delete</a>
+					Up Down</td>
 			</tr>
 			<% } %>
 			<form method="post" action="quiz/edit/AddQuestionServlet">
 				<tr>
 					<td colspan="2" align="center">Add New Question</td>
 					<td align="center"><select name="type">
-						<option value="QuestionResponse">Question/Picture Response</option>
-						<option value="FillInTheBlanks">Fill-in-the-Blanks</option>
-						<option value="MultipleChoice">Multiple Choice</option>
+							<option value="QuestionResponse">Question/Picture
+								Response</option>
+							<option value="FillInTheBlanks">Fill-in-the-Blanks</option>
+							<option value="MultipleChoice">Multiple Choice</option>
 					</select></td>
-					<td align="center">
-						<input type="hidden" name="quiz_id" value="<%=currentQuiz.quiz_id%>">
-						<input type="submit" value="Add Question">
-					</td>
+					<td align="center"><input type="hidden" name="quiz_id"
+						value="<%=currentQuiz.quiz_id%>"> <input type="submit"
+						value="Add Question"></td>
 				</tr>
 			</form>
 		</tbody>
 	</table>
+	<h3>Tags</h3>
+	<center>
+		<div id="tag_system">
+			<form style="display: inline" action="quiz/edit/TagQuizServlet"
+				method="POST">
+				<input type="hidden" name="quiz_id" value="<%=currentQuiz.quiz_id%>">
+				<input type="text" id="tag_box" name="tag_box"
+					placeholder="Drag in tags or create your own" 
+					<% String currentTags = currentQuiz.getCurTagsAsString();
+					if (!currentTags.equals("")) {%>
+						value="<%= currentTags %>"
+					<%} %>
+				 size="70"></input>
+				<input
+					type="submit" name="search" value="Update Tags">
+			</form>
+			<br/><br/>
+			<div id=tag_choices>
+			<% Tag[] tagsToDisplay = Tag.getTags(); %>
+			<% for (int tag_index = 0; tag_index < tagsToDisplay.length; tag_index++) {
+				Tag current_tag = tagsToDisplay[tag_index];%>
+				<div class="draggable"><%= current_tag.hashtag %></div>
+			<% } %>
+
+			</div>
+			<script>
+			$(function() {
+				$(".draggable").draggable({
+					revert : true,
+					helper : 'clone',
+					start : function(event, ui) {
+						$(this).fadeTo('fast', 0.5);
+					},
+					stop : function(event, ui) {
+						$(this).fadeTo(0, 1);
+					}
+				}); 
+
+				$("#tag_box").droppable({
+					hoverClass : 'active',
+					drop : function(event, ui) {
+						this.value = this.value + $(ui.draggable).text() + " ";
+					}
+				});
+			});
+			
+			
+			</script>
+		</div>
+	</center>
 </ex:push>
 
 <t:standard>
