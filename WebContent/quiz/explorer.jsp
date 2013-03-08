@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@taglib prefix="ex" uri="http://frankchn.stanford.edu/cs108/" %>
-<%@page import="quiz.model.*, quiz.manager.*" %>
+<%@page import="quiz.model.*, quiz.manager.*, java.util.List" %>
 
 <%
 User currentUser = (User) session.getAttribute("currentUser");
@@ -9,7 +9,7 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 %>
 
 <ex:push key="body.content">
-	<h3 style="text-align:left;float:left;"><a href="quiz/index.jsp">Explorer</a> &bull; 
+	<h3 style="text-align:left;float:left;"><a href="quiz/explorer.jsp">Explorer</a> &bull; 
 	    <span style="font-weight:normal;"><a href="quiz/index.jsp">Listing</a></span>	    
 	</h3>
 			<% if(currentUser != null) { %>
@@ -22,42 +22,32 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 	<hr style="clear:both;"/>
 
 	<p>Explore quizzes by clicking on tags.</p>
-	   
-	<div id="quiz_list_container">
-		<%
-		Quiz[] list = QuizManager.getAllQuizzes(currentUser);
-		if(list != null) {
-			for(Quiz q : list) {
-			%>
-			<div class="quiz_item_container">
-				<div class="quiz_item_right">
-					<div><strong><%=q.getQuestions().length %></strong> questions</div>
-					<div><strong>XXX</strong> attempts</div>
-				</div>
-				<div class="quiz_item_left">
-					<div class="quiz_item_title"><a href="quiz/info.jsp?quiz_id=<%=q.quiz_id%>"><%=q.name %></a></div>
-					<div class="quiz_item_author">
-						created by <a href="profile/?user_id=<%=q.user_id%>"><%=User.getUser(q.user_id).name %></a>
-						on <%=sdf.format(q.created) %>
-						&bull;
-						<%=q.is_public ? "Public" : "Draft (Invisible)" %>
-						<%=(currentUser != null && (currentUser.is_admin || currentUser.user_id == q.user_id)) ? 
-								"&bull; <a href='quiz/edit/index.jsp?quiz_id=" + q.quiz_id + "'>Edit This Quiz</a>"
-								: "" %>
-					</div>
-				</div>
-			</div>
-			<% 
-			}
-		} else { 
-		%>
-		<div style="text-align:center">
-			Sorry, an error occurred. Please contact system administrators for more information.
-		</div>
-		<% 
-		}
-		%>
-	</div>
+			<center><div id=tag_cloud>
+			<% List<List<Tag> > tagsToDisplay = Tag.get2DArrayOfTags(); %>
+			<% for (int tag_row = 0; tag_row < tagsToDisplay.size(); tag_row++) {
+				List<Tag> cur_list = tagsToDisplay.get(tag_row);
+				for (int tag_index = 0; tag_index < cur_list.size(); tag_index++) {
+					Tag current_tag = cur_list.get(tag_index);%>
+				<div class="draggable_empty" ><a href="quiz/explore_tag.jsp?hashtag=<%= current_tag.hashtag.substring(1) %>" style="font-size:<%= current_tag.fontSize %>px;"><%= current_tag.hashtag %></a></div>
+			<%  } %>
+				<br>
+			<% } %>
+
+			</div></center>
+			<script>
+			$(function() {
+				$(".draggable_empty").draggable({
+					revert : true,
+					helper : 'clone',
+					start : function(event, ui) {
+						$(this).fadeTo('fast', 0.5);
+					},
+					stop : function(event, ui) {
+						$(this).fadeTo(0, 1);
+					}
+				}); 
+			});
+			</script>
 </ex:push>
 
 <t:standard>

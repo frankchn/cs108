@@ -112,8 +112,10 @@ if(!currentUser.is_admin && currentQuiz.user_id != currentUser.user_id) return;
 			</form>
 			<br/><br/>
 			<div id=tag_choices>
-			<% List<List<Tag> > tagsToDisplay = Tag.get2DArrayOfTags(); %>
-			<% for (int tag_row = 0; tag_row < tagsToDisplay.size(); tag_row++) {
+			<% List<List<Tag> > tagsToDisplay = Tag.get2DArrayOfTags(); 
+			int t_size = tagsToDisplay.size();
+			if (t_size > 2) t_size = 2;%>
+			<% for (int tag_row = 0; tag_row < t_size; tag_row++) {
 				List<Tag> cur_list = tagsToDisplay.get(tag_row);
 				for (int tag_index = 0; tag_index < cur_list.size(); tag_index++) {
 					Tag current_tag = cur_list.get(tag_index);%>
