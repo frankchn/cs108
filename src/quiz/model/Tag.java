@@ -19,6 +19,8 @@ import quiz.base.DBConnector;
 public class Tag {
 	public String hashtag;
 	public String plaintext;
+	public int numOccurences;
+	public int fontSize;
 	
 	private static Connection db;
 	static {
@@ -28,6 +30,30 @@ public class Tag {
 	public Tag(String hashtag) {
 		this.hashtag = hashtag;
 		this.plaintext = stripHash(hashtag);
+		this.numOccurences = getNumOccurences();
+		this.fontSize = setFontSize();
+	}
+	
+	//set to a number between 11 and 30
+	public int setFontSize() {
+		int size = 11 + (numOccurences * 2);
+		if (size > 30) {
+			size = 30;
+		}
+		return size;
+	}
+	
+	public int getNumOccurences() {
+		try {
+			PreparedStatement p = db.prepareStatement("SELECT * from `tag` WHERE `hashtag` = ?");
+			p.setString(1, hashtag);
+			ResultSet r = p.executeQuery();
+			r.last();
+			int size = r.getRow();
+			return size;
+		} catch (SQLException ignored) {
+			return 0;
+		}			
 	}
 	
 	public String stripHash(String hashtag) {
@@ -37,8 +63,6 @@ public class Tag {
 	// hardcoded numbers for aesthetics
 	private static List<List<Tag> > formatTo2D(Tag[] tags) {
 		int size = tags.length;
-		if (size > 17)
-			size = 17;
 		List<List<Tag> > final_list = new ArrayList<List<Tag> >();
 		List<Tag> tag_row = new ArrayList<Tag>();
 		for (int i = 0; i < size; i++) {
