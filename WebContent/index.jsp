@@ -11,15 +11,8 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 <ex:push key="body.content">
 	<h2>Announcements
 	<% if(currentUser != null && currentUser.is_admin) { %>
-	&bull; <a onClick="showNewAnnouncementForm()" href="#">New</a>
+	&bull; <a href="admin/admin.jsp">Admin</a>
 	<% } %></h2>
-	<div class="newannouncement" style="display:none;padding-left:20px;padding-right:20px">
-		<form action="admin/NewAnnouncementServlet" method="post">
-			<div><input placeholder="Enter Title Here" style="width:600px;font-size:16px;font-weight:bold;" type="text" name="subject" /></div>
-			<div><textarea placeholder="Enter Announcement Text Here" style="width:600px;height:100px;" name="body"></textarea></div>
-			<div><input type="submit" value="Post New Announcement!" /></div>
-		</form>
-	</div>
 	<% for(Announcement a : Announcement.getAnnouncements()) { %>
 	<div style="padding-left:20px;padding-right:20px;padding-bottom:5px;border-bottom:1px solid #ccc">
 		<h4><%=a.subject %></h4>
