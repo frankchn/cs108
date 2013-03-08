@@ -16,7 +16,13 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 	<h2><a href="index.jsp">Announcements</a>
 	<% if(currentUser != null && currentUser.is_admin) { %>
 	&bull; Admin
-	<% } %></h2><hr><br>
+	<% } %></h2><hr>
+		<a href="table" style="padding-left:20px">Manage Users |</a>		
+		<a href="table">Manage Quizzes</a><br>
+	
+	<br>
+
+		
 		<div class ="inline" style="padding-left:20px;padding-right:20px">
 			<form action="admin/NewAnnouncementServlet" method="post">
 				<div><input placeholder="Enter Title Here" style="width:425px;font-size:16px;font-weight:bold;" type="text" name="subject" /></div>
