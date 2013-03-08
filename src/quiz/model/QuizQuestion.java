@@ -95,6 +95,7 @@ public abstract class QuizQuestion implements Serializable {
 	
 	public final int quiz_question_id;
 	public final int quiz_id;
+	public int sort_order = 0;
 	
 	abstract public String getTitle();
 	abstract public QuizQuestionAttempt gradeResponse(Map<String, String[]> response);
@@ -144,13 +145,15 @@ public abstract class QuizQuestion implements Serializable {
 		try {
 			ResultSet r = db.prepareStatement("SELECT * FROM `quiz_question` WHERE `quiz_question_id` = " + quiz_question_id).executeQuery();
 			if(!r.next()) return null;
-			return loadQuestion(r.getObject("metadata"));
+			QuizQuestion q = loadQuestion(r.getObject("metadata"));
+			q.sort_order = r.getInt("sort_order");
+			return q;
 		} catch (SQLException e) {
 			throw new RuntimeException("Cannot load question.");
 		}
 	}
 	
-	public static QuizQuestion loadQuestion(Object bas) {
+	protected static QuizQuestion loadQuestion(Object bas) {
 		try {
 			ByteArrayInputStream bs = new ByteArrayInputStream((byte[]) bas);
 			ObjectInputStream is = new ObjectInputStream(bs);
@@ -201,11 +204,29 @@ public abstract class QuizQuestion implements Serializable {
 	}
 	
 	public void moveUp() {
-		throw new RuntimeException("not implemented.");
+		try {
+			ResultSet r = db.prepareStatement("SELECT * FROM `quiz_question` WHERE `quiz_id` = " + quiz_id + " AND `sort_order` < " + sort_order + " ORDER BY `sort_order` DESC LIMIT 1").executeQuery();
+			if(!r.next()) { return; }
+			
+			int curr_so = sort_order;
+			int new_so = r.getInt("sort_order");
+			
+			db.prepareStatement("UPDATE `quiz_question` SET `sort_order` = " + new_so + " WHERE `quiz_question_id` = " + quiz_question_id).executeUpdate();
+			db.prepareStatement("UPDATE `quiz_question` SET `sort_order` = " + curr_so + " WHERE `quiz_question_id` = " + r.getInt("quiz_question_id")).executeUpdate();
+		} catch (SQLException e) { }
 	}
 	
 	public void moveDown() {
-		throw new RuntimeException("not implemented.");
+		try {
+			ResultSet r = db.prepareStatement("SELECT * FROM `quiz_question` WHERE `quiz_id` = " + quiz_id + " AND `sort_order` > " + sort_order + " ORDER BY `sort_order` ASC LIMIT 1").executeQuery();
+			if(!r.next()) { return; }
+			
+			int curr_so = sort_order;
+			int new_so = r.getInt("sort_order");
+			
+			db.prepareStatement("UPDATE `quiz_question` SET `sort_order` = " + new_so + " WHERE `quiz_question_id` = " + quiz_question_id).executeUpdate();
+			db.prepareStatement("UPDATE `quiz_question` SET `sort_order` = " + curr_so + " WHERE `quiz_question_id` = " + r.getInt("quiz_question_id")).executeUpdate();
+		} catch (SQLException e) { }
 	}
 	
 	// do not randomly initialize this!

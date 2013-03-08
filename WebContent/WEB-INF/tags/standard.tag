@@ -19,12 +19,14 @@ User currentUser = (User) session.getAttribute("currentUser");
 			<div id="topbar">
 				<div id="top_nav">
 					<div id="navbar_items">
+						<% if(currentUser != null) { %>
 						<span class="nav_item">
 							<form style="display:inline" action="user/search.jsp" method="POST">
 								<input type="text" name="search_query" placeholder="Search by user email or name" size="40">
 								<input type="submit" name="search" value="Search">
 							</form>
 						</span>
+						<% } %>
 						<span class="nav_item"><a href="">Home</a></span>
 						<span class="nav_item"><a href="quiz/">Quizzes</a></span>
 						<%

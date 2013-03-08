@@ -70,11 +70,12 @@ if(!currentUser.is_admin && currentQuiz.user_id != currentUser.user_id) return;
 				<td align="center"><%=i++ %></td>
 				<td align="center"><%=q.getTitle() %></td>
 				<td align="center"><%=q.getFriendlyType() %></td>
-				<td align="center"><a
-					href="quiz/edit/edit_question.jsp?quiz_question_id=<%=q.quiz_question_id%>">Edit</a>
-					<a
-					href="quiz/edit/DeleteQuestionServlet?quiz_question_id=<%=q.quiz_question_id%>">Delete</a>
-					Up Down</td>
+				<td align="center">
+					<a href="quiz/edit/edit_question.jsp?quiz_question_id=<%=q.quiz_question_id%>">Edit</a> 
+					<a href="quiz/edit/DeleteQuestionServlet?quiz_question_id=<%=q.quiz_question_id%>">Delete</a> 
+					<a href="quiz/edit/MoveQuestionServlet?quiz_question_id=<%=q.quiz_question_id %>&dir=up">Up</a> 
+					<a href="quiz/edit/MoveQuestionServlet?quiz_question_id=<%=q.quiz_question_id %>&dir=down">Down</a> 
+				</td>
 			</tr>
 			<% } %>
 			<form method="post" action="quiz/edit/AddQuestionServlet">

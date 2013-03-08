@@ -48,12 +48,12 @@ if (response.getHeader("search_quiz_term") != null) {
 			<div class="quiz_item_container">
 				<div class="quiz_item_right">
 					<div><strong><%=q.getQuestions().length %></strong> questions</div>
-					<div><strong>XXX</strong> attempts</div>
+					<div><strong><%=q.getNumAttempts() %></strong> attempts</div>
 				</div>
 				<div class="quiz_item_left">
 					<div class="quiz_item_title"><a href="quiz/info.jsp?quiz_id=<%=q.quiz_id%>"><%=q.name %></a></div>
 					<div class="quiz_item_author">
-						created by <a href="profile/?user_id=<%=q.user_id%>"><%=User.getUser(q.user_id).name %></a>
+						created by <a href="user/profile.jsp?user=<%=q.user_id%>"><%=User.getUser(q.user_id).name %></a>
 						on <%=sdf.format(q.created) %>
 						&bull;
 						<%=q.is_public ? "Public" : "Draft (Invisible)" %>
