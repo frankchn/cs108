@@ -10,8 +10,15 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 
 <ex:push key="body.content">
 	<h3 style="text-align:left;float:left;"><a href="quiz/index.jsp">Explorer</a> &bull; 
-	    <span style="font-weight:normal;"><a href="quiz/index.jsp">Index</a></span>	    
+	    <span style="font-weight:normal;"><a href="quiz/index.jsp">Listing</a></span>	    
 	</h3>
+			<% if(currentUser != null) { %>
+	<div style="float:right;padding-left:15px;position:relative;left:16px;">
+		<form method="post" action="quiz/edit/CreateQuizServlet">
+			<input type="submit" style="margin:15px;font-size:17px;font-weight:bold" value="Create New Quiz" />
+		</form>
+	</div>
+	<% } %>
 	<hr style="clear:both;"/>
 
 	<p>Explore quizzes by clicking on tags.</p>

@@ -91,6 +91,21 @@ public class User {
 		}
 	}
 	
+	public double getHighestScore(int quiz_id) {
+		try {
+			PreparedStatement p = db.prepareStatement("SELECT max(score) from `quiz_attempt` WHERE `user_id` = ? and `quiz_id` = ?");
+			p.setInt(1,  user_id);
+			p.setInt(2, quiz_id);
+			ResultSet r = p.executeQuery();
+			if (!r.next()) {
+				return 0;
+			}
+			return r.getDouble(1);
+		} catch (SQLException e) {
+			return 0;
+		}
+	}
+	
 	public Review getReview(int quiz_id) {
 		try {
 			PreparedStatement p = db.prepareStatement("SELECT * from `review` WHERE `user_id` = ? and `quiz_id` = ?");

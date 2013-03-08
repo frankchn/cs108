@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 import quiz.base.DBConnector;
 import quiz.model.Achievement;
@@ -69,6 +70,54 @@ public class QuizManager {
 			Quiz[] rtn = new Quiz[size];
 			while(r.next()) {
 				rtn[i++] = Quiz.getQuizFromResultSet(r);
+			}
+			
+			return rtn;
+		} catch (SQLException e) {
+			return null;
+		}
+	}
+	
+	public static Quiz[] getSearchedQuizzes(User currentUser, String searched) {	
+		if (searched.equals("")) {
+			return getAllQuizzes(currentUser);
+		}
+		boolean is_admin = true;
+		int user_id = -1;
+		if(currentUser == null || !currentUser.is_admin)
+			is_admin = false;
+		
+		if(currentUser != null)
+			user_id = currentUser.user_id;
+		
+		PreparedStatement p;
+		ResultSet r;
+		
+		try {
+			if(is_admin) {
+				p = db.prepareStatement("SELECT DISTINCT (quiz_id) FROM `tag` WHERE `hashtag` LIKE ?", 
+						                ResultSet.TYPE_SCROLL_INSENSITIVE, 
+						                ResultSet.CONCUR_READ_ONLY);
+				p.setString(2, "%" + searched + "%");
+			} else {
+				p = db.prepareStatement("SELECT DISTINCT (quiz.quiz_id) FROM (`tag` JOIN `quiz` ON (quiz.quiz_id = tag.quiz_id)) WHERE (quiz.is_public = 1 OR quiz.user_id = ?) AND tag.hashtag LIKE ?", 
+		                				ResultSet.TYPE_SCROLL_INSENSITIVE, 
+		                				ResultSet.CONCUR_READ_ONLY);
+				p.setInt(1, user_id);
+				p.setString(2, "%" + searched + "%");
+			}
+			
+			r = p.executeQuery();
+			
+			// get rows
+			r.last();
+			int size = r.getRow();
+			r.beforeFirst();
+			
+			int i = 0;
+			Quiz[] rtn = new Quiz[size];
+			while(r.next()) {
+				rtn[i++] = Quiz.getQuiz(r.getInt(1));
 			}
 			
 			return rtn;

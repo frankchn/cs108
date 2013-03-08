@@ -34,9 +34,28 @@ public class Tag {
 		return hashtag.substring(1);
 	}
 	
-	public static Tag[] getTags() {
+	// hardcoded numbers for aesthetics
+	private static List<List<Tag> > formatTo2D(Tag[] tags) {
+		int size = tags.length;
+		if (size > 17)
+			size = 17;
+		List<List<Tag> > final_list = new ArrayList<List<Tag> >();
+		List<Tag> tag_row = new ArrayList<Tag>();
+		for (int i = 0; i < size; i++) {
+			if (i % 9 == 8) {
+				// start new list
+				final_list.add(tag_row);
+				tag_row = new ArrayList<Tag>();
+			} 
+			tag_row.add(tags[i]);
+		}
+		final_list.add(tag_row);
+		return final_list;		
+	}
+	
+	public static List<List<Tag> > get2DArrayOfTags() {
 		try {
-			ResultSet r = db.prepareStatement("SELECT * from `tag`").executeQuery();
+			ResultSet r = db.prepareStatement("SELECT DISTINCT(hashtag) from `tag`").executeQuery();
 			r.last();
 			int size = r.getRow();
 			r.beforeFirst();
@@ -44,7 +63,26 @@ public class Tag {
 			int i = 0;
 			Tag[] rtn = new Tag[size];
 			while(r.next()) {
-				Tag nextTag = new Tag(r.getString("hashtag"));
+				Tag nextTag = new Tag(r.getString(1));
+				rtn[i++] = nextTag;
+			}	
+			return formatTo2D(rtn);
+		} catch (SQLException ignored) {
+			return null;
+		}		
+	}
+	
+	public static Tag[] getTags() {
+		try {
+			ResultSet r = db.prepareStatement("SELECT DISTINCT(hashtag) from `tag`").executeQuery();
+			r.last();
+			int size = r.getRow();
+			r.beforeFirst();
+			
+			int i = 0;
+			Tag[] rtn = new Tag[size];
+			while(r.next()) {
+				Tag nextTag = new Tag(r.getString(1));
 				rtn[i++] = nextTag;
 			}	
 			return rtn;

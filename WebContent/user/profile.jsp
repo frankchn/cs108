@@ -155,6 +155,10 @@ tab {
 			<%}%>
 			<tab>
 			<p>
+				<b>Highest Score:</b>
+				<%=currentUser.getHighestScore(rec.quiz_id) %>
+			</p>
+			<p>
 				<b>Last Taken:</b>
 				<%=sdf.format(rec.last_start_time)%>
 				(<a

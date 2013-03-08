@@ -6,29 +6,42 @@
 <%
 User currentUser = (User) session.getAttribute("currentUser");
 java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
+String searchedTag = "";
+if (response.getHeader("search_quiz_term") != null) {
+	searchedTag = response.getHeader("search_quiz_term");
+}
 %>
 
 <ex:push key="body.content">
 	<h3 style="text-align:left;float:left;"><span style="font-weight:normal;"><a href="quiz/explorer.jsp">Explorer</a></span> &bull; 
-	    <a href="quiz/index.jsp">Index</a>    
+	    <a href="quiz/index.jsp">Listing</a>    
 	</h3>
-	<hr style="clear:both;"/>
-	<% if(currentUser != null) { %>
-	<div style="float:right;padding-left:15px">
+		<% if(currentUser != null) { %>
+	<div style="float:right;padding-left:15px;position:relative;left:16px;">
 		<form method="post" action="quiz/edit/CreateQuizServlet">
 			<input type="submit" style="margin:15px;font-size:17px;font-weight:bold" value="Create New Quiz" />
 		</form>
 	</div>
 	<% } %>
+	<hr style="clear:both;"/>
 
-	<p>Here are a list of all the quizzes that are created and current available
-	   to take. Clicking on any one of them will take you to a page with more
-	   details and where you can take the quiz. You can also click the button on
-	   the right to create a new quiz.</p>
-	   
+
+	<p>Here is a list of all the quizzes that are created and currently
+		available to take. Clicking on any one of them will take you to a page
+		with more details and where you can take the quiz.</p>
+	
+	<div style="margin-bottom:15px; position:relative; left:-1px;">
+	<form style="display: inline;" action="quiz/SearchQuizServlet" method="post">
+		<input type="text" name="search_by_tag"
+			placeholder="Search by quiz tag" size="40"> 
+		<input
+			type="submit" name="search" value="Search">
+	</form></div>
+
 	<div id="quiz_list_container">
 		<%
-		Quiz[] list = QuizManager.getAllQuizzes(currentUser);
+		Quiz[] list = QuizManager.getSearchedQuizzes(currentUser, searchedTag);
+		//Quiz[] list = QuizManager.getAllQuizzes(currentUser);
 		if(list != null) {
 			for(Quiz q : list) {
 			%>

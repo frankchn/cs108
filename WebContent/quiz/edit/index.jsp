@@ -2,7 +2,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="ex" uri="http://frankchn.stanford.edu/cs108/" %>
-<%@page import="quiz.model.*, quiz.manager.*, quiz.website.auth.Authentication" %>
+<%@page import="quiz.model.*, quiz.manager.*, quiz.website.auth.Authentication, java.util.List" %>
 
 <%
 if(!Authentication.require_login(request, response)) return;
@@ -111,10 +111,14 @@ if(!currentUser.is_admin && currentQuiz.user_id != currentUser.user_id) return;
 			</form>
 			<br/><br/>
 			<div id=tag_choices>
-			<% Tag[] tagsToDisplay = Tag.getTags(); %>
-			<% for (int tag_index = 0; tag_index < tagsToDisplay.length; tag_index++) {
-				Tag current_tag = tagsToDisplay[tag_index];%>
+			<% List<List<Tag> > tagsToDisplay = Tag.get2DArrayOfTags(); %>
+			<% for (int tag_row = 0; tag_row < tagsToDisplay.size(); tag_row++) {
+				List<Tag> cur_list = tagsToDisplay.get(tag_row);
+				for (int tag_index = 0; tag_index < cur_list.size(); tag_index++) {
+					Tag current_tag = cur_list.get(tag_index);%>
 				<div class="draggable"><%= current_tag.hashtag %></div>
+			<%  } %>
+				<br>
 			<% } %>
 
 			</div>
