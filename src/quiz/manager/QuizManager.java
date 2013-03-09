@@ -37,6 +37,37 @@ public class QuizManager {
 		}
 	}
 	
+	public static int getNumQuizzes() {
+		ResultSet r;
+		try {
+			PreparedStatement p = db.prepareStatement("SELECT COUNT(*) FROM `quiz`");
+			r = p.executeQuery();
+			int numQuizzes = 0;			
+			if (r.next()) {
+				numQuizzes += r.getInt(1);
+			}
+			return numQuizzes;
+		} catch (SQLException e) {
+			return 0;
+		}
+	}
+	
+	public static int getNumTaken() {
+		ResultSet r;
+		try {
+			PreparedStatement p = db.prepareStatement("SELECT COUNT(*) FROM `quiz`");
+			r = p.executeQuery();
+			int numQuizzes = 0;			
+			if (r.next()) {
+				numQuizzes += r.getInt(1);
+			}
+			return numQuizzes;
+		} catch (SQLException e) {
+			return 0;
+		}
+	}
+	
+	
 	public static Quiz[] getAllQuizzes(User currentUser) {	
 		boolean is_admin = true;
 		int user_id = -1;
