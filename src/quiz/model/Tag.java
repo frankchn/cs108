@@ -11,6 +11,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -63,6 +65,8 @@ public class Tag {
 	// hardcoded numbers for aesthetics
 	private static List<List<Tag> > formatTo2D(Tag[] tags) {
 		int size = tags.length;
+		List<Tag> tags_list = Arrays.asList(tags);
+		Collections.shuffle(tags_list);
 		List<List<Tag> > final_list = new ArrayList<List<Tag> >();
 		List<Tag> tag_row = new ArrayList<Tag>();
 		for (int i = 0; i < size; i++) {
@@ -71,7 +75,7 @@ public class Tag {
 				final_list.add(tag_row);
 				tag_row = new ArrayList<Tag>();
 			} 
-			tag_row.add(tags[i]);
+			tag_row.add(tags_list.get(i));
 		}
 		final_list.add(tag_row);
 		return final_list;		
