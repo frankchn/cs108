@@ -115,7 +115,7 @@ public class MessageManager {
 		ArrayList<Message> inbox = new ArrayList<Message>();
 		ResultSet r;
 		try {
-			r = db.prepareStatement("SELECT * FROM `message` WHERE `recipient_user_id` = " + user_id).executeQuery();
+			r = db.prepareStatement("SELECT * FROM `message` WHERE `recipient_user_id` = " + user_id + " ORDER BY `time_sent` DESC").executeQuery();
 			while(r.next()) {
 				Message m = new Message(r.getInt("message_id"),
 										r.getString("type"),

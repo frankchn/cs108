@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import quiz.base.*;
 import quiz.model.*;
@@ -89,15 +90,58 @@ public class UserManager {
 	
 	public static void removeUser(User u) {
 		try {
-			db.prepareStatement("DELETE FROM user WHERE user_id = " + u.user_id).executeUpdate();
+			db.prepareStatement("DELETE FROM `user` WHERE `user_id` = " + u.user_id).executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void promoteUser(User u) {
+	public static void promoteUser(int user_id) {
 		try {
-			db.prepareStatement("").executeUpdate();
+			db.prepareStatement("UPDATE `user` SET `is_admin` = 1 WHERE `user_id` = " + user_id).executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static ArrayList<User> search(String query) {
+		try {
+			ArrayList<User> results = new ArrayList<User>();
+			PreparedStatement p = db.prepareStatement("SELECT * FROM `user` WHERE `email` LIKE ? OR `full_name` LIKE ? ORDER BY `user_id`");
+			p.setString(1, "%" + query + "%");
+			p.setString(2, "%" + query + "%");
+			
+			ResultSet r = p.executeQuery();
+			while(r.next()) {
+				User u = User.getUser(r.getInt("user_id"));
+				results.add(u);
+			}
+			return results;
+		} catch (SQLException e) {
+			return null;
+		}
+		
+	}
+	
+	public static ArrayList<User> getAdminUsers() {
+		try {
+			ArrayList<User> results = new ArrayList<User>();
+			PreparedStatement p = db.prepareStatement("SELECT * FROM `user` WHERE `is_admin`=1 LIMIT 8");
+			
+			ResultSet r = p.executeQuery();
+			while(r.next()) {
+				User u = User.getUser(r.getInt("user_id"));
+				results.add(u);
+			}
+			return results;
+		} catch (SQLException e) {
+			return null;
+		}
+	}
+	
+	public static void demoteUser(int user_id) {
+		try {
+			db.prepareStatement("UPDATE `user` SET `is_admin` = 0 WHERE `user_id` = " + user_id).executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
