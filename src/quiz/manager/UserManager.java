@@ -91,6 +91,10 @@ public class UserManager {
 	public static void removeUser(User u) {
 		try {
 			db.prepareStatement("DELETE FROM `user` WHERE `user_id` = " + u.user_id).executeUpdate();
+			db.prepareStatement("DELETE FROM `user` WHERE `user_id` = " + u.user_id).executeUpdate();
+			db.prepareStatement("DELETE FROM `user` WHERE `user_id` = " + u.user_id).executeUpdate();
+			db.prepareStatement("DELETE FROM `user` WHERE `user_id` = " + u.user_id).executeUpdate();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

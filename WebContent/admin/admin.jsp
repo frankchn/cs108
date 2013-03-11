@@ -117,10 +117,11 @@ String quiz_search = request.getParameter("quiz_search");
 			</div>
 			<% 
 			ArrayList<User> defaultUsers;
-			if (user_search != null && !user_search.isEmpty()) {
-				defaultUsers = UserManager.search(user_search);
-			} else {
+			System.out.println("user_search: " + user_search);
+			if (user_search == null || user_search.isEmpty() || user_search.equals("null")) {
 				defaultUsers = UserManager.getAdminUsers();
+			} else {
+				defaultUsers = UserManager.search(user_search);
 			}
 			
 			if (defaultUsers.size() != 0) { 
@@ -189,10 +190,10 @@ String quiz_search = request.getParameter("quiz_search");
 				<span style="display:inline-block"><b>Actions</b></span>
 			</div>
 			<% ArrayList<Quiz> editQuizzes;
-				if (quiz_search != null && !quiz_search.isEmpty()) {
-					editQuizzes = QuizManager.searchQuizzes(quiz_search);
-				} else {
+				if (quiz_search == null || quiz_search.isEmpty() || quiz_search.equals("null")) {
 					editQuizzes = QuizManager.getRecentQuizzes();
+				} else {
+					editQuizzes = QuizManager.searchQuizzes(quiz_search);
 				}
 			
 			if (editQuizzes.size() != 0) { 
