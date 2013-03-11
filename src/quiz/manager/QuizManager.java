@@ -55,7 +55,7 @@ public class QuizManager {
 	public static int getNumTaken() {
 		ResultSet r;
 		try {
-			PreparedStatement p = db.prepareStatement("SELECT COUNT(*) FROM `quiz`");
+			PreparedStatement p = db.prepareStatement("SELECT COUNT(*) FROM `quiz_attempt`");
 			r = p.executeQuery();
 			int numQuizzes = 0;			
 			if (r.next()) {
@@ -66,6 +66,22 @@ public class QuizManager {
 			return 0;
 		}
 	}
+	
+	public static int getNumTags() {
+		ResultSet r;
+		try {
+			PreparedStatement p = db.prepareStatement("SELECT COUNT(*) FROM `tag`");
+			r = p.executeQuery();
+			int numTags = 0;			
+			if (r.next()) {
+				numTags += r.getInt(1);
+			}
+			return numTags;
+		} catch (SQLException e) {
+			return 0;
+		}
+	}
+	
 	
 	
 	public static Quiz[] getAllQuizzes(User currentUser) {	
@@ -155,6 +171,22 @@ public class QuizManager {
 		} catch (SQLException e) {
 			return null;
 		}
+	}
+	
+	public void delete(int quiz_id) {
+		try {
+			db.prepareStatement("DELETE FROM `quiz_attempt` WHERE `quiz_id` = " + quiz_id).executeUpdate();
+			db.prepareStatement("DELETE FROM `quiz_attempt_question` WHERE `quiz_id` = " + quiz_id).executeUpdate();
+			db.prepareStatement("DELETE FROM `quiz_question` WHERE `quiz_id` = " + quiz_id).executeUpdate();
+			db.prepareStatement("DELETE FROM `quiz` WHERE `quiz_id` = " + quiz_id).executeUpdate();
+		} catch (SQLException ignored) { }
+	}
+
+	public void deleteHistory(int quiz_id) {
+		try {
+			db.prepareStatement("DELETE FROM `quiz_attempt` WHERE `quiz_id` = " + quiz_id).executeUpdate();
+			db.prepareStatement("DELETE FROM `quiz_attempt_question` WHERE `quiz_id` = " + quiz_id).executeUpdate();
+		} catch (SQLException ignored) { }
 	}
 	
 }

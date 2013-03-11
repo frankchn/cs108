@@ -74,11 +74,32 @@ public class UserManager {
 		}
 	}
 	
-	public static boolean removeUser(User u) {
+	public static int numAllUsers() {
 		try {
-			return db.prepareStatement("DELETE FROM user WHERE user_id = " + u.user_id).execute();
+			ResultSet chals = db.prepareStatement("SELECT COUNT(*) FROM `user`").executeQuery();	
+			int numUsers = 0;			
+			if (chals.next()) {
+				numUsers += chals.getInt(1);
+			}
+			return numUsers;
 		} catch (SQLException e) {
-			return false;
+			return 0;
+		}
+	}
+	
+	public static void removeUser(User u) {
+		try {
+			db.prepareStatement("DELETE FROM user WHERE user_id = " + u.user_id).executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void promoteUser(User u) {
+		try {
+			db.prepareStatement("").executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 	

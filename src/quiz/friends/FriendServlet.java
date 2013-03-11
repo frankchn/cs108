@@ -1,13 +1,17 @@
 package quiz.friends;
 
 import java.io.IOException;
-import java.sql.Timestamp;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.omg.CORBA.NameValuePair;
+
+import com.mysql.jdbc.log.Log;
 
 /**
  * Servlet implementation class FriendServlet
@@ -35,7 +39,7 @@ public class FriendServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int requestor = Integer.parseInt(request.getParameter("requestor_id"));
+		/*int requestor = Integer.parseInt(request.getParameter("requestor_id"));
 		int requestee = Integer.parseInt(request.getParameter("requestee_id"));
 		java.util.Date date = new java.util.Date();
 		Timestamp time = new Timestamp(date.getTime());
@@ -72,7 +76,8 @@ public class FriendServlet extends HttpServlet {
 		} else {
 			RelationManager.removeFriendship(requestor, requestee);
 			response.sendRedirect("user/profile.jsp?user=" + requestee);
-		}
+		}*/
+		
 	}
 
 }

@@ -1,20 +1,20 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@taglib prefix="ex" uri="http://frankchn.stanford.edu/cs108/" %>
-<%@page import="quiz.model.*, quiz.manager.*, quiz.website.auth.Authentication" %>
+<%@page import="quiz.model.*, quiz.manager.*, quiz.website.auth.Authentication, quiz.friends.*, quiz.messaging.*" %>
 
 <%
 User currentUser = (User) session.getAttribute("currentUser");
 java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
-int numQuizzes = 0;
-int numUsers = 0;
-int numTags = 0;
-int numQuizzesTaken = 0;
+int numQuizzes = QuizManager.getNumQuizzes();
+int numUsers = UserManager.numAllUsers();
+int numTags = QuizManager.getNumTags();
+int numQuizzesTaken = QuizManager.getNumTaken();
 
-int numFriends = 0;
-int numMsgsSent = 0;
-int numChallenges = 0;
-int numFriendReqs = 0;
+int numFriends = RelationManager.numFriendships();
+int numMsgsSent = MessageManager.numAllMsgs();
+int numChallenges = MessageManager.numAllChallenges();
+int numFriendReqs = MessageManager.numAllFriendReqs();
 %>
 
 <ex:push key="body.content">
@@ -47,31 +47,31 @@ int numFriendReqs = 0;
 			<table cellpadding="5" cellspacing="5" border="0" width="100%">
 				<tbody>
 					<tr>
-						<td align="right" width=7%><b>42 </b></td>
+						<td align="right" width=7%><b><%=numUsers %> </b></td>
 						<td align="left" width="38%"><font color="#000000">Users</font></td>
 						<td align="left" width="8%"></td>
-						<td align="right" width=9%><b>31</b></td>
+						<td align="right" width=9%><b><%=numFriends %></b></td>
 						<td align="left" width="38%"><font color="#000000">Friendships</font></td>
 					</tr>	
 					<tr>
-						<td align="right" width=7%><b>42 </b></td>
+						<td align="right" width=7%><b><%=numQuizzes %> </b></td>
 						<td align="left" width="38%"><font color="#000000">Quizzes</font></td>
 						<td align="left" width="8%"></td>
-						<td align="right" width=9%><b>32</b></td>
+						<td align="right" width=9%><b><%=numFriendReqs %></b></td>
 						<td align="left" width="38%"><font color="#000000">Friend Requests</font></td>
 					</tr>
 					<tr>
-						<td align="right" width=7%><b>42 </b></td>
+						<td align="right" width=7%><b><%=numQuizzesTaken%> </b></td>
 						<td align="left" width="38%"><font color="#000000">Quiz Attempts</font></td>
 						<td align="left" width="8%"></td>
-						<td align="right" width=9%><b>32</b></td>
+						<td align="right" width=9%><b><%=numMsgsSent %></b></td>
 						<td align="left" width="38%"><font color="#000000">Messages Sent</font></td>
 					</tr>
 					<tr>
-						<td align="right" width=7%><b>42 </b></td>
-						<td align="left" width="38%"><font color="#000000">Quiz Tags</font></td>
+						<td align="right" width=7%><b><%=numTags %> </b></td>
+						<td align="left" widtsh="38%"><font color="#000000">Quiz Tags</font></td>
 						<td align="left" width="8%"></td>
-						<td align="right" width=9%><b>32</b></td>
+						<td align="right" width=9%><b><%=numChallenges %></b></td>
 						<td align="left" width="38%"><font color="#000000">Challenges</font></td>
 					</tr>
 				</tbody>

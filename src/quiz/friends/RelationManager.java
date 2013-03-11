@@ -38,6 +38,20 @@ public class RelationManager {
 		
 	}
 	
+	public static int numFriendships() {
+		try {
+			PreparedStatement ps = db.prepareStatement("SELECT COUNT(*) FROM `friend`");
+			ResultSet p = ps.executeQuery();
+			int numReqs = 0;			
+			if (p.next()) {
+				numReqs += p.getInt(1);
+			}
+			return numReqs;
+		} catch (SQLException e) {
+			return 0;
+		}
+	}
+	
 	public static boolean friends(int user_id1, int user_id2) {
 		try {
 			PreparedStatement p = db.prepareStatement("SELECT * FROM `friend` WHERE (`user_id_1` =" + user_id1 + " AND `user_id_2`=" + user_id2 +") OR (`user_id_1` =" + user_id2 + " AND `user_id_2`=" + user_id1 +")");

@@ -17,6 +17,44 @@ public class MessageManager {
 		db = DBConnector.getConnection();
 	}
 	
+	public static int numAllFriendReqs() {
+		try {
+			ResultSet friendRequests = db.prepareStatement("SELECT COUNT(*) FROM `friend_request`").executeQuery();	
+			int numReqs = 0;			
+			if (friendRequests.next()) {
+				numReqs += friendRequests.getInt(1);
+			}
+			return numReqs;
+		} catch (SQLException e) {
+			return 0;
+		}
+	}
+	
+	public static int numAllChallenges() {
+		try {
+			ResultSet chals = db.prepareStatement("SELECT COUNT(*) FROM `message` WHERE `type` = 'CHALLENGE'").executeQuery();	
+			int numReqs = 0;			
+			if (chals.next()) {
+				numReqs += chals.getInt(1);
+			}
+			return numReqs;
+		} catch (SQLException e) {
+			return 0;
+		}
+	}
+	public static int numAllMsgs() {
+		try {
+			ResultSet chals = db.prepareStatement("SELECT COUNT(*) FROM `message` WHERE `type` = 'GENERAL'").executeQuery();	
+			int numMsgs = 0;			
+			if (chals.next()) {
+				numMsgs += chals.getInt(1);
+			}
+			return numMsgs;
+		} catch (SQLException e) {
+			return 0;
+		}
+	}
+	
 	public static int numNewNotifications(int user_id) {
 		return numFriendReqs(user_id) + numNewMessages(user_id);
 	}

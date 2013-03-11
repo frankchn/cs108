@@ -56,16 +56,6 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 					type="hidden" name="search_query"
 					value=<%=request.getParameter("search_query")%>>
 			</form>
-			<%
-				if (RelationManager.friends(currentUser.user_id, viewedUser.user_id)) {
-			%>
-			<form style="display: inline" action="MessageServlet" method="POST">
-				<input type="submit" name="message" value="Message"> <input
-					type="hidden" name="messengee_id" value=<%=viewedUser.user_id%>>
-				<input type="hidden" name="messenger_id"
-					value=<%=currentUser.user_id%>>
-			</form>
-			<%}%>
 
 			<%if (RelationManager.friends(currentUser.user_id, viewedUser.user_id)) { %>	
 				<form style="display:inline" action="MessageServlet" method="POST">
