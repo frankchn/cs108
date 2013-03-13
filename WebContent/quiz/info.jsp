@@ -37,7 +37,7 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 		</tr>
 		<tr>
 			<th>Created by</th>
-			<td><a href="profile/?user_id=<%=currentQuiz.user_id%>"><%=User.getUser(currentQuiz.user_id).name %></a></td>
+			<td><a href="user/profile.jsp?user=<%=currentQuiz.user_id%>"><%=User.getUser(currentQuiz.user_id).name %></a></td>
 		</tr>
 		<tr>
 			<th>Created on</th>
