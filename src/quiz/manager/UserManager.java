@@ -91,10 +91,21 @@ public class UserManager {
 	public static void removeUser(User u) {
 		try {
 			db.prepareStatement("DELETE FROM `user` WHERE `user_id` = " + u.user_id).executeUpdate();
-			db.prepareStatement("DELETE FROM `user` WHERE `user_id` = " + u.user_id).executeUpdate();
-			db.prepareStatement("DELETE FROM `user` WHERE `user_id` = " + u.user_id).executeUpdate();
-			db.prepareStatement("DELETE FROM `user` WHERE `user_id` = " + u.user_id).executeUpdate();
-
+			db.prepareStatement("DELETE FROM `achievement` WHERE `user_id` = " + u.user_id).executeUpdate();
+			db.prepareStatement("DELETE FROM `friend` WHERE `user_id_1` = " + u.user_id + " OR `user_id_2` = " + u.user_id).executeUpdate();
+			db.prepareStatement("DELETE FROM `friend_request` WHERE `requestor_user_id` = " + u.user_id + " OR `requestee_user_id` = " + u.user_id).executeUpdate();
+			db.prepareStatement("DELETE FROM `message` WHERE `sender_user_id` = " + u.user_id + " OR `recipient_user_id` = " + u.user_id).executeUpdate();
+			ResultSet rs = db.prepareStatement("SELECT `quiz_id` FROM `quiz` WHERE `user_id` = " + u.user_id).executeQuery();
+			while (rs.next()) {
+				int quiz_id = rs.getInt(1);
+				db.prepareStatement("DELETE FROM `quiz_question` WHERE `quiz_id` = " + quiz_id).executeUpdate();
+				db.prepareStatement("DELETE FROM `tag` WHERE `quiz_id` = " + quiz_id).executeUpdate();
+			}
+			db.prepareStatement("DELETE FROM `quiz` WHERE `user_id` = " + u.user_id).executeUpdate();
+			db.prepareStatement("DELETE FROM `quiz_attempt` WHERE `user_id` = " + u.user_id).executeUpdate();
+			db.prepareStatement("DELETE FROM `quiz_attempt_question` WHERE `user_id` = " + u.user_id).executeUpdate();
+			db.prepareStatement("DELETE FROM `rating` WHERE `user_id` = " + u.user_id).executeUpdate();
+			db.prepareStatement("DELETE FROM `review` WHERE `user_id` = " + u.user_id).executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

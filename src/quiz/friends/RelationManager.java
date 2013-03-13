@@ -38,6 +38,27 @@ public class RelationManager {
 		
 	}
 	
+	public static ArrayList<User> getFriends(int user_id) {
+		ArrayList<User> friends = new ArrayList<User>();
+		try {
+			PreparedStatement p = db.prepareStatement("SELECT * FROM `friend` WHERE `user_id_1` =" + user_id + " OR `user_id_2`=" + user_id + " ORDER BY `established`");
+			ResultSet r = p.executeQuery();
+			while (r.next()) {
+				int id1 = r.getInt(1);
+				int id2 = r.getInt(2);
+				if (id1 != user_id) {
+					friends.add(User.getUser(id1));
+				} else {
+					friends.add(User.getUser(id2));
+				}
+			}
+			return friends;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public static int numFriendships() {
 		try {
 			PreparedStatement ps = db.prepareStatement("SELECT COUNT(*) FROM `friend`");

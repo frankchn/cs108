@@ -14,6 +14,7 @@ User currentUser = (User) session.getAttribute("currentUser");
 List<Achievement> achievements = viewedUser.getAchievements();
 List<Record> records = viewedUser.getRecords();
 java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
+ArrayList<User> friends = RelationManager.getFriends(viewedUser.user_id);
 %>
 
 <ex:push key="body.content">
@@ -79,6 +80,21 @@ tab {
 	<tab>
 	<h3>Friends</h3>
 	</tab>
+	<tab><div style="margin-left:20px;margin-right:20px">
+		<table>
+		<%
+		for (int i = 0; i < friends.size(); i++) {
+			User u = friends.get(i);
+		%>
+			<tr>
+				<td width="7%"><a href="user/profile.jsp?user=<%=u.user_id%>"><b><font size="3px"><%=u.name%></font></b></a></td>
+				<td width="30%"><font size="3px"><%=u.email%></font></td>
+			</tr>
+		<% 
+		}
+		%>
+		</table>
+	</div></tab>
 	<tab>
 	<h3>Achievements</h3>
 	</tab>

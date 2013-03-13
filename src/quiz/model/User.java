@@ -33,7 +33,6 @@ public class User {
 							  r.getString("email"), 
 							  r.getInt("is_admin") == 1 ? true : false,
 							  r.getString("cookie_key"));
-
 			return u;
 		} catch (SQLException e) {
 			return null;

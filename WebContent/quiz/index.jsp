@@ -41,9 +41,9 @@ if (response.getHeader("search_quiz_term") != null) {
 	<div id="quiz_list_container">
 		<%
 		Quiz[] list = QuizManager.getSearchedQuizzes(currentUser, searchedTag);
-		//Quiz[] list = QuizManager.getAllQuizzes(currentUser);
 		if(list != null) {
 			for(Quiz q : list) {
+				User u = User.getUser(q.user_id);
 			%>
 			<div class="quiz_item_container">
 				<div class="quiz_item_right">
@@ -53,7 +53,7 @@ if (response.getHeader("search_quiz_term") != null) {
 				<div class="quiz_item_left">
 					<div class="quiz_item_title"><a href="quiz/info.jsp?quiz_id=<%=q.quiz_id%>"><%=q.name %></a></div>
 					<div class="quiz_item_author">
-						created by <a href="user/profile.jsp?user=<%=q.user_id%>"><%=User.getUser(q.user_id).name %></a>
+						created by <a href="user/profile.jsp?user=<%=q.user_id%>"><%=u.name %></a>
 						on <%=sdf.format(q.created) %>
 						&bull;
 						<%=q.is_public ? "Public" : "Draft (Invisible)" %>

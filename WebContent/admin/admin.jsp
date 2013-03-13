@@ -117,7 +117,6 @@ String quiz_search = request.getParameter("quiz_search");
 			</div>
 			<% 
 			ArrayList<User> defaultUsers;
-			System.out.println("user_search: " + user_search);
 			if (user_search == null || user_search.isEmpty() || user_search.equals("null")) {
 				defaultUsers = UserManager.getAdminUsers();
 			} else {
@@ -213,7 +212,7 @@ String quiz_search = request.getParameter("quiz_search");
 					</div>
 					<div class="search_user_left">
 						<div align="left">
-						<span style="width:37%;display:inline-block"><a href="user/profile.jsp?user=<%=q.quiz_id%>"><%=q.name %></a></span>
+						<span style="width:37%;display:inline-block"><a href="quiz/info.jsp?quiz_id=<%=q.quiz_id%>"><%=q.name %></a></span>
 						<span style="width:24%;display:inline-block"><%=(User.getUser(q.user_id)).name%></span>
 						<span style="width:22%;display:inline-block"><%=sdf.format(q.created)%></span>
 						</div>

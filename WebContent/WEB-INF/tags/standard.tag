@@ -28,6 +28,13 @@ User currentUser = (User) session.getAttribute("currentUser");
 						</span>
 						<% } %>
 						<span class="nav_item"><a href="">Home</a></span>
+						<%
+						if(currentUser != null && currentUser.is_admin) {
+						%>
+						<span class="nav_item"><a href="admin/admin.jsp">Admin</a></span>
+						<%
+						}
+						%>
 						<span class="nav_item"><a href="quiz/">Quizzes</a></span>
 						<%
 						
@@ -43,13 +50,7 @@ User currentUser = (User) session.getAttribute("currentUser");
 						<%
 						}
 						%>
-						<%
-						if(currentUser != null && currentUser.is_admin) {
-						%>
-						<span class="nav_item"><a href="admin/">Admin</a></span>
-						<%
-						}
-						%>
+
 					</div>
 					<div id="greeting_msg">
 					<% if(currentUser == null) { %>

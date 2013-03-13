@@ -221,6 +221,7 @@ public class QuizManager {
 			db.prepareStatement("DELETE FROM `quiz_attempt_question` WHERE `quiz_id` = " + quiz_id).executeUpdate();
 			db.prepareStatement("DELETE FROM `quiz_question` WHERE `quiz_id` = " + quiz_id).executeUpdate();
 			db.prepareStatement("DELETE FROM `quiz` WHERE `quiz_id` = " + quiz_id).executeUpdate();
+			db.prepareStatement("DELETE FROM `tag` WHERE `quiz_id` = " + quiz_id).executeUpdate();
 		} catch (SQLException ignored) { }
 	}
 
