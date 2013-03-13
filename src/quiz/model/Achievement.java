@@ -9,7 +9,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import quiz.base.DBConnector;
@@ -26,7 +28,9 @@ public class Achievement {
 	public final int user_id;
 	public final int achievement_id;
 	public final String description;
+	public final String title;
 	public final String img;
+	public Timestamp time;
 
 	private static Connection db;
 	static {
@@ -43,6 +47,7 @@ public class Achievement {
 			int numQuizzes = r.getInt(1);
 			switch (numQuizzes) {
 				case 1: saveAchievement(user_id, AMATEUR_AUTHOR);
+					System.out.println("am");
 					break;
 				case 5: saveAchievement(user_id, PROLIFIC_AUTHOR);
 					break;
@@ -93,47 +98,58 @@ public class Achievement {
 		} catch (SQLException ignored) { }	
 	}
 		
+	/* FIX */
 	public static void saveAchievement(int user_id, int achievement_id) {
 		try {
-			PreparedStatement p = db.prepareStatement("INSERT INTO `achievement` (`user_id`, `achievement_id`) VALUES (?, ?)");
-			p.setInt(1, user_id);
-			p.setInt(2, achievement_id);
+			Timestamp time = new Timestamp(System.currentTimeMillis());
+			String stmt = "INSERT INTO `achievement` (`user_id`, `achievement_id`, `timestamp`) VALUES (" + user_id + ", " + achievement_id + ", '" + time + "')";
+			PreparedStatement p = db.prepareStatement(stmt);
 			p.executeUpdate();
 			
-		} catch (SQLException ignored) {  }
+		} catch (SQLException ignored) {  
+			System.out.println("save achievement failed");
+		}
 	}
 	
-	public Achievement(int user_id, int achievement_id) {
+	public Achievement(int user_id, int achievement_id, Timestamp timestamp) {
 		this.user_id = user_id;
 		this.achievement_id = achievement_id;
+		this.time = timestamp;
 		switch (achievement_id) {
 			case 1:
 				img = "images/amateur_author.gif";
 				description = " created one quiz.";
+				title = "Amateur Author";
 				break;
 			case 2:
 				img = "images/prolific_author.gif";
 				description = " created five quizzes.";
+				title = "Prolific Author";
 				break;
 			case 3:
 				img = "images/prodigious_author.gif";
 				description = " created ten quizzes.";
+				title = "Prodigious Author";
 				break;
 			case 4:
 				img = "images/quiz_machine.gif";
 				description = " took ten quizzes.";
+				title = "Quiz Machine";
 				break;
 			case 5:
 				img = "images/youre_the_greatest.gif";
 				description = " got the highest score on a quiz.";
+				title = "You're the Greatest";
 				break;
 			case 6:
 				img = "images/practice_makes_perfect.gif";
 				description = " took a practice quiz.";
+				title = "Practice Makes Perfect";
 				break;
 			default:
 				img = "";
 				description = "";
+				title = "";
 		}
 	}
 	

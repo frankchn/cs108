@@ -146,11 +146,12 @@ public class User {
 		try {
 			r = db.prepareStatement("SELECT * FROM `achievement` WHERE `user_id` = " + user_id).executeQuery();
 			while (r.next()) {
-				Achievement a = new Achievement(r.getInt("user_id"), r.getInt("achievement_id"));
+				Achievement a = new Achievement(r.getInt("user_id"), r.getInt("achievement_id"), r.getTimestamp("timestamp"));
 				a_list.add(a);
 			}
 			return a_list;
 		} catch (SQLException e) {
+			System.out.println("get achievements fail");
 			return null;
 		}
 	}
@@ -209,6 +210,53 @@ public class User {
 			e.printStackTrace();
 		}	
 		return friends;
+	}
+	
+	public List<Activity> getFriendsActivity() {
+		List<Activity> act = new ArrayList<Activity>();
+		List<User> friends = getFriends();
+		for (int i = 0; i < friends.size(); i++) {
+			friends.get(i).getActivities(act);
+		}
+		Activity.sortByTime(act);
+		return act;
+	}
+	
+	public void getActivities(List<Activity> act) {
+		/* Gets the most recent quiz-created, quiz-taken, and achievement-won by the user */
+		Quiz[] created = Quiz.getMyRecentCreated(user_id);
+		if (created.length > 0) {
+			Activity new_act = new Activity(user_id, " created the quiz ", created[0].created, created[0]);
+			act.add(new_act);
+		}
+		List<Record> taken = getRecords();
+		if (taken.size() > 0) {
+			Activity new_act = new Activity(user_id, " took the quiz ", taken.get(0).last_start_time, Quiz.getQuiz(taken.get(0).quiz_id));
+			act.add(new_act);
+		}
+		Achievement recent_achievement = latestAchievement();
+		if (recent_achievement != null) {
+			Activity new_act = new Activity(user_id, " unlocked the achievement " + recent_achievement.title + " ", recent_achievement.time, null);
+			act.add(new_act);
+		}		
+	}
+	
+	public Achievement latestAchievement() {
+		try {
+			ResultSet r = db.prepareStatement("SELECT * FROM  `achievement` WHERE `user_id` = " + user_id + " ORDER BY `timestamp` DESC LIMIT 1",
+					  ResultSet.TYPE_SCROLL_INSENSITIVE, 
+					  ResultSet.CONCUR_READ_ONLY).executeQuery();
+			Achievement rtn = null;
+			while(r.next()) {
+				rtn = new Achievement(r.getInt("user_id"), r.getInt("achievement_id"), r.getTimestamp("time"));
+			}
+			
+			return rtn;
+			
+		} catch (SQLException e) {
+			System.out.println("latest achievement failed");
+			return null;
+		}	
 	}
 	
 	private User(int user_id, String name, String email, boolean is_admin, String cookie_key) {

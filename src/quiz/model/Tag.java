@@ -92,6 +92,7 @@ public class Tag {
 			Tag[] rtn = new Tag[size];
 			while(r.next()) {
 				Tag nextTag = new Tag(r.getString(1));
+
 				rtn[i++] = nextTag;
 			}	
 			return formatTo2D(rtn);

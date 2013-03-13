@@ -15,10 +15,14 @@ public class Quiz {
 	
 	public final int quiz_id;
 	public String name;
+	public String abbrev_name;
 	public String description;
 	public int user_id;
 	public boolean is_public;
 	public Timestamp created;
+	
+	/* WARNING: DO NOT USE UNLESS UPDATED!!!!!! */
+	public double cur_rating;
 	
 	// quiz options
 	public boolean random_questions;
@@ -42,6 +46,14 @@ public class Quiz {
 		this.immediate_correction = immediate_correction;
 		this.practice_mode = practice_mode;
 		
+		if (name.length() > 45) {
+			this.abbrev_name = name.substring(0, 45) + "...";
+		} else {
+			this.abbrev_name = name;
+		}
+		
+		this.cur_rating = this.getAvgRating();
+		
 	}
 	
 	public static Quiz getQuizFromResultSet(ResultSet r) {
@@ -59,6 +71,72 @@ public class Quiz {
 		} catch (SQLException e) {
 			return null;
 		}
+	}
+	
+	public static Quiz[] getTopFive() {
+		try {
+			ResultSet r = db.prepareStatement("SELECT rating.quiz_id AS quiz_id, AVG( stars ) AS avg_rating FROM  `rating` JOIN  `quiz` ON rating.quiz_id = quiz.quiz_id GROUP BY rating.quiz_id ORDER BY AVG( stars ) DESC LIMIT 5",
+					  ResultSet.TYPE_SCROLL_INSENSITIVE, 
+					  ResultSet.CONCUR_READ_ONLY).executeQuery();
+			r.last();
+			int size = r.getRow();
+			r.beforeFirst();
+			
+			int i = 0;
+			Quiz[] rtn = new Quiz[size];
+			while(r.next()) {
+				rtn[i++] = getQuiz(r.getInt("quiz_id"));
+			}
+			
+			return rtn;
+			
+		} catch (SQLException e) {
+			return null;
+		}	
+	}
+	
+	public static Quiz[] getRecent() {
+		try {
+			ResultSet r = db.prepareStatement("SELECT quiz_id FROM  `quiz` ORDER BY `created` DESC LIMIT 5",
+					  ResultSet.TYPE_SCROLL_INSENSITIVE, 
+					  ResultSet.CONCUR_READ_ONLY).executeQuery();
+			r.last();
+			int size = r.getRow();
+			r.beforeFirst();
+			
+			int i = 0;
+			Quiz[] rtn = new Quiz[size];
+			while(r.next()) {
+				rtn[i++] = getQuiz(r.getInt("quiz_id"));
+			}
+			
+			return rtn;
+			
+		} catch (SQLException e) {
+			return null;
+		}	
+	}
+
+	public static Quiz[] getMyRecentCreated(int user_id) {
+		try {
+			ResultSet r = db.prepareStatement("SELECT quiz_id FROM  `quiz` WHERE `user_id` = " + user_id + " ORDER BY `created` DESC LIMIT 5",
+					  ResultSet.TYPE_SCROLL_INSENSITIVE, 
+					  ResultSet.CONCUR_READ_ONLY).executeQuery();
+			r.last();
+			int size = r.getRow();
+			r.beforeFirst();
+			
+			int i = 0;
+			Quiz[] rtn = new Quiz[size];
+			while(r.next()) {
+				rtn[i++] = getQuiz(r.getInt("quiz_id"));
+			}
+			
+			return rtn;
+			
+		} catch (SQLException e) {
+			return null;
+		}	
 	}
 	
 	public static Quiz getQuiz(int quiz_id) {

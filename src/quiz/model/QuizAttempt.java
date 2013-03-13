@@ -1,11 +1,14 @@
 package quiz.model;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import quiz.base.DBConnector;
 
@@ -158,6 +161,34 @@ public class QuizAttempt {
 		} catch (SQLException e) {
 			return null;
 		}
+	}
+	
+	public static QuizAttempt[] last_day_attempt(int user_id) {
+		java.util.Date date = new java.util.Date();
+		Calendar c = Calendar.getInstance();
+	    c.setTime(date);
+	    c.add(Calendar.DATE, -1);
+	    date.setTime( c.getTime().getTime() );
+		Timestamp last_day = new Timestamp(date.getTime());
+		try {
+			ResultSet r = db.prepareStatement("SELECT `quiz_attempt_id` FROM `quiz_attempt` WHERE `user_id` = " + user_id + " AND `submission_time` > '" + last_day + "' ORDER BY `submission_time` DESC",
+					  ResultSet.TYPE_SCROLL_INSENSITIVE, 
+					  ResultSet.CONCUR_READ_ONLY).executeQuery();
+			r.last();
+			int size = r.getRow();
+			r.beforeFirst();
+			
+			int i = 0;
+			QuizAttempt[] rtn = new QuizAttempt[size];
+			while(r.next()) {
+				rtn[i++] = load(r.getInt("quiz_attempt_id"));
+			}
+			
+			return rtn;
+			
+		} catch (SQLException e) {
+			return null;
+		}		
 	}
 	
 }
