@@ -90,9 +90,10 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 		<th>Date Created</th>
 	</tr>
 	<% Quiz[] my_quizzes = Quiz.getMyRecentCreated(currentUser.user_id); 
+	System.out.print(currentUser.user_id);
 		for (int mq = 0; mq < my_quizzes.length; mq++) {%>
 	<tr>
-		<td align="left"><a href="quiz/info.jsp?quiz_id=<%=my_quizzes[mq].quiz_id%>"><%=recent_quizzes[mq].abbrev_name %></a></td>
+		<td align="left"><a href="quiz/info.jsp?quiz_id=<%=my_quizzes[mq].quiz_id%>"><%=my_quizzes[mq].abbrev_name %></a></td>
 		<td align="center"><%=sdf.format(my_quizzes[mq].created) %></td>
 	</tr>
 	<%
