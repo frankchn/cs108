@@ -108,7 +108,6 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 			<th>Started</th>
 			<th>Completed</th>
 			<th>Score</th>
-			<th>Action</th>
 		</tr>
 		<% 
 		QuizAttempt[] ts = QuizAttempt.loadTopScores(currentQuiz.quiz_id);
@@ -119,9 +118,6 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 			<td align="center"><%= sdf.format(s.start_time)%></td>
 			<td align="center"><%=s.submission_time != null ? sdf.format(s.submission_time) : "Not complete" %></td>
 			<td align="center"><%=s.finished ? (!s.show_score ? "Practice" : s.score) : "Not complete" %></td>
-			<td align="center"><%=s.finished ? 
-					"<a href='quiz/attempt/results.jsp?quiz_attempt_id=" + s.quiz_attempt_id + "'>View Results</a>" : 
-					"<a href='quiz/attempt/attempt.jsp?quiz_attempt_id=" + s.quiz_attempt_id + "'>Continue</a>" %></td>
 		</tr>
 		<%
 		}
@@ -134,7 +130,6 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 			<th>Started</th>
 			<th>Completed</th>
 			<th>Score</th>
-			<th>Action</th>
 		</tr>
 		<% 
 		QuizAttempt[] hs = QuizAttempt.loadRecentScores(currentQuiz.quiz_id);
@@ -145,23 +140,20 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 			<td align="center"><%= sdf.format(s.start_time)%></td>
 			<td align="center"><%=s.submission_time != null ? sdf.format(s.submission_time) : "Not complete" %></td>
 			<td align="center"><%=s.finished ? (!s.show_score ? "Practice" : s.score) : "Not complete" %></td>
-			<td align="center"><%=s.finished ? 
-					"<a href='quiz/attempt/results.jsp?quiz_attempt_id=" + s.quiz_attempt_id + "'>View Results</a>" : 
-					"<a href='quiz/attempt/attempt.jsp?quiz_attempt_id=" + s.quiz_attempt_id + "'>Continue</a>" %></td>
 		</tr>
 		<%
 		}
 		%>
 	</table>
 	<h3>Reviews</h3>
-	<tab><div>
+	<div>
 		<% Review[] reviews = currentQuiz.getReviews();
 		for (int cur = 0; cur < reviews.length; cur++) {
 			Review cur_review = reviews[cur];
 		%>
-			<p><b>At <%=sdf.format(cur_review.time)%>:</b> <%=cur_review.content %></p>
+			<div><b>At <%=sdf.format(cur_review.time)%>:</b> <%=cur_review.content %></div>
 		<% }%>
-	</div></tab>
+	</div>
 </ex:push>
 
 <t:standard>

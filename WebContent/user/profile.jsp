@@ -141,22 +141,22 @@ tab {
 				   </span>
 			   <%}%> <!--  end for (star) -->
 			   </div>
-			   <tab>
+			   
 			   <div class="quiz_rating_info">
 				<%
 				Review curReview = currentUser.getReview(rec.quiz_id);
 			    if (curReview == null) {
 				%>
-				    <textarea class="review_box" id="review_<%=rec.quiz_id%>"
+				    <div style="padding-left:30px;"><textarea class="review_box" id="review_<%=rec.quiz_id%>"
 					style="resize: none" placeholder="Review this quiz. Press enter to submit." rows="5"
-					cols="112"></textarea>
+					cols="112"></textarea></div>
 				<%
 				} else {
 				%>
-					<p><b>Your Review at <%=sdf.format(curReview.time) %>:</b> <%=curReview.content%></p>
+					<div style="padding-left:30px;"><b>Your Review at <%=sdf.format(curReview.time) %>:</b> <%=curReview.content%></div>
 			  <%}%>
 			   </div>
-			   </tab>
+			   
 			<!--  end current user review/rating -->
 			<%}%>
 			<tab>
