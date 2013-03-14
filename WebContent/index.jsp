@@ -36,11 +36,17 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 	<h2> My Friends' Activities</h2>
 	<tab><div>
 	<% List<Activity> acts = currentUser.getFriendsActivity();
-	for (int a = 0; a < acts.size(); a++) {
+	int size = 10;
+	if (acts.size() < 10) {
+		size = acts.size();
+	}
+	for (int a = 0; a < size; a++) {
 		Activity act = acts.get(a);%>
 		<p><a href="user/profile.jsp?user=<%=act.user_id%>"><%= User.getUser(act.user_id).name %></a> <%= act.description %>
 		<% if (act.quiz != null) { %>
 			&nbsp;<a href="quiz/info.jsp?quiz_id=<%=act.quiz.quiz_id%>"><%= act.quiz.name %></a>
+		<%} else {%>
+			<a href="user/profile.jsp?user=<%=act.user_id %>#ach"><%= act.achievement %></a>
 		<%} %>
 		</p>
 	<%} %>

@@ -47,7 +47,6 @@ public class Achievement {
 			int numQuizzes = r.getInt(1);
 			switch (numQuizzes) {
 				case 1: saveAchievement(user_id, AMATEUR_AUTHOR);
-					System.out.println("am");
 					break;
 				case 5: saveAchievement(user_id, PROLIFIC_AUTHOR);
 					break;

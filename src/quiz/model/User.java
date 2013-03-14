@@ -235,7 +235,7 @@ public class User {
 		}
 		Achievement recent_achievement = latestAchievement();
 		if (recent_achievement != null) {
-			Activity new_act = new Activity(user_id, " unlocked the achievement " + recent_achievement.title + " ", recent_achievement.time, null);
+			Activity new_act = new Activity(user_id, recent_achievement.title + " ", recent_achievement.time, null);
 			act.add(new_act);
 		}		
 	}
@@ -247,7 +247,7 @@ public class User {
 					  ResultSet.CONCUR_READ_ONLY).executeQuery();
 			Achievement rtn = null;
 			while(r.next()) {
-				rtn = new Achievement(r.getInt("user_id"), r.getInt("achievement_id"), r.getTimestamp("time"));
+				rtn = new Achievement(r.getInt("user_id"), r.getInt("achievement_id"), r.getTimestamp("timestamp"));
 			}
 			
 			return rtn;

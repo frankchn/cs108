@@ -24,6 +24,7 @@ public class Activity {
 	public String description;
 	public Timestamp time;
 	public Quiz quiz;
+	public String achievement;
 	
 	private static Connection db;
 	static {
@@ -33,9 +34,19 @@ public class Activity {
 	
 	public Activity(int user_id, String description, Timestamp time, Quiz quiz) {
 		this.user_id = user_id;
-		this.description = description;
+		setDescription(description, quiz);
 		this.time = time;
 		this.quiz = quiz;
+	}
+	
+	public void setDescription(String description, Quiz quiz) {
+		if (quiz != null) {
+			this.description = description;
+			this.achievement = "";
+		} else {
+			this.description = " unlocked the achievement ";
+			this.achievement = description;
+		}
 	}
 	
 	public static class CustomComparator implements Comparator<Activity> {

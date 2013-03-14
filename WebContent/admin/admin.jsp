@@ -183,9 +183,9 @@ String quiz_search = request.getParameter("quiz_search");
 				</form>
 			</div>
 			<div style="margin-bottom:10px;margin-right:10px;margin-left:10px;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#d8d8d8;">
-				<span style="width:37%;display:inline-block"><b>Quiz</b></span>
-				<span style="width:24%;display:inline-block"><b>Creator</b></span>
-				<span style="width:27%;display:inline-block"><b>Date Created</b></span>
+				<span style="width:32%;display:inline-block"><b>Quiz</b></span>
+				<span style="width:27%;display:inline-block"><b>Creator</b></span>
+				<span style="width:22%;display:inline-block"><b>Date Created</b></span>
 				<span style="display:inline-block"><b>Actions</b></span>
 			</div>
 			<% ArrayList<Quiz> editQuizzes;
@@ -212,8 +212,8 @@ String quiz_search = request.getParameter("quiz_search");
 					</div>
 					<div class="search_user_left">
 						<div align="left">
-						<span style="width:37%;display:inline-block"><a href="quiz/info.jsp?quiz_id=<%=q.quiz_id%>"><%=q.name %></a></span>
-						<span style="width:24%;display:inline-block"><%=(User.getUser(q.user_id)).name%></span>
+						<span style="width:32%;display:inline-block"><a href="quiz/info.jsp?quiz_id=<%=q.quiz_id%>"><%=q.name %></a></span>
+						<span style="width:27%;display:inline-block"><%=(User.getUser(q.user_id)).name%></span>
 						<span style="width:22%;display:inline-block"><%=sdf.format(q.created)%></span>
 						</div>
 					</div>

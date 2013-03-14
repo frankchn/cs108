@@ -96,7 +96,7 @@ tab {
 		</table>
 	</div></tab>
 	<tab>
-	<h3>Achievements</h3>
+	<h3 id="ach">Achievements</h3>
 	</tab>
 	<tab>
 	<div class="achievement_grid">
