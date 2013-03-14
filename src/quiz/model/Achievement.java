@@ -106,7 +106,7 @@ public class Achievement {
 			p.executeUpdate();
 			
 		} catch (SQLException ignored) {  
-			System.out.println("save achievement failed");
+			
 		}
 	}
 	

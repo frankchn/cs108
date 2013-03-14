@@ -43,6 +43,7 @@ int numMsgs = MessageManager.numNewMessages(currentUser.user_id);
 			<%	
 				for(int i = 0; i < messages.size(); i++) {
 					Message m = messages.get(i);
+					if (m.subject.isEmpty()) m.subject = "[No Subject]";
 					User sender = User.getUser(m.sender_user_id);
 				%>
 				<tr>
