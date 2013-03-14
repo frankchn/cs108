@@ -161,10 +161,10 @@ String quiz_search = request.getParameter("quiz_search");
 				}
 			} else {
 			%>
-		</div>
 		<div class="no_results" style="margin-bottom:10px;margin-right:10px;margin-left:10px;">
-			No Users Matched.
-		</div>
+			No Quizzes Matched.
+		</div></div> 
+		
 			<%	
 			}
 			%>
@@ -185,7 +185,7 @@ String quiz_search = request.getParameter("quiz_search");
 			<div style="margin-bottom:10px;margin-right:10px;margin-left:10px;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#d8d8d8;">
 				<span style="width:32%;display:inline-block"><b>Quiz</b></span>
 				<span style="width:27%;display:inline-block"><b>Creator</b></span>
-				<span style="width:22%;display:inline-block"><b>Date Created</b></span>
+				<span style="width:29%;display:inline-block"><b>Date Created</b></span>
 				<span style="display:inline-block"><b>Actions</b></span>
 			</div>
 			<% ArrayList<Quiz> editQuizzes;
