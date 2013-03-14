@@ -286,7 +286,6 @@ public class Quiz {
 			r = p.executeQuery();
 			if (!r.next()) return 0;
 			double max_score = r.getDouble(1);
-			System.out.println(max_score);
 			return max_score;
 		} catch (SQLException ignored) { 
 			return 0;

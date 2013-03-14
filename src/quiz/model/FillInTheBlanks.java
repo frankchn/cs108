@@ -37,7 +37,7 @@ public class FillInTheBlanks extends QuizQuestion {
 			
 			for(Integer blank_id : answer.keySet()) {
 				String current_answer = answer.get(blank_id);
-								
+
 				if(FillInTheBlanks.this.correct_answers.get(blank_id).containsKey(current_answer)) {
 					score += FillInTheBlanks.this.correct_answers.get(blank_id).get(current_answer);
 				}
