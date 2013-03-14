@@ -150,10 +150,8 @@ tab {
 				    <div style="padding-left:30px;"><textarea class="review_box" id="review_<%=rec.quiz_id%>"
 					style="resize: none" placeholder="Review this quiz. Press enter to submit." rows="5"
 					cols="112"></textarea></div>
-				<%
-				} else {
-				%>
-					<div style="padding-left:30px;"><b>Your Review at <%=sdf.format(curReview.time) %>:</b> <%=curReview.content%></div>
+				<%} else {%>
+					<div style="padding-left:29px;"><b>Your Review at <%=sdf.format(curReview.time) %>:</b> <%=curReview.content%></div>
 			  <%}%>
 			   </div>
 			   
