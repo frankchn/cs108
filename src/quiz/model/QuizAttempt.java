@@ -42,6 +42,50 @@ public class QuizAttempt {
 		} catch (SQLException e) { }
 	}
 	
+	public static QuizAttempt[] loadTopScores(int quiz_id) {
+		try {
+			ResultSet r = db.prepareStatement("SELECT quiz_attempt_id FROM  `quiz_attempt` WHERE `quiz_id` = " + quiz_id + " ORDER BY `score` DESC LIMIT 5",
+					  ResultSet.TYPE_SCROLL_INSENSITIVE, 
+					  ResultSet.CONCUR_READ_ONLY).executeQuery();
+			r.last();
+			int size = r.getRow();
+			r.beforeFirst();
+			
+			int i = 0;
+			QuizAttempt[] rtn = new QuizAttempt[size];
+			while(r.next()) {
+				rtn[i++] = QuizAttempt.load(r.getInt("quiz_attempt_id"));
+			}
+			
+			return rtn;
+			
+		} catch (SQLException e) {
+			return null;
+		}	
+	}
+	
+	public static QuizAttempt[] loadRecentScores(int quiz_id) {
+		try {
+			ResultSet r = db.prepareStatement("SELECT quiz_attempt_id FROM  `quiz_attempt` WHERE `quiz_id` = " + quiz_id + " ORDER BY `submission_time` DESC LIMIT 5",
+					  ResultSet.TYPE_SCROLL_INSENSITIVE, 
+					  ResultSet.CONCUR_READ_ONLY).executeQuery();
+			r.last();
+			int size = r.getRow();
+			r.beforeFirst();
+			
+			int i = 0;
+			QuizAttempt[] rtn = new QuizAttempt[size];
+			while(r.next()) {
+				rtn[i++] = QuizAttempt.load(r.getInt("quiz_attempt_id"));
+			}
+			
+			return rtn;
+			
+		} catch (SQLException e) {
+			return null;
+		}	
+	}
+	
 	public QuizQuestion.QuizQuestionAttempt[] getQuizQuestionAttempts(boolean random_order) {
 		try {
 			String orderSQL = " ORDER BY `sort_order` ASC";
