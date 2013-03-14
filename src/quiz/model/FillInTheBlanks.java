@@ -1,6 +1,8 @@
 package quiz.model;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FillInTheBlanks extends QuizQuestion {
 
@@ -37,7 +39,7 @@ public class FillInTheBlanks extends QuizQuestion {
 			
 			for(Integer blank_id : answer.keySet()) {
 				String current_answer = answer.get(blank_id);
-								
+
 				if(FillInTheBlanks.this.correct_answers.get(blank_id).containsKey(current_answer)) {
 					score += FillInTheBlanks.this.correct_answers.get(blank_id).get(current_answer);
 				}
@@ -73,6 +75,15 @@ public class FillInTheBlanks extends QuizQuestion {
 		question_text = response.get("question_text")[0];
 		
 		correct_answers.clear();
+		
+		Pattern p = Pattern.compile("(\\x5b)(\\d*)(\\x5d)");
+		Matcher m = p.matcher(question_text);
+		
+		while(m.find()) {
+			int question_id = Integer.parseInt(question_text.substring(m.start(2), m.end(2)));
+			if(!correct_answers.containsKey(question_id))
+				correct_answers.put(question_id, new HashMap<String, Double>());
+		}
 		
 		for(int i = 0; i < response.get("correct_answer_blank").length; i++) {
 			if(response.get("correct_answer_blank")[i].length() > 0) {
