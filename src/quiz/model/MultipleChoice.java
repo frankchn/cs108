@@ -131,9 +131,7 @@ public class MultipleChoice extends QuizQuestion {
 		
 		int cv = Math.min(this.correct_visible, this.correct_options.size());
 		int iv = Math.min(this.incorrect_visible, this.incorrect_options.size());
-		
-		System.out.println(cv + " " + iv);
-		
+				
 		HashMap<String, Double> cvm = new HashMap<String, Double>();
 		HashMap<String, Double> ivm = new HashMap<String, Double>();
 		

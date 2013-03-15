@@ -150,7 +150,6 @@ public class User {
 			}
 			return a_list;
 		} catch (SQLException e) {
-			System.out.println("get achievements fail");
 			return null;
 		}
 	}

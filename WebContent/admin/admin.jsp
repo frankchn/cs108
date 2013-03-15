@@ -162,8 +162,8 @@ String quiz_search = request.getParameter("quiz_search");
 			} else {
 			%>
 		<div class="no_results" style="margin-bottom:10px;margin-right:10px;margin-left:10px;">
-			No Quizzes Matched.
-		</div></div> 
+			No Users Matched.
+		</div> 
 		
 			<%	
 			}
