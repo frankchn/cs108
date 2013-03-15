@@ -207,6 +207,35 @@ public class QuizAttempt {
 		}
 	}
 	
+	public static QuizAttempt[] lastDayAttemptForQuiz(int quiz_id) {
+		java.util.Date date = new java.util.Date();
+		Calendar c = Calendar.getInstance();
+	    c.setTime(date);
+	    c.add(Calendar.DATE, -1);
+	    date.setTime( c.getTime().getTime() );
+		Timestamp last_day = new Timestamp(date.getTime());
+		try {
+			ResultSet r = db.prepareStatement("SELECT `quiz_attempt_id` FROM `quiz_attempt` WHERE `quiz_id` = " + quiz_id + " AND `submission_time` > '" + last_day + "' ORDER BY `score` DESC, `submission_time` - `start_time` ASC LIMIT 5",
+					  ResultSet.TYPE_SCROLL_INSENSITIVE, 
+					  ResultSet.CONCUR_READ_ONLY).executeQuery();
+			r.last();
+			int size = r.getRow();
+			r.beforeFirst();
+			
+			int i = 0;
+			QuizAttempt[] rtn = new QuizAttempt[size];
+			while(r.next()) {
+				rtn[i++] = load(r.getInt("quiz_attempt_id"));
+			}
+			
+			return rtn;
+			
+		} catch (SQLException e) {
+			return null;
+		}	
+		
+	}
+	
 	public static QuizAttempt[] last_day_attempt(int user_id) {
 		java.util.Date date = new java.util.Date();
 		Calendar c = Calendar.getInstance();
