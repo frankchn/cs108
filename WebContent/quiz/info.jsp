@@ -132,7 +132,29 @@ DecimalFormat df = new DecimalFormat("#.###");
 		}
 		%>
 	</table>
-	<h3>Top Scorers</h3>
+	<h3>Today's Highest Scores</h3>
+		<table cellpadding="3" cellspacing="3" border="0">
+		<tr>
+			<th>User</th>
+			<th>Started</th>
+			<th>Completed</th>
+			<th>Score</th>
+		</tr>
+		<% 
+		QuizAttempt[] ls = QuizAttempt.lastDayAttemptForQuiz(currentQuiz.quiz_id);
+		for(QuizAttempt s : ls) {
+		%>
+		<tr>
+			<td align="center"><%=User.getUser(s.user_id).name %></td>
+			<td align="center"><%= sdf.format(s.start_time)%></td>
+			<td align="center"><%=s.submission_time != null ? sdf.format(s.submission_time) : "Not complete" %></td>
+			<td align="center"><%=s.finished ? (!s.show_score ? "Practice" : s.score) : "Not complete" %></td>
+		</tr>
+		<%
+		}
+		%>
+	</table>
+	<h3>Top Scores of All Time</h3>
 	<table cellpadding="3" cellspacing="3" border="0">
 		<tr>
 			<th>User</th>
