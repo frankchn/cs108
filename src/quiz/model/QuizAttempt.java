@@ -44,7 +44,7 @@ public class QuizAttempt {
 	
 	public static QuizAttempt[] loadTopScores(int quiz_id) {
 		try {
-			ResultSet r = db.prepareStatement("SELECT quiz_attempt_id FROM  `quiz_attempt` WHERE `quiz_id` = " + quiz_id + " AND `score` > 0 ORDER BY `score` DESC LIMIT 5",
+			ResultSet r = db.prepareStatement("SELECT quiz_attempt_id FROM  `quiz_attempt` WHERE `quiz_id` = " + quiz_id + " AND `score` > 0 ORDER BY `score` DESC, `submission_time` - `start_time` ASC LIMIT 5",
 					  ResultSet.TYPE_SCROLL_INSENSITIVE, 
 					  ResultSet.CONCUR_READ_ONLY).executeQuery();
 			r.last();
