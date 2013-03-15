@@ -106,7 +106,6 @@ public class Achievement {
 			p.executeUpdate();
 			
 		} catch (SQLException ignored) {  
-			
 		}
 	}
 	
