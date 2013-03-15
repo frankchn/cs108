@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@taglib prefix="ex" uri="http://frankchn.stanford.edu/cs108/" %>
-<%@page import="quiz.model.*, quiz.manager.*, quiz.website.auth.*" %>
+<%@page import="quiz.model.*, quiz.manager.*, quiz.website.auth.*, java.text.DecimalFormat" %>
 
 <%
 if(!Authentication.require_login(request, response)) return;
@@ -10,6 +10,7 @@ User currentUser = (User) session.getAttribute("currentUser");
 Quiz currentQuiz = Quiz.getQuiz(Integer.parseInt(request.getParameter("quiz_id")));
 
 java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
+DecimalFormat df = new DecimalFormat("#.###");
 %>
 
 
@@ -67,13 +68,43 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 			<% if(currentQuiz.practice_mode) { %>
 			<input type="submit" style="font-size:16px;padding:5px;" name="practice_mode" value="Take Quiz without Recording Scores">
 			<% } %>
-		</form>
+		</form>	
+		<% 	if(currentUser != null && (currentUser.is_admin || currentUser.user_id == currentQuiz.user_id)) { %>
+		<form method="post" action="quiz/edit/index.jsp?quiz_id=<%=currentQuiz.quiz_id%>" style="display:inline">
+			<input type="submit" style="font-size:16px;padding:5px;" name="edit_quiz" value="Edit Quiz">
+		</form>			
+		<% } %>
 		<form method="post" action="messaging/compose.jsp" style="display:inline">
 			<input type="hidden" name="quiz_id" value="<%=currentQuiz.quiz_id %>">
 			<input type="hidden" name="high_score" value="<%=currentQuiz.getHighestScore(currentUser.user_id) %>"/>
 			<input type="submit" style="font-size:16px;padding:5px" name="challenge" value="Challenge a Friend!">
 		</form>
 	</div>
+	<h3 id= "quizStats">Quiz Statistics</h3>
+	<table cellpadding="3" cellspacing="3" border="0">
+		<tr>
+			<th>No.Times Taken</th>
+			<th>Avg. Score</th>
+			<th>Std. Dev</th>
+			<th>Lowest Score</th>
+			<th>Highest Score</th>
+		</tr>
+		<% 
+		int numTimes = QuizAttempt.loadNumAttempts(currentQuiz.quiz_id);
+		double avgScore = QuizAttempt.loadAvg(currentQuiz.quiz_id);
+		double stddevScore = QuizAttempt.loadStdDev(currentQuiz.quiz_id);
+		double minScore = QuizAttempt.loadMin(currentQuiz.quiz_id);
+		double maxScore = QuizAttempt.loadMax(currentQuiz.quiz_id);
+		%>
+		<tr>
+			<td align="center"><%=numTimes%></td>
+			<td align="center"><%=avgScore%></td>
+			<td align="center"><%=df.format(stddevScore)%></td>
+			<td align="center"><%=minScore%></td>
+			<td align="center"><%=maxScore%></td>
+		</tr>
+
+	</table>
 	<h3 id= "prevAttempts">Previous Attempts</h3>
 	<table cellpadding="3" cellspacing="3" border="0">
 		<tr>

@@ -42,6 +42,81 @@ public class QuizAttempt {
 		} catch (SQLException e) { }
 	}
 	
+	public static double loadAvg(int quiz_id) {
+		try {
+			ResultSet r = db.prepareStatement("SELECT AVG(`score`) FROM  `quiz_attempt` WHERE `quiz_id` = " + quiz_id + " AND `score` IS NOT NULL",
+					  ResultSet.TYPE_SCROLL_INSENSITIVE, 
+					  ResultSet.CONCUR_READ_ONLY).executeQuery();
+			if (r.next()) {
+				return r.getDouble(1);
+			}
+			return 0;
+			
+		} catch (SQLException e) {
+			return 0;
+		}	
+	}
+	
+	public static double loadStdDev(int quiz_id) {
+		try {
+			ResultSet r = db.prepareStatement("SELECT STDDEV(`score`) FROM `quiz_attempt` WHERE `quiz_id` = " + quiz_id + " AND `score` IS NOT NULL",
+					  ResultSet.TYPE_SCROLL_INSENSITIVE, 
+					  ResultSet.CONCUR_READ_ONLY).executeQuery();
+			if (r.next()) {
+				return r.getDouble(1);
+			}
+			return 0;
+			
+		} catch (SQLException e) {
+			return 0;
+		}	
+	}
+	
+	public static double loadMin(int quiz_id) {
+		try {
+			ResultSet r = db.prepareStatement("SELECT MIN(`score`) FROM  `quiz_attempt` WHERE `quiz_id` = " + quiz_id + " AND `score` IS NOT NULL",
+					  ResultSet.TYPE_SCROLL_INSENSITIVE, 
+					  ResultSet.CONCUR_READ_ONLY).executeQuery();
+			if (r.next()) {
+				return r.getDouble(1);
+			}
+			return 0;
+			
+		} catch (SQLException e) {
+			return 0;
+		}	
+	}
+	
+	public static double loadMax(int quiz_id) {
+		try {
+			ResultSet r = db.prepareStatement("SELECT MAX(`score`) FROM  `quiz_attempt` WHERE `quiz_id` = " + quiz_id + " AND `score` IS NOT NULL",
+					  ResultSet.TYPE_SCROLL_INSENSITIVE, 
+					  ResultSet.CONCUR_READ_ONLY).executeQuery();
+			if (r.next()) {
+				return r.getDouble(1);
+			}
+			return 0;
+			
+		} catch (SQLException e) {
+			return 0;
+		}	
+	}
+	
+	public static int loadNumAttempts(int quiz_id) {
+		try {
+			ResultSet r = db.prepareStatement("SELECT COUNT(*) FROM  `quiz_attempt` WHERE `quiz_id` = " + quiz_id + " AND `score` IS NOT NULL",
+					  ResultSet.TYPE_SCROLL_INSENSITIVE, 
+					  ResultSet.CONCUR_READ_ONLY).executeQuery();
+			if (r.next()) {
+				return r.getInt(1);
+			}
+			return 0;
+			
+		} catch (SQLException e) {
+			return 0;
+		}	
+	}
+	
 	public static QuizAttempt[] loadTopScores(int quiz_id) {
 		try {
 			ResultSet r = db.prepareStatement("SELECT quiz_attempt_id FROM  `quiz_attempt` WHERE `quiz_id` = " + quiz_id + " AND `score` > 0 ORDER BY `score` DESC, `submission_time` - `start_time` ASC LIMIT 5",
