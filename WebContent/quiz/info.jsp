@@ -105,7 +105,7 @@ DecimalFormat df = new DecimalFormat("#.###");
 		</tr>
 
 	</table>
-	<h3 id= "prevAttempts">Previous Attempts</h3>
+	<h3 id= "prevAttempts">My Previous Attempts</h3>
 	<table cellpadding="3" cellspacing="3" border="0">
 		<tr>
 			<th>Attempt No.</th>
